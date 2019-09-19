@@ -21,5 +21,9 @@ public:
 
 	void PlaySceneMusic();
 
-
+	bool my_tool_active = true;
+	
+	char buf[10] = "casa";
+	float f = 1.0f;
+	//float my_color[] = { 0.0f, 0.0f, 1.0f };
 };
