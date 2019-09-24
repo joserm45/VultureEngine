@@ -19,6 +19,7 @@ bool ModuleSceneIntro::Start()
 	bool ret = true;
 
 	App->physics->debug = true;
+
 	//Music Level
 	//PlaySceneMusic();
 
@@ -36,13 +37,10 @@ bool ModuleSceneIntro::CleanUp()
 // Update
 update_status ModuleSceneIntro::Update(float dt)
 {
+
 	ImGui::Text("Hello, world %d", 123);
-	if (ImGui::Button("Save"))
-	{
-		// do stuff
-	}
-	ImGui::InputText("string", buf, IM_ARRAYSIZE(buf));
-	ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
+
+
 	return UPDATE_CONTINUE;
 }
 

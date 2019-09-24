@@ -20,7 +20,8 @@ public:
 	void OnResize(int width, int height);
 
 public:
-
+	char buf[23] = "casa";
+	float f = 1.0f;
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
 	mat3x3 NormalMatrix;

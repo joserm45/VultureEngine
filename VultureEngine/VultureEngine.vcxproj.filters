@@ -22,6 +22,12 @@
     <Filter Include="Sources\Third_Party">
       <UniqueIdentifier>{4e8c494c-a2dd-48ba-9b55-8cf99066719e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Third_Party\ImGui">
+      <UniqueIdentifier>{4681e0bf-483c-4f6b-8493-f69a49e627cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Third_Party\Glew">
+      <UniqueIdentifier>{0e411bf2-f312-467a-94f7-ad06ccb3888f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -81,23 +87,42 @@
     <ClInclude Include="PhysBody3D.h">
       <Filter>Sources\Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Imgui\imconfig.h">
-      <Filter>Sources\Third_Party</Filter>
+      <Filter>Sources\Third_Party\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imgui.h">
-      <Filter>Sources\Third_Party</Filter>
+      <Filter>Sources\Third_Party\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imgui_impl_opengl3.h">
+      <Filter>Sources\Third_Party\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\imgui_impl_sdl.h">
+      <Filter>Sources\Third_Party\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imgui_internal.h">
-      <Filter>Sources\Third_Party</Filter>
+      <Filter>Sources\Third_Party\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imstb_rectpack.h">
-      <Filter>Sources\Third_Party</Filter>
+      <Filter>Sources\Third_Party\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imstb_textedit.h">
-      <Filter>Sources\Third_Party</Filter>
+      <Filter>Sources\Third_Party\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imstb_truetype.h">
-      <Filter>Sources\Third_Party</Filter>
+      <Filter>Sources\Third_Party\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="glew\include\GL\eglew.h">
+      <Filter>Sources\Third_Party\Glew</Filter>
+    </ClInclude>
+    <ClInclude Include="glew\include\GL\glew.h">
+      <Filter>Sources\Third_Party\Glew</Filter>
+    </ClInclude>
+    <ClInclude Include="glew\include\GL\glxew.h">
+      <Filter>Sources\Third_Party\Glew</Filter>
+    </ClInclude>
+    <ClInclude Include="glew\include\GL\wglew.h">
+      <Filter>Sources\Third_Party\Glew</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -150,16 +175,25 @@
       <Filter>Sources\Helpers</Filter>
     </ClCompile>
     <ClCompile Include="Imgui\imgui.cpp">
-      <Filter>Sources\Third_Party</Filter>
+      <Filter>Sources\Third_Party\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="Imgui\imgui_demo.cpp">
-      <Filter>Sources\Third_Party</Filter>
+      <Filter>Sources\Third_Party\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="Imgui\imgui_draw.cpp">
-      <Filter>Sources\Third_Party</Filter>
+      <Filter>Sources\Third_Party\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\imgui_impl_opengl3.cpp">
+      <Filter>Sources\Third_Party\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Imgui\imgui_impl_sdl.cpp">
+      <Filter>Sources\Third_Party\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="Imgui\imgui_widgets.cpp">
-      <Filter>Sources\Third_Party</Filter>
+      <Filter>Sources\Third_Party\ImGui</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="VultureEngine.rc" />
   </ItemGroup>
 </Project>

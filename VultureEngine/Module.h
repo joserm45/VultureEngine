@@ -8,6 +8,7 @@ class Module
 private :
 	bool enabled;
 
+	
 public:
 	Application* App;
 
@@ -49,4 +50,7 @@ public:
 
 	virtual void OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 	{}
+
+protected :
+	char* name = "NULL";
 };
