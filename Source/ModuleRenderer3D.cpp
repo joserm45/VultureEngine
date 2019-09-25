@@ -72,7 +72,7 @@ bool ModuleRenderer3D::Init()
 		glClearDepth(1.0f);
 		
 		//Initialize clear color
-		glClearColor(0.53f, 0.81f, 1.f, 1.f); //135, 206,255 - Blue
+		//glClearColor(0.53f, 0.81f, 1.f, 1.f); //135, 206,255 - Blue
 
 		//Check for error
 		error = glGetError();
@@ -113,7 +113,7 @@ bool ModuleRenderer3D::Init()
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
-	ImGui::NewFrame();
+	//ImGui::NewFrame();
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
@@ -127,9 +127,23 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	for(uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
 
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplSDL2_NewFrame(App->window->window);
-	ImGui::NewFrame();
+	glBegin(GL_LINES);
+	for (int i = -100; i <= 100; i++) {
+
+		glVertex3f(-100, 0, i);
+		glVertex3f(100, 0, i);
+
+		glVertex3f(i, 0, -100);
+		glVertex3f(i, 0, 100);
+
+	}
+	glColor3f(255, 0, 0);
+	glEnd();
+
+
+	//ImGui_ImplOpenGL3_NewFrame();
+	//ImGui_ImplSDL2_NewFrame(App->window->window);
+	//ImGui::NewFrame();
 
 	return UPDATE_CONTINUE;
 }
