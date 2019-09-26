@@ -47,5 +47,5 @@ update_status ModuleSceneIntro::Update(float dt)
 
 void ModuleSceneIntro::PlaySceneMusic()
 {
-	App->audio->PlayMusic("Sound/Music.ogg", 0);
+	//App->audio->PlayMusic("Sound/Music.ogg", 0);
 }
