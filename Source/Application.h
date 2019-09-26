@@ -11,7 +11,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
 #include "ModulePhysics3D.h"
-
+#include "ModuleImGui.h"
 
 class Application
 {
@@ -23,6 +23,7 @@ public:
 	ModuleRenderer3D* renderer3D = nullptr;
 	ModuleCamera3D* camera = nullptr;
 	ModulePhysics3D* physics = nullptr;
+	ModuleImGui* imgui = nullptr;
 
 
 private:

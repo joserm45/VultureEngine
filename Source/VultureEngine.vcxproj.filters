@@ -28,6 +28,9 @@
     <Filter Include="Sources\Third_Party\Glew">
       <UniqueIdentifier>{0e411bf2-f312-467a-94f7-ad06ccb3888f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Modules\GUI">
+      <UniqueIdentifier>{50e431cf-05f5-46e2-beef-34dbdbd90a1f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -124,6 +127,18 @@
     <ClInclude Include="glew\include\GL\wglew.h">
       <Filter>Sources\Third_Party\Glew</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleImGui.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel.h">
+      <Filter>Sources\Modules\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelConsole.h">
+      <Filter>Sources\Modules\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelConfiguration.h">
+      <Filter>Sources\Modules\GUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleAudio.cpp">
@@ -191,6 +206,18 @@
     </ClCompile>
     <ClCompile Include="Imgui\imgui_widgets.cpp">
       <Filter>Sources\Third_Party\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleImGui.cpp">
+      <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Panel.cpp">
+      <Filter>Sources\Modules\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelConsole.cpp">
+      <Filter>Sources\Modules\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelConfiguration.cpp">
+      <Filter>Sources\Modules\GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

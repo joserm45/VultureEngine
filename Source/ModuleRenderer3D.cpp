@@ -1,13 +1,19 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleImGui.h"
+
+#include "glew\include\GL\glew.h"
 #include "SDL\include\SDL_opengl.h"
+
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
 #include "imgui.h"
 #include "imgui\imgui_impl_sdl.h"
 #include "imgui\imgui_impl_opengl3.h"
+
+#include <stdio.h>
 
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
@@ -40,6 +46,14 @@ bool ModuleRenderer3D::Init()
 	
 	if(ret == true)
 	{
+		// Initialize glew
+		GLenum error_glew = glewInit();
+		if (error_glew != GL_NO_ERROR)
+		{
+			LOG("Error initializing glew! %s\n", glewGetErrorString(error_glew));
+			ret = false;
+		}
+
 		//Use Vsync
 		if(VSYNC && SDL_GL_SetSwapInterval(1) < 0)
 			LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());

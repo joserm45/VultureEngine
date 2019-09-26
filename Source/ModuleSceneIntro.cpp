@@ -38,9 +38,6 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update(float dt)
 {
 
-	//ImGui::Text("Hello, world %d", 123);
-
-
 	return UPDATE_CONTINUE;
 }
 
