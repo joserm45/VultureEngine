@@ -127,6 +127,10 @@
     <ClInclude Include="PanelConfiguration.h">
       <Filter>Sources\Modules\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="p2List.h" />
+    <ClInclude Include="ModuleAudio.h" />
+    <ClInclude Include="p2DynArray.h" />
+    <ClInclude Include="p2Point.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -204,6 +208,7 @@
     <ClCompile Include="PanelConfiguration.cpp">
       <Filter>Sources\Modules\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="ModuleAudio.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="VultureEngine.rc" />

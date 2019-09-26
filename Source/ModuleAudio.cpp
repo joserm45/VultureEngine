@@ -132,7 +132,7 @@ unsigned int ModuleAudio::LoadFx(const char* path)
 	}
 	else
 	{
-		fx.push_back(chunk);
+		fx.add(chunk);
 		//ret = fx.count();
 	}
 
