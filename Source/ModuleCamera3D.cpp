@@ -1,6 +1,5 @@
 #include "Globals.h"
 #include "Application.h"
-#include "PhysBody3D.h"
 #include "ModuleCamera3D.h"
 
 ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -173,7 +172,7 @@ void ModuleCamera3D::SelectFollowItem(PhysBody3D* body, float min, float max, fl
 void ModuleCamera3D::Follow()
 {
 	mat4x4 m;
-	following->GetTransform(&m);
+	//following->GetTransform(&m);
 
 	Look(Position, m.translation(), true);
 

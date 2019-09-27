@@ -8,9 +8,8 @@
 #include "ModuleSceneIntro.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
-#include "ModulePhysics3D.h"
 #include "ModuleImGui.h"
-#include "p2List.h"
+
 
 class Application
 {
@@ -20,7 +19,6 @@ public:
 	ModuleSceneIntro* scene_intro = nullptr;
 	ModuleRenderer3D* renderer3D = nullptr;
 	ModuleCamera3D* camera = nullptr;
-	ModulePhysics3D* physics = nullptr;
 	ModuleImGui* imgui = nullptr;
 
 	

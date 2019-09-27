@@ -1,4 +1,7 @@
+#include "Globals.h"
 #include "Application.h"
+#include "ModuleWindow.h"
+
 #include "PanelConfiguration.h"
 
 #include "imgui/imgui.h"
@@ -27,7 +30,7 @@ void PanelConfiguration::Draw()
 		ImGui::MenuItem("Set defaults"); 
 		ImGui::MenuItem("Save"); 
 		ImGui::MenuItem("Load"); 
-
+		
 		ImGui::EndMenu();
 	}
 	if (ImGui::CollapsingHeader("Application"))

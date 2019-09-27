@@ -3,6 +3,7 @@
 #define __PANEL_CONFIG_H__
 
 #include "Panel.h"
+#include "Application.h"
 #include "globals.h"
 #include <vector>
 

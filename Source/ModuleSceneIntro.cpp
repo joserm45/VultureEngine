@@ -2,7 +2,6 @@
 #include "Application.h"
 #include "ModuleSceneIntro.h"
 #include "Primitive.h"
-#include "PhysBody3D.h"
 #include "imgui.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -18,7 +17,7 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
-	App->physics->debug = true;
+	//App->physics->debug = true;
 
 	//Music Level
 	//PlaySceneMusic();
@@ -47,5 +46,5 @@ update_status ModuleSceneIntro::Update(float dt)
 
 void ModuleSceneIntro::PlaySceneMusic()
 {
-	//App->audio->PlayMusic("Sound/Music.ogg", 0);
+	
 }
