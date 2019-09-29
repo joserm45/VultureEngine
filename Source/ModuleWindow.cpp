@@ -103,9 +103,64 @@ void ModuleWindow::SetFullscreen(bool fullscreen)
 	{
 		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
 	}
-
 	else if (fullscreen == false)
 	{
 		SDL_SetWindowFullscreen(window, 0);
+		
 	}
+}
+
+void ModuleWindow::SetResizable(bool resizable)
+{
+	if (resizable == true)
+	{
+		SDL_WINDOW_RESIZABLE;
+	}
+	else if(resizable == false)
+	{
+		SDL_WINDOWEVENT_RESIZED;
+	}
+}
+
+void ModuleWindow::SetBorderless(bool borderless)
+{
+	if (borderless == true)
+	{
+		SDL_SetWindowBordered(window, SDL_FALSE);
+	}
+	else if (borderless == false)
+	{
+		SDL_SetWindowBordered(window, SDL_TRUE);
+	}
+}
+
+void ModuleWindow::SetFullDesktop(bool FullDesktop)
+{
+	if (FullDesktop == true)
+	{
+		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+	}
+	else if (FullDesktop == false)
+	{
+		SDL_SetWindowFullscreen(window, 0);
+	}
+}
+
+void ModuleWindow::ChangeBrightness(float brightness)
+{
+	SDL_SetWindowBrightness(window, brightness);
+}
+
+void ModuleWindow::ChangeWidth(int width)
+{
+	width_win = width;
+	SDL_SetWindowSize(window, width, height_win);
+	App->renderer3D->OnResize(width, height_win);
+}
+
+void ModuleWindow::ChangeHeight(int height)
+{
+	height_win = height;
+	SDL_SetWindowSize(window, width_win, height);
+	App->renderer3D->OnResize(width_win, height);
 }

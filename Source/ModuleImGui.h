@@ -5,13 +5,14 @@
 class Panel;
 class PanelConfiguration;
 class PanelConsole;
+class PanelAbout;
 
 using namespace std;
 
 class ModuleImGui : public Module
 {
 public:
-
+	
 	ModuleImGui(Application* app, bool start_enabled = true);
 	~ModuleImGui();
 
@@ -31,5 +32,6 @@ private:
 	list<Panel*> panels;
 	PanelConfiguration* config;
 	PanelConsole* console;
+	PanelAbout* about;
 
 };

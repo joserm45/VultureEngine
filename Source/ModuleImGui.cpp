@@ -9,6 +9,7 @@
 #include "Panel.h"
 #include "PanelConfiguration.h"
 #include "PanelConsole.h"
+#include "PanelAbout.h"
 
 
 ModuleImGui::ModuleImGui(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -38,6 +39,8 @@ bool ModuleImGui::Init()
 	panels.push_back(config);
 	console = new PanelConsole();
 	panels.push_back(console);
+	about = new PanelAbout();
+	panels.push_back(about);
 
 	AddLogToConsole("Initializing ImGui");
 
@@ -128,6 +131,9 @@ update_status ModuleImGui::HandleMainMenuBar()
 
 			if (ImGui::MenuItem("Configuration","", config->IsEnabled()))
 				config->ToggleVisibility();
+
+			if (ImGui::MenuItem("About", "", about->IsEnabled()))
+				about->ToggleVisibility();
 
 			ImGui::EndMenu();
 		}

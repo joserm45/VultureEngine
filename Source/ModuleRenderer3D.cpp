@@ -142,13 +142,13 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 		lights[i].Render();
 
 	glBegin(GL_LINES);
-	for (int i = -5; i <= 5; i++) {
+	for (int i = -20; i <= 20; i++) {
 
-		glVertex3f(-5, 0, i);
-		glVertex3f(5, 0, i);
+		glVertex3f(-20, 0, i);
+		glVertex3f(20, 0, i);
 
-		glVertex3f(i, 0, -5);
-		glVertex3f(i, 0, 5);
+		glVertex3f(i, 0, -20);
+		glVertex3f(i, 0, 20);
 
 	}
 	glColor3f(255, 255, 255);

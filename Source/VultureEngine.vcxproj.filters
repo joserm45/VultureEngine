@@ -121,6 +121,9 @@
     <ClInclude Include="PanelConfiguration.h">
       <Filter>Sources\Modules\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="PanelAbout.h">
+      <Filter>Sources\Modules\GUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -190,6 +193,9 @@
       <Filter>Sources\Modules\GUI</Filter>
     </ClCompile>
     <ClCompile Include="PanelConfiguration.cpp">
+      <Filter>Sources\Modules\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelAbout.cpp">
       <Filter>Sources\Modules\GUI</Filter>
     </ClCompile>
   </ItemGroup>

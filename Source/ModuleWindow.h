@@ -20,6 +20,12 @@ public:
 
 	void SetTitle(const char* title);
 	void SetFullscreen(bool fullscreen);
+	void SetResizable(bool resizable);
+	void SetBorderless(bool borderless);
+	void SetFullDesktop(bool full_desktop);
+	void ChangeBrightness(float brightness);
+	void ChangeWidth(int width);
+	void ChangeHeight(int height);
 
 public:
 	//The window we'll be rendering to
@@ -27,6 +33,9 @@ public:
 
 	//The surface contained by the window
 	SDL_Surface* screen_surface;
+
+	int width_win = SCREEN_WIDTH;
+	int height_win = SCREEN_HEIGHT;
 };
 
 #endif // __ModuleWindow_H__

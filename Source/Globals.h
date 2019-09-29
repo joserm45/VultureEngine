@@ -36,5 +36,5 @@ enum update_status
 #define WIN_BORDERLESS false
 #define WIN_FULLSCREEN_DESKTOP false
 #define VSYNC true
-#define TITLE "3D Physics Playground"
+#define TITLE "Vultrue Engine"
 #define SETTINGS_FOLDER "/Settings/"

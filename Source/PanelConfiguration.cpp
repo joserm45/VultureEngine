@@ -63,7 +63,7 @@ void PanelConfiguration::Draw()
 
 	if (ImGui::CollapsingHeader("Window"))
 	{ 
-		static bool WindowActive = false;
+		static bool WindowActive = true;
 		if (ImGui::Checkbox("Active", &WindowActive))
 		{
 
@@ -75,19 +75,23 @@ void PanelConfiguration::Draw()
 		ImGui::Text("%s", icon);
 
 		static float brightness = 0.5f;
-		ImGui::SliderFloat("Brightness", &brightness, 0.0f, 1.0f)
-			//to do change brightness
-			;
+		if (ImGui::SliderFloat("Brightness", &brightness, 0.0f, 1.0f))
+		{
+			//WindowAccess->ChangeBrightness(brightness);
+		}
+			
 
 		static int width = SCREEN_WIDTH;
-		ImGui::SliderInt("Width", &width, 640, 1600)
-			//to do change width
-			;
+		if (ImGui::SliderInt("Width", &width, 640, 1600))
+		{
+			//WindowAccess->ChangeWidth(width);
+		}
 
 		static int height = SCREEN_HEIGHT;
-		ImGui::SliderInt("Height", &height, 480, 1400)
-			//to do change height
-			;
+		if (ImGui::SliderInt("Height", &height, 480, 1400))
+		{
+			//WindowAccess->ChangeHeight(height);
+		}
 
 		//to do ??
 		static int RefRate = 60;
@@ -99,7 +103,8 @@ void PanelConfiguration::Draw()
 		if (ImGui::Checkbox("Fullscreen", &fullscreen))
 		{
 			//to do
-			//App->window->SetFullscreen(fullscreen);
+			//AppAccess->App->window->SetFullscreen(fullscreen);
+			//WindowAccess->SetFullscreen(fullscreen);
 		}
 		ImGui::SameLine();
 		static bool resizable = WIN_RESIZABLE;
@@ -107,6 +112,7 @@ void PanelConfiguration::Draw()
 		{
 			//to do
 			//App->window->SetResizable(resizable);
+			//WindowAccess->SetResizable(resizable);
 		}
 
 		static bool borderless = WIN_BORDERLESS;
@@ -114,6 +120,7 @@ void PanelConfiguration::Draw()
 		{
 			//to do
 			//App->window->SetBorderless(borderless);
+			//WindowAccess->SetBorderless(borderless);
 		}
 		ImGui::SameLine();
 		static bool FullDesktop = WIN_FULLSCREEN_DESKTOP;
@@ -121,6 +128,7 @@ void PanelConfiguration::Draw()
 		{
 			//to do
 			//App->window->SetFullDesktop(FullDesktop);
+			//WindowAccess->SetFullDesktop(FullDesktop);
 		}
 	}
 
@@ -136,7 +144,7 @@ void PanelConfiguration::Draw()
 
 	if (ImGui::CollapsingHeader("Hardware"))
 	{ 
-		static bool HardwareActive = false;
+		static bool HardwareActive = true;
 		if (ImGui::Checkbox("Active", &HardwareActive))
 		{
 
@@ -190,6 +198,7 @@ void PanelConfiguration::Draw()
 			ImGui::SameLine();
 			ImGui::TextColored(ImVec4(0, 0, 1, 1), "RDTSC,");
 		}
+		ImGui::Text("\n");
 		if (SDL_HasSSE() == true)
 		{
 			ImGui::SameLine();

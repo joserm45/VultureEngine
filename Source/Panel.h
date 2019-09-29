@@ -2,14 +2,15 @@
 #ifndef __PANEL_H__
 #define __PANEL_H__
 
+class ModuleWindow;
 
 class Panel
 {
 public:
-
+	ModuleWindow *WindowAccess;
 	char* name = nullptr;
 	bool visibility = false;
-
+	
 	Panel();
 	virtual ~Panel();
 
