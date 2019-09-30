@@ -1,5 +1,9 @@
 #include "PanelAbout.h"
 
+#include <windows.h>
+#include <shellapi.h>
+
+
 PanelAbout::PanelAbout()
 {
 	name = "about";
@@ -14,22 +18,36 @@ void PanelAbout::Draw()
 {
 	//Set window position and size
 	ImGui::SetNextWindowPos(ImVec2(400,75), ImGuiCond_Once);
-	ImGui::SetNextWindowSize(ImVec2(450, 650), ImGuiCond_Once);
+	ImGui::SetNextWindowSize(ImVec2(460, 660), ImGuiCond_Once);
 
 	//Window
 	ImGui::Begin("About", &visibility, ImGuiWindowFlags_None);
 
 	ImGui::Text("Vulture Engine v0.1");
 	ImGui::Text("The next generation 3D engine.");
-	ImGui::Text("Made by Jose Rodriguez & Manav Lakhwani.");
+	ImGui::Text("Made by");
+	ImGui::SameLine();
+	if (ImGui::Button("Jose Rodriguez"))
+		ShellExecute(NULL, "open", "https://github.com/joserm45", NULL, NULL, SW_SHOWNORMAL);
+	ImGui::SameLine();
+	ImGui::Text("&");
+	ImGui::SameLine();
+	if (ImGui::Button("Manav Lakhwani."))
+		ShellExecute(NULL, "open", "https://github.com/manavld", NULL, NULL, SW_SHOWNORMAL);
+
 	ImGui::Text("\n");
 
 	ImGui::Text("3rd party libraries used:");
-	ImGui::Text(" * SDL 2.0.6"); 
-	ImGui::Text(" * Glew 2.0.0"); 
-	ImGui::Text(" * ImGui 1.51"); 
-	ImGui::Text(" * MathGeoLib 1.5"); 
-	ImGui::Text(" * OpenGL 3.1");
+	if (ImGui::Button(" * SDL 2.0.6"))
+		ShellExecute(NULL, "open", "https://www.libsdl.org/", NULL, NULL, SW_SHOWNORMAL);
+	if (ImGui::Button(" * Glew 2.0.0"))
+		ShellExecute(NULL, "open", "http://glew.sourceforge.net/", NULL, NULL, SW_SHOWNORMAL);
+	if (ImGui::Button(" * ImGui 1.51"))
+		ShellExecute(NULL, "open", "https://github.com/ocornut/imgui", NULL, NULL, SW_SHOWNORMAL);
+	if (ImGui::Button(" * MathGeoLib 1.5"))
+		ShellExecute(NULL, "open", "https://github.com/juj/MathGeoLib", NULL, NULL, SW_SHOWNORMAL);
+	if (ImGui::Button(" * OpenGL 3.1"))
+		ShellExecute(NULL, "open", "https://www.opengl.org/?", NULL, NULL, SW_SHOWNORMAL);
 	ImGui::Text("\n");
 
 	ImGui::Text("License");

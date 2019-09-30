@@ -132,9 +132,6 @@ update_status ModuleImGui::HandleMainMenuBar()
 			if (ImGui::MenuItem("Configuration","", config->IsEnabled()))
 				config->ToggleVisibility();
 
-			if (ImGui::MenuItem("About", "", about->IsEnabled()))
-				about->ToggleVisibility();
-
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Help"))
@@ -145,8 +142,10 @@ update_status ModuleImGui::HandleMainMenuBar()
 			if (ImGui::MenuItem("Documentation"))
 				RequestBrowser("https://github.com/joserm45/VultureEngine");
 
-			if (ImGui::MenuItem("About"))
-			{}
+			if (ImGui::MenuItem("About", "", about->IsEnabled()))
+			{
+				about->ToggleVisibility();
+			}
 
 			ImGui::EndMenu();
 		}
