@@ -44,13 +44,15 @@ void PanelConfiguration::Draw()
 		//fps and ms
 		static int maxFPS = 0;
 		ImGui::SliderInt("Max FPS", &maxFPS, 0, 125)
-			//to do
+			//TO DO
 			;
 
 		ImGui::Text("Limit Framerate:");
 		ImGui::SameLine();
 		ImGui::TextColored(ImVec4(0, 0, 1, 1),"%d", maxFPS);
 
+		//TO DO
+		 
 		//fps and ms graphs
 		/*
 		char title[25];
@@ -66,7 +68,6 @@ void PanelConfiguration::Draw()
 		static bool WindowActive = true;
 		if (ImGui::Checkbox("Active", &WindowActive))
 		{
-
 		}
 
 		char icon[15] = "*default*";
@@ -74,61 +75,50 @@ void PanelConfiguration::Draw()
 		ImGui::SameLine();
 		ImGui::Text("%s", icon);
 
-		static float brightness = 0.5f;
-		if (ImGui::SliderFloat("Brightness", &brightness, 0.0f, 1.0f))
+		if (ImGui::SliderFloat("Brightness", &App->window->brightness, 0.0f, 1.0f))
 		{
-			//WindowAccess->ChangeBrightness(brightness);
+			App->window->ChangeBrightness(App->window->brightness);
 		}
 			
-
-		static int width = SCREEN_WIDTH;
-		if (ImGui::SliderInt("Width", &width, 640, 1600))
+		if (ImGui::SliderInt("Width", &App->window->width_win, 640, 1600))
 		{
-			//WindowAccess->ChangeWidth(width);
+			App->window->ChangeWidth(App->window->width_win);
 		}
 
-		static int height = SCREEN_HEIGHT;
-		if (ImGui::SliderInt("Height", &height, 480, 1400))
+		if (ImGui::SliderInt("Height", &App->window->height_win, 480, 1400))
 		{
-			//WindowAccess->ChangeHeight(height);
+			App->window->ChangeHeight(App->window->height_win);
 		}
 
-		//to do ??
+		//TO DO ??
 		static int RefRate = 60;
 		ImGui::Text("Refresh rate:");
 		ImGui::SameLine();
 		ImGui::TextColored(ImVec4(0, 0, 1, 1), "%d", RefRate);
 
-		static bool fullscreen = WIN_FULLSCREEN;
-		if (ImGui::Checkbox("Fullscreen", &fullscreen))
+
+		if (ImGui::Checkbox("Fullscreen", &App->window->fullscreen))
 		{
-			//to do
-			//AppAccess->App->window->SetFullscreen(fullscreen);
-			//WindowAccess->SetFullscreen(fullscreen);
+			App->window->SetFullscreen(App->window->fullscreen);
 		}
 		ImGui::SameLine();
-		static bool resizable = WIN_RESIZABLE;
-		if (ImGui::Checkbox("Resizable", &resizable))
+
+		//static bool resizable = WIN_RESIZABLE;
+		if (ImGui::Checkbox("Resizable", &App->window->resizable))
 		{
-			//to do
-			//App->window->SetResizable(resizable);
-			//WindowAccess->SetResizable(resizable);
+			//TO DO
+			App->window->SetResizable(App->window->resizable);
+			
 		}
 
-		static bool borderless = WIN_BORDERLESS;
-		if (ImGui::Checkbox("Borderless", &borderless))
+		if (ImGui::Checkbox("Borderless", &App->window->borderless))
 		{
-			//to do
-			//App->window->SetBorderless(borderless);
-			//WindowAccess->SetBorderless(borderless);
+			App->window->SetBorderless(App->window->borderless);
 		}
 		ImGui::SameLine();
-		static bool FullDesktop = WIN_FULLSCREEN_DESKTOP;
-		if (ImGui::Checkbox("Full Desktop", &FullDesktop))
+		if (ImGui::Checkbox("Full Desktop", &App->window->FullDesktop))
 		{
-			//to do
-			//App->window->SetFullDesktop(FullDesktop);
-			//WindowAccess->SetFullDesktop(FullDesktop);
+			App->window->SetFullDesktop(App->window->FullDesktop);
 		}
 	}
 
@@ -147,7 +137,6 @@ void PanelConfiguration::Draw()
 		static bool HardwareActive = true;
 		if (ImGui::Checkbox("Active", &HardwareActive))
 		{
-
 		}
 
 		SDL_version linked;

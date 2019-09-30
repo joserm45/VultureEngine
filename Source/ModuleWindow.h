@@ -36,6 +36,11 @@ public:
 
 	int width_win = SCREEN_WIDTH;
 	int height_win = SCREEN_HEIGHT;
+	bool fullscreen = WIN_FULLSCREEN;
+	bool resizable = WIN_RESIZABLE;
+	bool borderless = WIN_BORDERLESS;
+	bool FullDesktop = WIN_FULLSCREEN_DESKTOP;
+	float brightness = 1.0f;
 };
 
 #endif // __ModuleWindow_H__

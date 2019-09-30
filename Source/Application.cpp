@@ -118,14 +118,14 @@ bool Application::CleanUp()
 {
 	bool ret = true;
 	std::list<Module*>::reverse_iterator item = list_modules.rbegin();
-	/*
+	
 	while(item != list_modules.rend() && ret == true)
 	{
 		ret = (*item)->CleanUp();
 		item++;
 	}
 	return ret;
-	*/
+	
 	return true;
 }
 

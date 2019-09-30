@@ -98,7 +98,7 @@ bool ModuleImGui::CleanUp()
 	while (panel != panels.end())
 	{
 		if (&panel != nullptr) {
-			delete &panel;
+			delete *panel;
 			panels.remove(*panel++);
 			continue;
 		}
