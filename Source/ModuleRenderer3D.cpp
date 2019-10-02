@@ -154,66 +154,6 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	}
 	glEnd();
 	
-	
-	//CUBE
-	glBegin(GL_TRIANGLES);
-	glColor3f(0, 0, 255);
-	//front
-	glVertex3f(1, 1, 0);
-	glVertex3f(0, 1, 0);
-	glVertex3f(0, 0, 0);
-
-	glVertex3f(0, 0, 0);
-	glVertex3f(1, 0, 0);
-	glVertex3f(1, 1, 0);
-
-	//right
-	glVertex3f(1, 1, 0);
-	glVertex3f(1, 0, 0);
-	glVertex3f(1, 0, 1);
-
-	glVertex3f(1, 0, 1);
-	glVertex3f(1, 1, 1);
-	glVertex3f(1, 1, 0);
-
-	//top
-	glVertex3f(1, 1, 0);
-	glVertex3f(1, 1, 1);
-	glVertex3f(0, 1, 1);
-
-	glVertex3f(0, 1, 1);
-	glVertex3f(0, 1, 0);
-	glVertex3f(1, 1, 0);
-
-	//back
-	glVertex3f(0, 0, 1);
-	glVertex3f(1, 0, 1);
-	glVertex3f(1, 1, 1);
-
-	glVertex3f(1, 1, 1);
-	glVertex3f(0, 1, 1);
-	glVertex3f(0, 0, 1);
-
-	//left
-	glVertex3f(0, 0, 1);
-	glVertex3f(0, 1, 1);
-	glVertex3f(0, 1, 0);
-
-	glVertex3f(0, 1, 0);
-	glVertex3f(0, 0, 0);
-	glVertex3f(0, 0, 1);
-
-	//bottom
-	glVertex3f(0, 0, 1);
-	glVertex3f(0, 0, 0);
-	glVertex3f(1, 0, 0);
-
-	glVertex3f(1, 0, 0);
-	glVertex3f(1, 0, 1);
-	glVertex3f(0, 0, 1);
-
-	glEnd();
-	
 	//ImGui_ImplOpenGL3_NewFrame();
 	//ImGui_ImplSDL2_NewFrame(App->window->window);
 	//ImGui::NewFrame();
