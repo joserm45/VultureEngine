@@ -5,6 +5,8 @@
 #include "imgui.h"
 #include "ModuleInput.h"
 
+#include "glew\include\GL\glew.h"
+#include "SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
@@ -45,7 +47,7 @@ update_status ModuleSceneIntro::Update(float dt)
 		App->SaveProject();
 	}
 
-	//CUBE
+	//CUBE 1 DIRECT MODE
 	float v0[] = { 1.0f, 1.0f, 0.0f };
 	float v1[] = { 0.0f, 1.0f, 0.0f };
 	float v2[] = { 0.0f, 0.0f, 0.0f };
@@ -100,6 +102,111 @@ update_status ModuleSceneIntro::Update(float dt)
 	glVertex3fv(v2);
 	glVertex3fv(v7);
 	glEnd();
+
+
+	
+	//CUBE 2 VERTEX ARRAYS & GLDRAWARRAYS
+	float v0_VA[] = { 3.0f, 1.0f, 0.0f };
+	float v1_VA[] = { 2.0f, 1.0f, 0.0f };
+	float v2_VA[] = { 2.0f, 0.0f, 0.0f };
+	float v3_VA[] = { 3.0f, 0.0f, 0.0f };
+	float v4_VA[] = { 3.0f, 0.0f, 1.0f };
+	float v5_VA[] = { 3.0f, 1.0f, 1.0f };
+	float v6_VA[] = { 2.0f, 1.0f, 1.0f };
+	float v7_VA[] = { 2.0f, 0.0f, 1.0f };
+
+	float vertices[] = { 
+	//Front
+		v0_VA[0], v0_VA[1], v0_VA[2],
+		v1_VA[0], v1_VA[1], v1_VA[2],
+		v2_VA[0], v2_VA[1], v2_VA[2],
+		v2_VA[0], v2_VA[1], v2_VA[2],
+		v3_VA[0], v3_VA[1], v3_VA[2],
+		v0_VA[0], v0_VA[1], v0_VA[2],
+	//Right
+		v0_VA[0], v0_VA[1], v0_VA[2],
+		v3_VA[0], v3_VA[1], v3_VA[2],
+		v4_VA[0], v4_VA[1], v4_VA[2],
+		v4_VA[0], v4_VA[1], v4_VA[2],
+		v5_VA[0], v5_VA[1], v5_VA[2],
+		v0_VA[0], v0_VA[1], v0_VA[2],
+	//Up
+		v0_VA[0], v0_VA[1], v0_VA[2],
+		v5_VA[0], v5_VA[1], v5_VA[2],
+		v6_VA[0], v6_VA[1], v6_VA[2],
+		v6_VA[0], v6_VA[1], v6_VA[2],
+		v1_VA[0], v1_VA[1], v1_VA[2],
+		v0_VA[0], v0_VA[1], v0_VA[2],
+	//Back
+		v7_VA[0], v7_VA[1], v7_VA[2],
+		v6_VA[0], v6_VA[1], v6_VA[2],
+		v5_VA[0], v5_VA[1], v5_VA[2],
+		v5_VA[0], v5_VA[1], v5_VA[2],
+		v4_VA[0], v4_VA[1], v4_VA[2],
+		v7_VA[0], v7_VA[1], v7_VA[2],
+	//Left
+		v7_VA[0], v7_VA[1], v7_VA[2],
+		v2_VA[0], v2_VA[1], v2_VA[2],
+		v1_VA[0], v1_VA[1], v1_VA[2],
+		v1_VA[0], v1_VA[1], v1_VA[2],
+		v6_VA[0], v6_VA[1], v6_VA[2],
+		v7_VA[0], v7_VA[1], v7_VA[2],
+	//Down
+		v7_VA[0], v7_VA[1], v7_VA[2],
+		v4_VA[0], v4_VA[1], v4_VA[2],
+		v3_VA[0], v3_VA[1], v3_VA[2],
+		v3_VA[0], v3_VA[1], v3_VA[2],
+		v2_VA[0], v2_VA[1], v2_VA[2],
+		v7_VA[0], v7_VA[1], v7_VA[2]};
+
+	uint my_id = 0;
+	glGenBuffers(1, (GLuint*)&(my_id));
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glColor3f(255, 0, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, my_id);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices));
+	glDisableClientState(GL_VERTEX_ARRAY);
+
+
+
+
+	//CUBE 3 GLDRAWELEMENTS
+	float vertices_DE[] = { 
+		5.0f, 1.0f, 0.0f,
+		4.0f, 1.0f, 0.0f,
+		4.0f, 0.0f, 0.0f,
+		5.0f, 0.0f, 0.0f,
+		5.0f, 0.0f, 1.0f,
+		5.0f, 1.0f, 1.0f,
+		4.0f, 1.0f, 1.0f,
+		4.0f, 0.0f, 1.0f 
+	};
+
+	uint indices[] = {
+		0, 1, 2,  2, 3, 0,
+		0, 3, 4,  4, 5, 0,
+		0, 5, 6,  6, 1, 0,
+		7, 6, 5,  5, 4, 7,
+		7, 2, 1,  1, 6, 7,
+		7, 4, 3,  3, 2, 7
+	};
+	
+	uint my_id2 = 0;
+	uint my_indices = 0;
+	glGenBuffers(1, (GLuint*)&(my_id2));
+	glGenBuffers(1, (GLuint*)&(my_indices));
+	glBindBuffer(GL_ARRAY_BUFFER, my_id2);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_DE), vertices_DE, GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glColor3f(0, 255, 0);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glDrawElements(GL_TRIANGLES, sizeof(indices), GL_UNSIGNED_INT, NULL);   
+	glDisableClientState(GL_VERTEX_ARRAY);
+
 
 	return UPDATE_CONTINUE;
 }
