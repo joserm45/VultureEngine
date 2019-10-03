@@ -3,6 +3,7 @@
 #include "ModuleSceneIntro.h"
 #include "Primitive.h"
 #include "imgui.h"
+#include "ModuleInput.h"
 
 #include <gl/GL.h>
 #include <gl/GLU.h>
@@ -39,6 +40,11 @@ bool ModuleSceneIntro::CleanUp()
 // Update
 update_status ModuleSceneIntro::Update(float dt)
 {
+	if (App->input->keyboard[SDL_SCANCODE_M] == KEY_DOWN)
+	{
+		App->SaveProject();
+	}
+
 	//CUBE
 	float v0[] = { 1.0f, 1.0f, 0.0f };
 	float v1[] = { 0.0f, 1.0f, 0.0f };

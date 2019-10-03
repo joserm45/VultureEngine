@@ -1,5 +1,7 @@
 #pragma once
 
+#include "parson/parson.h"
+
 class Application;
 struct PhysBody3D;
 
@@ -47,6 +49,14 @@ public:
 	virtual bool CleanUp() 
 	{ 
 		return true; 
+	}
+
+	virtual void SaveStatus(JSON_Object*) {};
+	virtual void LoadStatus(const JSON_Object*) {};
+
+	char* GetName()
+	{
+		return name;
 	}
 
 	virtual void OnCollision(PhysBody3D* body1, PhysBody3D* body2)

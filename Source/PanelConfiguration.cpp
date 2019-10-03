@@ -9,7 +9,7 @@
 
 PanelConfiguration::PanelConfiguration()
 {
-	name = "config";
+	name = "Panel config";
 	visibility = true;
 }
 

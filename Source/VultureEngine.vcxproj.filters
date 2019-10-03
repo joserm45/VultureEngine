@@ -31,6 +31,12 @@
     <Filter Include="Sources\Modules\GUI">
       <UniqueIdentifier>{50e431cf-05f5-46e2-beef-34dbdbd90a1f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Third_Party\parson">
+      <UniqueIdentifier>{93e7e650-96c1-4c4f-a674-a1cc05336732}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Third_Party\PCG">
+      <UniqueIdentifier>{1b7845cc-0aab-4368-ad22-558f99c292db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -124,6 +130,18 @@
     <ClInclude Include="PanelAbout.h">
       <Filter>Sources\Modules\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="parson\parson.h">
+      <Filter>Sources\Third_Party\parson</Filter>
+    </ClInclude>
+    <ClInclude Include="PCG\entropy.h">
+      <Filter>Sources\Third_Party\PCG</Filter>
+    </ClInclude>
+    <ClInclude Include="PCG\pcg_spinlock.h">
+      <Filter>Sources\Third_Party\PCG</Filter>
+    </ClInclude>
+    <ClInclude Include="PCG\pcg_variants.h">
+      <Filter>Sources\Third_Party\PCG</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -198,8 +216,19 @@
     <ClCompile Include="PanelAbout.cpp">
       <Filter>Sources\Modules\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="parson\parson.c">
+      <Filter>Sources\Third_Party\parson</Filter>
+    </ClCompile>
+    <ClCompile Include="PCG\entropy.c">
+      <Filter>Sources\Third_Party\PCG</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="VultureEngine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="parson\LICENSE">
+      <Filter>Sources\Third_Party\parson</Filter>
+    </None>
   </ItemGroup>
 </Project>

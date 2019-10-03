@@ -59,7 +59,7 @@ public:
 	}
 
 private:
-	KEY_STATE* keyboard;
+
 	KEY_STATE mouse_buttons[MAX_MOUSE_BUTTONS];
 	int mouse_x;
 	int mouse_y;
@@ -67,4 +67,7 @@ private:
 	int mouse_x_motion;
 	int mouse_y_motion;
 	//int mouse_z_motion;
+
+public:
+	KEY_STATE* keyboard;
 };

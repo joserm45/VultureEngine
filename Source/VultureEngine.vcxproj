@@ -103,6 +103,10 @@
     <ClInclude Include="PanelAbout.h" />
     <ClInclude Include="PanelConfiguration.h" />
     <ClInclude Include="PanelConsole.h" />
+    <ClInclude Include="parson\parson.h" />
+    <ClInclude Include="PCG\entropy.h" />
+    <ClInclude Include="PCG\pcg_spinlock.h" />
+    <ClInclude Include="PCG\pcg_variants.h" />
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Timer.h" />
@@ -130,11 +134,16 @@
     <ClCompile Include="PanelAbout.cpp" />
     <ClCompile Include="PanelConfiguration.cpp" />
     <ClCompile Include="PanelConsole.cpp" />
+    <ClCompile Include="parson\parson.c" />
+    <ClCompile Include="PCG\entropy.c" />
     <ClCompile Include="Primitive.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="VultureEngine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="parson\LICENSE" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
