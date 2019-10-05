@@ -50,7 +50,7 @@ update_status ModuleSceneIntro::Update(float dt)
 	//Draw Cubes
 	DrawCubeDirectMode();
 
-	DrawCubeVertexArrays();
+	//DrawCubeVertexArrays();
 
 	DrawCubeDrawElements();
 
@@ -213,9 +213,9 @@ void ModuleSceneIntro::DrawCubeDrawElements()
 	glGenBuffers(1, (GLuint*)&(my_id2));
 	glGenBuffers(1, (GLuint*)&(my_indices));
 	glBindBuffer(GL_ARRAY_BUFFER, my_id2);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_DE), vertices_DE, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * sizeof(vertices_DE) * 3, vertices_DE, GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * sizeof(indices), indices, GL_STATIC_DRAW);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glColor3f(0, 255, 0);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
