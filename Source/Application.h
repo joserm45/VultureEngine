@@ -9,6 +9,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
 #include "ModuleImGui.h"
+#include "ModuleLoadMesh.h"
 
 #include "PCG\pcg_variants.h"
 
@@ -22,6 +23,7 @@ public:
 	ModuleRenderer3D* renderer3D = nullptr;
 	ModuleCamera3D* camera = nullptr;
 	ModuleImGui* imgui = nullptr;
+	ModuleLoadMesh* load_mesh = nullptr;
 
 	pcg32_random_t random_num;
 

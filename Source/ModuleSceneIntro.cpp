@@ -10,6 +10,8 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
+
+
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 }
@@ -24,9 +26,11 @@ bool ModuleSceneIntro::Start()
 	bool ret = true;
 
 	//App->physics->debug = true;
-
+	
 	//Music Level
 	//PlaySceneMusic();
+
+
 
 	return ret;
 }
@@ -35,6 +39,7 @@ bool ModuleSceneIntro::Start()
 bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
+
 
 	return true;
 }
@@ -46,14 +51,14 @@ update_status ModuleSceneIntro::Update(float dt)
 	{
 		App->SaveProject();
 	}
-
+	
 	//Draw Cubes
 	DrawCubeDirectMode();
-
+	
 	//DrawCubeVertexArrays();
 
 	DrawCubeDrawElements();
-
+	
 
 	return UPDATE_CONTINUE;
 }

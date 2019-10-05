@@ -142,6 +142,9 @@
     <ClInclude Include="PCG\pcg_variants.h">
       <Filter>Sources\Third_Party\PCG</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleLoadMesh.h">
+      <Filter>Sources\Modules\Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -221,6 +224,9 @@
     </ClCompile>
     <ClCompile Include="PCG\entropy.c">
       <Filter>Sources\Third_Party\PCG</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleLoadMesh.cpp">
+      <Filter>Sources\Modules\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
