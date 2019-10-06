@@ -53,6 +53,16 @@ bool Application::Init()
 	entropy_getbytes((void*)seeds, sizeof(seeds));
 	pcg32_srandom_r(&random_num, seeds[0], seeds[1]);
 
+	// Load Config.json
+
+	JSON_Value* root_value = json_parse_file("config.json");
+	JSON_Object* module_root_object = json_value_get_object(root_value);
+
+	JSON_Object* module_object = json_object_get_object(module_root_object, "Application");
+	SetAppName(json_object_get_string(module_object, "Title"));
+	SetOrganizationName(json_object_get_string(module_object, "Organization"));
+	SetMaxFramerate(json_object_get_number(module_object, "Max FPS"));
+
 	// Call Init() in all modules
 	std::list<Module*>::iterator item = list_modules.begin();
 
@@ -72,6 +82,7 @@ bool Application::Init()
 		item++;
 	}
 	
+
 	ms_timer.Start();
 	return ret;
 }
@@ -151,32 +162,38 @@ bool Application::CleanUp()
 
 void Application::Save()
 {
-	JSON_Value* root_value = json_parse_file("config.json");
-	JSON_Object* root_object = nullptr;
+	/*JSON_Value* root_value = json_value_init_object();
+	JSON_Object* root_object = json_value_get_object(root_value);*/
 
-
-
-	if (root_value == NULL)
+	/*if (root_value == NULL)
 	{
 		//Create Config
 		root_value = json_value_init_object();
-	}
+	}*/
 
-	root_object = json_value_get_object(root_value);
+	//root_object = json_value_get_object(root_value);
+		// Saving App 
 
 	JSON_Value* root_module_value = json_value_init_object();
 	JSON_Object* object_module = json_value_get_object(root_module_value);
+
+	json_object_set_value(object_module, "Application", root_module_value);
+	json_object_set_string(object_module, "Title", GetAppName());
+	json_object_set_string(object_module, "Organization", GetOrganizationName());
+	json_object_set_number(object_module, "Max FPS", GetMaxFramerate());
 
 	for (list<Module*>::const_iterator item = list_modules.begin(); item != list_modules.end(); item++)
 	{
 		root_module_value = json_value_init_object();
 		object_module = json_value_get_object(root_module_value);
 
-		json_object_set_value(root_object, (*item)->GetName(), root_module_value);
-		(*item)->SaveStatus(object_module);
+		/*json_object_set_value(root_object, (*item)->GetName(), root_module_value);
+		(*item)->SaveStatus(object_module); TODO */
 	}
 
-	json_value_free(root_value);
+	//json_value_free(root_value);
+
+	App->imgui->AddLogToConsole("Saved with exit!");
 }
 
 void Application::Load()
@@ -185,12 +202,6 @@ void Application::Load()
 	JSON_Object* root_object = nullptr;
 
 
-
-	if (root_value == NULL)
-	{
-		//Create Config
-		root_value = json_value_init_object();
-	}
 
 	root_object = json_value_get_object(root_value);
 
@@ -222,6 +233,40 @@ void Application::SaveProject()
 void Application::LoadProject()
 {
 	go_to_load = true;
+}
+
+void Application::SetAppName(const char* name)
+{
+	appName = new char[CHAR_BUFFER_SIZE];
+	strcpy_s((char*)appName, CHAR_BUFFER_SIZE, name);
+	
+	window->SetTitle(appName);
+}
+
+const char* Application::GetAppName() const
+{
+	return appName;
+}
+
+void Application::SetOrganizationName(const char* name)
+{
+	organizationName = new char[CHAR_BUFFER_SIZE];
+	strcpy_s((char*)organizationName, CHAR_BUFFER_SIZE, name);
+}
+
+const char* Application::GetOrganizationName() const
+{
+	return organizationName;
+}
+
+void Application::SetMaxFramerate(uint max_framerate)
+{
+	this->max_framerate = max_framerate;
+}
+
+uint Application::GetMaxFramerate() const
+{
+	return max_framerate;;
 }
 
 void Application::AddModule(Module* mod)

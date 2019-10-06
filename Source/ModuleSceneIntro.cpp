@@ -51,6 +51,10 @@ update_status ModuleSceneIntro::Update(float dt)
 	{
 		App->SaveProject();
 	}
+	if (App->input->keyboard[SDL_SCANCODE_N] == KEY_DOWN)
+	{
+		App->LoadProject();
+	}
 	
 	//Draw Cubes
 	//DrawCubeDirectMode();

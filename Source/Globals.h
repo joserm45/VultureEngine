@@ -38,3 +38,4 @@ enum update_status
 #define VSYNC true
 #define TITLE "Vultrue Engine"
 #define SETTINGS_FOLDER "/Settings/"
+#define CHAR_BUFFER_SIZE 56

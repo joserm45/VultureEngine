@@ -31,10 +31,18 @@ private:
 
 	Timer	ms_timer;
 	float	dt;
+	uint max_framerate = 125;
 	std::list<Module*> list_modules;
 	
 	bool go_to_save = false;
 	bool go_to_load = false;
+	bool cap_frames = false;
+
+	const char*	appName = nullptr;
+	const char*	organizationName = nullptr;
+
+	JSON_Value* root_value;
+	JSON_Object* root_object;
 
 public:
 
@@ -49,6 +57,13 @@ public:
 	void SaveProject();
 	void LoadProject();
 
+	void SetAppName(const char* name);
+	const char* GetAppName()const;
+	void SetOrganizationName(const char* name);
+	const char* GetOrganizationName()const;
+	void SetMaxFramerate(uint max_framerate);
+	uint GetMaxFramerate()const;
+
 private:
 
 	void AddModule(Module* mod);
@@ -57,6 +72,7 @@ private:
 
 	void Save();
 	void Load();
+
 };
 
 extern Application *App;

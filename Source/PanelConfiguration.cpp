@@ -35,18 +35,29 @@ void PanelConfiguration::Draw()
 	}
 	if (ImGui::CollapsingHeader("Application"))
 	{ 
-		static char AppName[15] = "Vulture Engine";
-		static char OrgName[15] = "CITM UPC";
-		ImGui::InputText("App Name", AppName, IM_ARRAYSIZE(AppName));
-		ImGui::InputText("Organization", OrgName, IM_ARRAYSIZE(OrgName));
+		static char AppName[CHAR_BUFFER_SIZE];
+		static char OrgName[CHAR_BUFFER_SIZE];
+
+		// GET Name Engine
+		if (App->GetAppName() != NULL)
+			strcpy_s(AppName, CHAR_BUFFER_SIZE, App->GetAppName());
+
+		if(ImGui::InputText("App Name", AppName, IM_ARRAYSIZE(AppName)) != NULL);
+			App->SetAppName(AppName);
+
+		if (App->GetOrganizationName() != NULL)
+			strcpy_s(OrgName, CHAR_BUFFER_SIZE, App->GetOrganizationName());
+
+		if(ImGui::InputText("Organization", OrgName, IM_ARRAYSIZE(OrgName)));
+			App->SetOrganizationName(OrgName);
 
 		//TO DO (ALL THE REST OF APP)
 		//fps and ms
-		static int maxFPS = 0;
-		ImGui::SliderInt("Max FPS", &maxFPS, 0, 125)
+		static int maxFPS = App->GetMaxFramerate();
+		if (ImGui::SliderInt("Max FPS", &maxFPS, 0, 125))
+			App->SetMaxFramerate(maxFPS);
 			//TO DO
-			;
-
+			
 		ImGui::Text("Limit Framerate:");
 		ImGui::SameLine();
 		ImGui::TextColored(ImVec4(0, 0, 1, 1),"%d", maxFPS);
