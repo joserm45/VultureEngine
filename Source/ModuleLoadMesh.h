@@ -28,7 +28,7 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
-private:
+public:
 	mesh_data fbx;
 
 };

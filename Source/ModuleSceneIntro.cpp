@@ -53,11 +53,11 @@ update_status ModuleSceneIntro::Update(float dt)
 	}
 	
 	//Draw Cubes
-	DrawCubeDirectMode();
+	//DrawCubeDirectMode();
 	
 	//DrawCubeVertexArrays();
 
-	DrawCubeDrawElements();
+	//DrawCubeDrawElements();
 	
 
 	return UPDATE_CONTINUE;
