@@ -55,10 +55,12 @@ update_status ModuleSceneIntro::Update(float dt)
 	{
 		App->LoadProject();
 	}
-	
+	/*glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);*/
 	//Draw Cubes
-	//DrawCubeDirectMode();
+	DrawCubeDirectMode();
 	
+
 	//DrawCubeVertexArrays();
 
 	//DrawCubeDrawElements();
@@ -81,7 +83,7 @@ void ModuleSceneIntro::DrawCubeDirectMode()
 	float v7[] = { 0.0f, 0.0f, 1.0f };
 
 	glBegin(GL_TRIANGLES);
-	glColor3f(0, 0, 255);
+	//glColor3f(0, 0, 255);
 	//Front
 	glVertex3fv(v0);
 	glVertex3fv(v1);
@@ -124,6 +126,43 @@ void ModuleSceneIntro::DrawCubeDirectMode()
 	glVertex3fv(v3);
 	glVertex3fv(v2);
 	glVertex3fv(v7);
+
+	/*glEnable(GL_TEXTURE_2D);
+
+
+
+	int width, height;
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); 
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); 
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); 
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); 
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
+
+	//unsigned char* image = loadBMP_custom("./my_texture.bmp");;
+
+	GLubyte checkImage[50][50][4];
+
+	for (int i = 0; i < 25; i++)
+	{
+		for (int j = 0; j < 25; j++)
+		{
+			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
+
+			checkImage[i][j][0] = (GLubyte)c;
+			checkImage[i][j][1] = (GLubyte)c;
+			checkImage[i][j][2] = (GLubyte)c;
+			checkImage[i][j][3] = (GLubyte)255;
+		}
+	}
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 50, 50, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+
+	glBindTexture(GL_TEXTURE_2D, 0);*/
 	glEnd();
 }
 
@@ -186,11 +225,15 @@ void ModuleSceneIntro::DrawCubeVertexArrays()
 	uint my_id = 0;
 	glGenBuffers(1, (GLuint*)&(my_id));
 	glEnableClientState(GL_VERTEX_ARRAY);
+
 	glColor3f(255, 0, 0);
+
 	glBindBuffer(GL_ARRAY_BUFFER, my_id);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
+
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices));
+
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 

@@ -30,4 +30,6 @@ public:
 	char buf[10] = "casa";
 	float f = 1.0f;
 	//float my_color[] = { 0.0f, 0.0f, 1.0f };
+//	GLuint texture;
+	//const char ImageName[] = "Assets/lenna.png";
 };
