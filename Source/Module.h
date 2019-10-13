@@ -3,14 +3,14 @@
 #include "parson/parson.h"
 
 class Application;
-struct PhysBody3D;
 
 class Module
 {
+
 private :
 
 	bool enabled;
-	
+
 public:
 
 	Application* App;
@@ -51,7 +51,7 @@ public:
 		return true; 
 	}
 
-	virtual void SaveStatus(JSON_Object*) {};
+	virtual void SaveStatus(JSON_Object*)const {};
 	virtual void LoadStatus(const JSON_Object*) {};
 
 	char* GetName()
@@ -59,9 +59,7 @@ public:
 		return name;
 	}
 
-	virtual void OnCollision(PhysBody3D* body1, PhysBody3D* body2)
-	{}
-
 protected :
+
 	char* name = "NULL";
 };

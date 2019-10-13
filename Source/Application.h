@@ -10,6 +10,8 @@
 #include "ModuleCamera3D.h"
 #include "ModuleImGui.h"
 #include "ModuleLoadMesh.h"
+#include "Components.h"
+#include "GameObject.h"
 
 #include "PCG\pcg_variants.h"
 
@@ -24,6 +26,7 @@ public:
 	ModuleCamera3D* camera = nullptr;
 	ModuleImGui* imgui = nullptr;
 	ModuleLoadMesh* load_mesh = nullptr;
+	
 
 	pcg32_random_t random_num;
 
