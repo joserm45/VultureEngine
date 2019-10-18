@@ -1,3 +1,4 @@
+#include "Globals.h"
 #include "Components.h"
 #include "GameObject.h"
 

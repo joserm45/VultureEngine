@@ -1,5 +1,7 @@
-#include "GameObject.h"
+#include "Application.h"
 #include "Globals.h"
+#include "GameObject.h"
+
 #include "Components.h"
 
 #include "imgui/imgui.h"
@@ -93,6 +95,7 @@ GameObject* GameObject::GetParent()
 GameObject* GameObject::GetChild(uint number_child)
 {
 	//return childs[number_child];
+	return 0;
 }
 
 

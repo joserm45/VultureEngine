@@ -5,6 +5,9 @@
 
 #include "MathGeoLib/include/MathGeoLib.h"
 
+/*
+
+
 class CompTransform : public Components
 {
 public:
@@ -28,11 +31,14 @@ public:
 private:
 	math::float4x4 global_matrix = math::float4x4::identity;
 	math::float4x4 local_matrix = math::float4x4::identity;
-
+	
 	math::float3 position = math::float3::zero;
 	math::float3 rotation = math::float3::zero;
 	math::float3 scale = math::float3::one;
+	
 
 };
+
+*/
 
 #endif

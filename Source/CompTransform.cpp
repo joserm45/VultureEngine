@@ -2,6 +2,10 @@
 #include "CompTransform.h"
 #include "GameObject.h"
 
+#include "MathGeoLib/include/MathGeoLib.h"
+
+/*
+
 CompTransform::CompTransform(GameObject* parent) : Components(parent)
 {
 	LOG("Added Transform to GO");
@@ -47,3 +51,6 @@ math::float4x4 CompTransform::GetGlobalMatrix() const {
 
 	return global_matrix;
 }
+
+
+*/
