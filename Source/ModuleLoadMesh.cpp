@@ -42,7 +42,7 @@ bool ModuleLoadMesh::Start()
 	bool ret = true;
 	
 
-	LoadMesh("Assets/warrior.FBX");
+	LoadMesh("Assets/BakerHouse.FBX");
 
 
 

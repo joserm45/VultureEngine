@@ -58,7 +58,7 @@ update_status ModuleSceneIntro::Update(float dt)
 	/*glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);*/
 	//Draw Cubes
-	DrawCubeDirectMode();
+	//DrawCubeDirectMode();
 	
 
 	//DrawCubeVertexArrays();
