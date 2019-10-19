@@ -42,7 +42,7 @@ bool ModuleLoadMesh::Start()
 	bool ret = true;
 	
 
-	LoadMesh("Assets/BakerHouse.FBX");
+	LoadMesh("Assets/warrior.FBX");
 
 
 
@@ -125,11 +125,16 @@ void ModuleLoadMesh::LoadMesh(char* path)
 			}
 
 			//copy color
-			if (scene->mMeshes[x]->HasFaces())
+			if (scene->mMeshes[x]->HasVertexColors(0))
 			{
-				fbx.num_color = scene->mMeshes[x]->mNumFaces;
-				fbx.color = new float[fbx.num_color * 3];
-				memcpy(fbx.color, scene->mMeshes[x]->mColors, sizeof(float) * fbx.num_color * 3);
+				fbx.num_color = scene->mMeshes[x]->mNumVertices;
+				fbx.color = new float[fbx.num_color * 4];
+				for (uint i = 0; i < scene->mMeshes[x]->mNumVertices; ++i) {
+					memcpy(&fbx.color[i], &scene->mMeshes[x]->mColors[0][i].r, sizeof(float));
+					memcpy(&fbx.color[i + 1], &scene->mMeshes[x]->mColors[0][i].g, sizeof(float));
+					memcpy(&fbx.color[i + 2], &scene->mMeshes[x]->mColors[0][i].b, sizeof(float));
+					memcpy(&fbx.color[i + 3], &scene->mMeshes[x]->mColors[0][i].a, sizeof(float));
+				}
 			}
 
 			//copy text coordinates
@@ -140,7 +145,8 @@ void ModuleLoadMesh::LoadMesh(char* path)
 				//memcpy(fbx.textcoord, scene->mMeshes[0]->mTextureCoords, sizeof(float) * fbx.num_textcoord * 2);
 				for (uint i = 0; i < scene->mMeshes[x]->mNumVertices; ++i)
 				{
-					memcpy(&fbx.textcoord[i], &scene->mMeshes[x]->mTextureCoords[0][i], sizeof(float) * 2);
+					memcpy(&fbx.textcoord[i], &scene->mMeshes[x]->mTextureCoords[0][i].x, sizeof(float));
+					memcpy(&fbx.textcoord[i], &scene->mMeshes[x]->mTextureCoords[0][i].y, sizeof(float));
 				}
 			}
 
@@ -149,7 +155,7 @@ void ModuleLoadMesh::LoadMesh(char* path)
 
 			fbx.v_size = sizeof(float) * fbx.num_vertex * 3;
 			fbx.n_size = sizeof(float) * fbx.num_normal * 3;
-			fbx.c_size = sizeof(float) * fbx.num_color * 3;
+			fbx.c_size = sizeof(float) * fbx.num_color * 4;
 			fbx.t_size = sizeof(float) * fbx.num_textcoord * 2;
 
 			glBindBuffer(GL_ARRAY_BUFFER, fbx.id_vertex);
@@ -162,6 +168,12 @@ void ModuleLoadMesh::LoadMesh(char* path)
 
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, fbx.id_index);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * fbx.num_index, fbx.index, GL_STATIC_DRAW);
+
+
+			//create gameobject
+
+
+
 		}
 		aiReleaseImport(scene);
 	}
