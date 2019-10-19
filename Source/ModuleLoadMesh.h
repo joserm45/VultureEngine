@@ -47,6 +47,7 @@ public:
 
 	void LoadMesh(char* path);
 	void DrawMesh();
+	void ClearMeshData();
 
 public:
 	mesh_data fbx;

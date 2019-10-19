@@ -71,6 +71,8 @@ bool ModuleLoadMesh::CleanUp()
 {
 	LOG("Unloading assets");
 
+	ClearMeshData();
+	
 
 	// detach log stream
 	aiDetachAllLogStreams();
@@ -81,69 +83,86 @@ bool ModuleLoadMesh::CleanUp()
 
 void ModuleLoadMesh::LoadMesh(char* path)
 {
+	ClearMeshData();
+
 	const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != NULL && scene->HasMeshes())
 	{
-		//copy vertices
-		fbx.num_vertex = scene->mMeshes[0]->mNumVertices;
-		fbx.vertex = new float[fbx.num_vertex * 3];
-		memcpy(fbx.vertex, scene->mMeshes[0]->mVertices, sizeof(float) * fbx.num_vertex * 3);
-		LOG("New mesh with %d vertices", fbx.num_vertex);
-
-		//copy faces
-		if (scene->mMeshes[0]->HasFaces())
+		for (int x = 0; x < scene->mNumMeshes; x++)
 		{
-			fbx.num_index = scene->mMeshes[0]->mNumFaces * 3;
-			fbx.index = new uint[fbx.num_index];
-			for (uint i = 0; i < scene->mMeshes[0]->mNumFaces; ++i)
-			{
+			//copy vertices
+			fbx.num_vertex = scene->mMeshes[x]->mNumVertices;
+			fbx.vertex = new float[fbx.num_vertex * 3];
+			memcpy(fbx.vertex, scene->mMeshes[x]->mVertices, sizeof(float) * fbx.num_vertex * 3);
+			LOG("New mesh with %d vertices", fbx.num_vertex);
 
-				if (scene->mMeshes[0]->mFaces[i].mNumIndices != 3)
+			//copy faces
+			if (scene->mMeshes[x]->HasFaces())
+			{
+				fbx.num_index = scene->mMeshes[x]->mNumFaces * 3;
+				fbx.index = new uint[fbx.num_index];
+				for (uint i = 0; i < scene->mMeshes[x]->mNumFaces; ++i)
 				{
-					LOG("WARNING, geometry face with != 3 indices!");
-				}
-				else
-				{
-					memcpy(&fbx.index[i * 3], scene->mMeshes[0]->mFaces[i].mIndices, 3 * sizeof(uint));
+
+					if (scene->mMeshes[x]->mFaces[i].mNumIndices != 3)
+					{
+						LOG("WARNING, geometry face with != 3 indices!");
+					}
+					else
+					{
+						memcpy(&fbx.index[i * 3], scene->mMeshes[x]->mFaces[i].mIndices, 3 * sizeof(uint));
+					}
 				}
 			}
+
+			//copy normal
+			if (scene->mMeshes[x]->HasNormals())
+			{
+				fbx.num_normal = scene->mMeshes[x]->mNumVertices;
+				fbx.normal = new float[fbx.num_normal * 3];
+				memcpy(fbx.normal, scene->mMeshes[x]->mNormals, sizeof(float) * fbx.num_normal * 3);
+				LOG("New mesh with %d normals", fbx.num_normal);
+			}
+
+			//copy color
+			if (scene->mMeshes[x]->HasFaces())
+			{
+				fbx.num_color = scene->mMeshes[x]->mNumFaces;
+				fbx.color = new float[fbx.num_color * 3];
+				memcpy(fbx.color, scene->mMeshes[x]->mColors, sizeof(float) * fbx.num_color * 3);
+			}
+
+			//copy text coordinates
+			if (scene->mMeshes[x]->HasTextureCoords(0))
+			{
+				fbx.num_textcoord = scene->mMeshes[x]->mNumVertices;
+				fbx.textcoord = new float[fbx.num_textcoord * 2];
+				//memcpy(fbx.textcoord, scene->mMeshes[0]->mTextureCoords, sizeof(float) * fbx.num_textcoord * 2);
+				for (uint i = 0; i < scene->mMeshes[x]->mNumVertices; ++i)
+				{
+					memcpy(&fbx.textcoord[i], &scene->mMeshes[x]->mTextureCoords[0][i], sizeof(float) * 2);
+				}
+			}
+
+			glGenBuffers(1, (GLuint*)&(fbx.id_vertex));
+			glGenBuffers(1, (GLuint*)&(fbx.id_index));
+
+			fbx.v_size = sizeof(float) * fbx.num_vertex * 3;
+			fbx.n_size = sizeof(float) * fbx.num_normal * 3;
+			fbx.c_size = sizeof(float) * fbx.num_color * 3;
+			fbx.t_size = sizeof(float) * fbx.num_textcoord * 2;
+
+			glBindBuffer(GL_ARRAY_BUFFER, fbx.id_vertex);
+			//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * fbx.num_vertex * 3, fbx.vertex, GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, fbx.v_size + fbx.n_size + fbx.c_size + fbx.t_size, 0, GL_STATIC_DRAW);
+			glBufferSubData(GL_ARRAY_BUFFER, 0, fbx.v_size, fbx.vertex);
+			glBufferSubData(GL_ARRAY_BUFFER, fbx.v_size, fbx.n_size, fbx.normal);
+			glBufferSubData(GL_ARRAY_BUFFER, fbx.v_size + fbx.n_size, fbx.c_size, fbx.color);
+			glBufferSubData(GL_ARRAY_BUFFER, fbx.v_size + fbx.n_size + fbx.c_size, fbx.t_size, fbx.textcoord);
+
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, fbx.id_index);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * fbx.num_index, fbx.index, GL_STATIC_DRAW);
 		}
-
-		//copy normal
-		fbx.num_normal = scene->mMeshes[0]->mNumFaces;
-		fbx.normal = new float[fbx.num_normal * 3];
-		memcpy(fbx.normal, scene->mMeshes[0]->mNormals, sizeof(float) * fbx.num_normal * 3);
-		LOG("New mesh with %d normals", fbx.num_normal);
-
-		//copy color
-		fbx.num_color = scene->mMeshes[0]->mNumFaces;
-		fbx.color = new float[fbx.num_color * 3];
-		memcpy(fbx.color, scene->mMeshes[0]->mColors, sizeof(float) * fbx.num_color * 3);
-
-		//copy text coordinates
-		fbx.num_textcoord = scene->mNumTextures;
-		fbx.textcoord = new float[fbx.num_textcoord * 2];
-		memcpy(fbx.textcoord, scene->mMeshes[0]->mTextureCoords, sizeof(float) * fbx.num_textcoord * 2);
-
-		glGenBuffers(1, (GLuint*)&(fbx.id_vertex));
-		glGenBuffers(1, (GLuint*)&(fbx.id_index));
-
-		fbx.v_size = sizeof(float) * fbx.num_vertex * 3;
-		fbx.n_size = sizeof(float) * fbx.num_normal * 3;
-		fbx.c_size = sizeof(float) * fbx.num_color * 3;
-		fbx.t_size = sizeof(float) * fbx.num_textcoord * 2;
-
-		glBindBuffer(GL_ARRAY_BUFFER, fbx.id_vertex);
-		//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * fbx.num_vertex * 3, fbx.vertex, GL_STATIC_DRAW);
-		glBufferData(GL_ARRAY_BUFFER, fbx.v_size + fbx.n_size + fbx.c_size + fbx.t_size, 0, GL_STATIC_DRAW); 
-		glBufferSubData(GL_ARRAY_BUFFER, 0, fbx.v_size, fbx.vertex);
-		glBufferSubData(GL_ARRAY_BUFFER, fbx.v_size, fbx.n_size, fbx.normal);
-		glBufferSubData(GL_ARRAY_BUFFER, fbx.v_size + fbx.n_size, fbx.c_size, fbx.color);
-		glBufferSubData(GL_ARRAY_BUFFER, fbx.v_size + fbx.n_size + fbx.c_size, fbx.t_size, fbx.textcoord);
-
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, fbx.id_index);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * fbx.num_index, fbx.index, GL_STATIC_DRAW);
-
 		aiReleaseImport(scene);
 	}
 	else
@@ -177,3 +196,31 @@ void ModuleLoadMesh::DrawMesh()
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
+void ModuleLoadMesh::ClearMeshData()
+{
+	if (fbx.index != nullptr)
+	{
+		delete[] fbx.index;
+		fbx.index = nullptr;
+	}
+	if (fbx.vertex != nullptr)
+	{
+		delete[] fbx.vertex;
+		fbx.vertex = nullptr;
+	}
+	if (fbx.normal != nullptr)
+	{
+		delete[] fbx.normal;
+		fbx.normal = nullptr;
+	}
+	if (fbx.color != nullptr)
+	{
+		delete[] fbx.color;
+		fbx.color = nullptr;
+	}
+	if (fbx.textcoord != nullptr)
+	{
+		delete[] fbx.textcoord;
+		fbx.textcoord = nullptr;
+	}
+}
