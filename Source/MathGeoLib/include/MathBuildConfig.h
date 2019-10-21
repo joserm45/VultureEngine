@@ -17,25 +17,25 @@
 	@brief Specifies all build flags for the library. */
 #pragma once
 
-#if !defined(WIN32)
+/*#if !defined(WIN32)
 #define WIN32
-#endif
+#endif*/
 
 // Ric
 // Warning disabled ---
-#pragma warning( disable : 4577 ) // Warning that exceptions are disabled
-#pragma warning( disable : 4530 ) // Warning that exceptions are disabled
+//#pragma warning( disable : 4577 ) // Warning that exceptions are disabled
+//#pragma warning( disable : 4530 ) // Warning that exceptions are disabled
 #define MATH_SILENT_ASSUME
-#define MATH_BULLET_INTEROP
+//#define MATH_BULLET_INTEROP
 // ---
-
+/*
 // Disable STL exceptions
 #if !defined(_HAS_EXCEPTIONS) 
 #define _HAS_EXCEPTIONS 0
 #endif
 
 #define _STATIC_CPPLIB
-
+*/
 // If MATH_ENABLE_NAMESPACE is defined, all math symbols are put inside a namespace.
 #define MATH_ENABLE_NAMESPACE
 
