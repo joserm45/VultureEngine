@@ -5,6 +5,9 @@
 
 Application::Application()
 {
+	frames = 0;
+	PERF_START(ptimer);
+
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
 	scene_intro = new ModuleSceneIntro(this);
@@ -32,6 +35,10 @@ Application::Application()
 
 	// Renderer last!
 	AddModule(renderer3D);
+
+	cap = "ON";
+
+	PERF_PEEK(ptimer);
 }
 
 Application::~Application()
@@ -47,6 +54,8 @@ Application::~Application()
 
 bool Application::Init()
 {
+	PERF_START(ptimer);
+
 	bool ret = true;
 
 	uint64_t seeds[2];
@@ -62,6 +71,9 @@ bool Application::Init()
 	SetAppName(json_object_get_string(module_object, "Title"));
 	SetOrganizationName(json_object_get_string(module_object, "Organization"));
 	SetMaxFramerate(json_object_get_number(module_object, "Max FPS"));
+
+	//framerete_cap = ; 
+	framerete_ms = 1000 / framerete_cap;
 
 	// Call Init() in all modules
 	std::list<Module*>::iterator item = list_modules.begin();
@@ -83,21 +95,43 @@ bool Application::Init()
 	}
 	
 
-	ms_timer.Start();
+	PERF_PEEK(ptimer);
+	//ms_timer.Start();
 	return ret;
 }
 
 // ---------------------------------------------
 void Application::PrepareUpdate()
 {
-	dt = (float)ms_timer.Read() / 1000.0f;
-	ms_timer.Start();
+	//dt = (float)ms_timer.Read() / 1000.0f;
+	//ms_timer.Start();
+	frame_count++;
+	last_sec_frame_count++;
+	dt = frame_time.ReadSec();
+
+	frame_time.Start();
 }
 
 
 // Call PreUpdate, Update and PostUpdate on all modules
 update_status Application::Update()
 {
+	if (cap_FPS == false)
+		cap_FPS = true;
+	else
+		cap_FPS = false;
+
+
+	if (cap_FPS == true)
+	{
+		framerete_ms = 1000 / framerete_cap;
+		cap = "ON";
+	}
+	else
+	{
+		framerete_ms = frame_time.Read();
+		cap = "OFF";
+	}
 	update_status ret = UPDATE_CONTINUE;
 	PrepareUpdate();
 	
@@ -133,6 +167,29 @@ update_status Application::Update()
 
 void Application::FinishUpdate()
 {
+	if (last_sec_frame_time.Read() > 1000)
+	{
+		last_sec_frame_time.Start();
+		prev_last_sec_frame_count = last_sec_frame_count;
+		last_sec_frame_count = 0;
+	}
+
+	float avg_fps = float(frame_count) / startup_time.ReadSec();
+	float seconds_since_startup = startup_time.ReadSec();
+	float last_frame_ms = frame_time.Read();
+	//uint frames_on_last_update = prev_last_sec_frame_count;
+	
+	float init_sleep_timer = App->ptimer.ReadMs();
+
+	if (last_frame_ms < framerete_ms && cap == "ON")
+	{
+		SDL_Delay(framerete_ms - last_frame_ms);
+
+		float final_sleep_timer = App->ptimer.ReadMs();
+		float sleep_timer = final_sleep_timer - init_sleep_timer;
+	}
+
+
 	if (go_to_save == true)
 	{
 		Save();
@@ -261,15 +318,25 @@ const char* Application::GetOrganizationName() const
 
 void Application::SetMaxFramerate(uint max_framerate)
 {
-	this->max_framerate = max_framerate;
+	this->framerete_cap = max_framerate;
 }
 
 uint Application::GetMaxFramerate() const
 {
-	return max_framerate;;
+	return framerete_cap;
 }
 
 void Application::AddModule(Module* mod)
 {
 	list_modules.push_back(mod);
+}
+
+float Application::GetFPS()
+{
+	return float(prev_last_sec_frame_count);
+}
+
+float Application::GetMS()
+{
+	return float(1000 / prev_last_sec_frame_count);
 }

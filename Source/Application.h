@@ -2,6 +2,7 @@
 
 #include "Globals.h"
 #include "Timer.h"
+#include "j1PerfTimer.h"
 #include "Module.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
@@ -29,11 +30,28 @@ public:
 	
 
 	pcg32_random_t random_num;
+	//fps
+	j1PerfTimer			ptimer;
+	Timer				startup_time;
+	Timer				frame_time;
+	Timer				last_sec_frame_time;
+	float				last_sec_frame_count = 0;
+	float				prev_last_sec_frame_count = 0;
+	float				frame_count = 0;
+
+	uint				frames = 0;
+	uint				framerete_cap = 60;
+	float				framerete_ms = 0;
+	float				dt = 0;
+	int					argc = 0;
+	char**				args;
+	char*				cap;
+	bool				cap_FPS = true;
 
 private:
 
-	Timer	ms_timer;
-	float	dt;
+	//Timer	ms_timer;
+	//float	dt;
 	uint max_framerate = 125;
 	std::list<Module*> list_modules;
 	
@@ -46,6 +64,7 @@ private:
 
 	JSON_Value* root_value;
 	JSON_Object* root_object;
+
 
 public:
 
@@ -66,6 +85,9 @@ public:
 	const char* GetOrganizationName()const;
 	void SetMaxFramerate(uint max_framerate);
 	uint GetMaxFramerate()const;
+	float GetFPS();
+	float GetMS();
+	
 
 private:
 

@@ -51,27 +51,40 @@ void PanelConfiguration::Draw()
 		if(ImGui::InputText("Organization", OrgName, IM_ARRAYSIZE(OrgName)));
 			App->SetOrganizationName(OrgName);
 
-		//TO DO (ALL THE REST OF APP)
-		//fps and ms
+	
 		static int maxFPS = App->GetMaxFramerate();
 		if (ImGui::SliderInt("Max FPS", &maxFPS, 0, 125))
 			App->SetMaxFramerate(maxFPS);
-			//TO DO
 			
 		ImGui::Text("Limit Framerate:");
 		ImGui::SameLine();
 		ImGui::TextColored(ImVec4(0, 0, 1, 1),"%d", maxFPS);
 
-		//TO DO
-		 
 		//fps and ms graphs
-		/*
+		if (fps_log.size() != 100)
+		{
+			fps_log.push_back(App->GetFPS());
+			ms_log.push_back(App->GetMS());
+		}
+
+		else
+		{
+			fps_log.erase(fps_log.begin());
+			fps_log.push_back(App->GetFPS());
+
+			ms_log.erase(ms_log.begin());
+			ms_log.push_back(App->GetMS());
+		}
+
+		
 		char title[25];
 		sprintf_s(title, 25, "Framerate %.1f", fps_log[fps_log.size() - 1]);
 		ImGui::PlotHistogram("##framerate", &fps_log[0], fps_log.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
+
+		
 		sprintf_s(title, 25, "Milliseconds %0.1f", ms_log[ms_log.size() - 1]);
 		ImGui::PlotHistogram("##milliseconds", &ms_log[0], ms_log.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
-		*/
+		
 	}
 
 	if (ImGui::CollapsingHeader("Window"))
