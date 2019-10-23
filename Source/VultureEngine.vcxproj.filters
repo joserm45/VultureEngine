@@ -588,6 +588,9 @@
     <ClCompile Include="ModuleImport.cpp">
       <Filter>Sources\Modules\Game</Filter>
     </ClCompile>
+    <ClCompile Include="par_shapes.cpp">
+      <Filter>Sources\Third_Party</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="VultureEngine.rc" />

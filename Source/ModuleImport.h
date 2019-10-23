@@ -7,6 +7,7 @@
 #include "SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
+#include "Par\par_shapes.h"
 
 struct mesh_data
 {
@@ -46,12 +47,19 @@ public:
 	bool CleanUp();
 
 	void LoadMesh(char* path);
-	void DrawMesh();
+	void DrawMesh(mesh_data fbx);
 	void ClearMeshData();
+
+	void LoadParShapeCube();
+	void DrawParShapeCube();
 
 public:
 	mesh_data fbx;
+	mesh_data cube_data;
+	mesh_data sphere_data;
 
+	par_shapes_mesh* cube;
+	par_shapes_mesh* sphere;
 };
 
 

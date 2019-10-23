@@ -52,8 +52,8 @@ bool ModuleImport::Start()
 	bool ret = true;
 	
 
-	LoadMesh("Assets/warrior.FBX");
-
+	//LoadMesh("Assets/BakerHouse.FBX");
+	LoadParShapeCube();
 
 
 	return ret;
@@ -72,8 +72,9 @@ update_status ModuleImport::Update(float dt)
 update_status ModuleImport::PostUpdate(float dt)
 {
 	
-	DrawMesh();
-	
+	//DrawMesh(fbx);
+	DrawParShapeCube();
+
 	return UPDATE_CONTINUE;
 }
 
@@ -193,8 +194,74 @@ void ModuleImport::LoadMesh(char* path)
 	}
 
 }
+void ModuleImport::LoadParShapeCube()
+{
+	cube = par_shapes_create_cube();
 
-void ModuleImport::DrawMesh()
+	//copy vertices
+	cube_data.num_vertex = cube->npoints;
+	cube_data.vertex = new float[cube_data.num_vertex * 3];
+	memcpy(cube_data.vertex, cube->points, sizeof(float) * cube_data.num_vertex * 3);
+	LOG("New mesh with %d vertices", cube_data.num_vertex);
+
+	//copy faces
+	cube_data.num_index = cube->ntriangles * 3;
+	cube_data.index = new uint[cube_data.num_index];
+	memcpy(cube_data.index, cube->triangles, cube_data.num_index * sizeof(PAR_SHAPES_T));
+	
+
+	//copy normals
+	cube_data.num_normal = cube->npoints;
+	cube_data.normal = new float[cube_data.num_normal * 3];
+	memcpy(cube_data.normal, cube->points, sizeof(float) * cube_data.num_normal * 3);
+	LOG("New mesh with %d normals", cube_data.num_normal);
+
+	/*
+	copy color
+	cube_data.num_color = cube->npoints;
+	cube_data.color = new float[cube_data.num_color * 4];
+	for (uint i = 0; i < cube->npoints; ++i) {
+	memcpy(&cube_data.color[i], &cube., sizeof(float));
+	memcpy(&cube_data.color[i + 1], &scene->mMeshes[x]->mColors[0][i].g, sizeof(float));
+	memcpy(&cube_data.color[i + 2], &scene->mMeshes[x]->mColors[0][i].b, sizeof(float));
+	memcpy(&cube_data.color[i + 3], &scene->mMeshes[x]->mColors[0][i].a, sizeof(float));
+	}
+
+	copy text coordinates
+	cube_data.num_textcoord = cube->npoints;
+	cube_data.textcoord = new float[cube_data.num_textcoord * 2];
+	memcpy(fbx.textcoord, scene->mMeshes[0]->mTextureCoords, sizeof(float) * fbx.num_textcoord * 2);
+	for (uint i = 0; i < cube->npoints; ++i)
+	{
+		memcpy(&cube_data.textcoord[i], &cube->tcoords[i], sizeof(float) * 2);
+	}
+	*/
+
+	glGenBuffers(1, (GLuint*)&(cube_data.id_vertex));
+	glGenBuffers(1, (GLuint*)&(cube_data.id_index));
+
+	glBindBuffer(GL_ARRAY_BUFFER, cube_data.id_vertex);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * cube_data.num_vertex * 3, cube_data.vertex, GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cube_data.id_index);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(PAR_SHAPES_T) * cube_data.num_index, cube_data.index, GL_STATIC_DRAW);
+
+	/*
+	cube_data.v_size = sizeof(float) * cube_data.num_vertex * 3;
+	cube_data.n_size = sizeof(float) * cube_data.num_normal * 3;
+	cube_data.c_size = sizeof(float) * cube_data.num_color * 4;
+	cube_data.t_size = sizeof(float) * cube_data.num_textcoord * 2;
+	glBufferData(GL_ARRAY_BUFFER, cube_data.v_size + cube_data.n_size + cube_data.c_size + cube_data.t_size, 0, GL_STATIC_DRAW);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, cube_data.v_size, cube_data.vertex);
+	glBufferSubData(GL_ARRAY_BUFFER, cube_data.v_size, cube_data.n_size, cube_data.normal);
+	glBufferSubData(GL_ARRAY_BUFFER, cube_data.v_size + cube_data.n_size, cube_data.c_size, cube_data.color);
+	glBufferSubData(GL_ARRAY_BUFFER, cube_data.v_size + cube_data.n_size + cube_data.c_size, cube_data.t_size, cube_data.textcoord);
+	*/
+	
+
+	par_shapes_free_mesh(cube);
+}
+
+void ModuleImport::DrawMesh(mesh_data fbx)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
@@ -245,4 +312,14 @@ void ModuleImport::ClearMeshData()
 		delete[] fbx.textcoord;
 		fbx.textcoord = nullptr;
 	}
+}
+
+
+void ModuleImport::DrawParShapeCube()
+{
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glColor3f(0, 255, 0);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glDrawElements(GL_TRIANGLES, cube_data.num_index * 3, GL_UNSIGNED_SHORT, NULL);
+	glDisableClientState(GL_VERTEX_ARRAY);
 }
