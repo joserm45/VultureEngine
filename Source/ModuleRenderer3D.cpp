@@ -55,9 +55,21 @@ bool ModuleRenderer3D::Init()
 			ret = false;
 		}
 
+		// Initialize Projection Matrix
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+
 		//Use Vsync
 		if(VSYNC && SDL_GL_SetSwapInterval(1) < 0)
 			LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
+
+		// Check for error
+		error_glew = glGetError();
+		if (error_glew != GL_NO_ERROR)
+		{
+			LOG("Error initializing OpenGL! %s\n", gluErrorString(error_glew));
+			ret = false;
+		}
 
 		//Initialize Projection Matrix
 		glMatrixMode(GL_PROJECTION);

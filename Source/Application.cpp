@@ -10,7 +10,7 @@ Application::Application()
 
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
-	scene_intro = new ModuleSceneIntro(this);
+	scene_intro = new ModuleScene(this);
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
 	imgui = new ModuleImGui(this);

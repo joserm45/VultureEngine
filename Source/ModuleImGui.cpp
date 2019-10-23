@@ -116,6 +116,7 @@ bool ModuleImGui::CleanUp()
 update_status ModuleImGui::HandleMainMenuBar()
 {
 	static bool quit = false;
+	static bool demo = false;
 
 	if (ImGui::BeginMainMenuBar())
 	{
@@ -138,7 +139,9 @@ update_status ModuleImGui::HandleMainMenuBar()
 		if (ImGui::BeginMenu("Help"))
 		{
 			if (ImGui::MenuItem("Gui Demo"))
-			{}
+			{
+				demo = !demo;
+			}
 
 			if (ImGui::MenuItem("Documentation"))
 				RequestBrowser("https://github.com/joserm45/VultureEngine");
@@ -156,7 +159,10 @@ update_status ModuleImGui::HandleMainMenuBar()
 
 	if (quit == true) 
 		return UPDATE_STOP;
-
+	if (demo == true)
+	{
+		ImGui::ShowDemoWindow(&demo);
+	}
 	return UPDATE_CONTINUE;
 }
 

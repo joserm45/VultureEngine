@@ -1,9 +1,10 @@
 #include "Globals.h"
 #include "Application.h"
-#include "ModuleSceneIntro.h"
+#include "ModuleScene.h"
 #include "Primitive.h"
 #include "imgui.h"
 #include "ModuleInput.h"
+#include "GameObject.h"
 
 #include "glew\include\GL\glew.h"
 #include "SDL\include\SDL_opengl.h"
@@ -12,40 +13,40 @@
 
 
 
-ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 }
 
-ModuleSceneIntro::~ModuleSceneIntro()
+ModuleScene::~ModuleScene()
 {}
 
 // Load assets
-bool ModuleSceneIntro::Start()
+bool ModuleScene::Start()
 {
 	LOG("Loading Intro assets");
 	bool ret = true;
 
 	//App->physics->debug = true;
-	
+	App->camera->LookAt(vec3(3.0f, 3.0f, 0.0f));
 	//Music Level
 	//PlaySceneMusic();
-
+	CreateGameObject(scene_root_gameobject);
 
 
 	return ret;
 }
 
 // Load assets
-bool ModuleSceneIntro::CleanUp()
+bool ModuleScene::CleanUp()
 {
 	LOG("Unloading Intro scene");
-
+	//RELEASE(scene_root_gameobject);
 
 	return true;
 }
 
 // Update
-update_status ModuleSceneIntro::Update(float dt)
+update_status ModuleScene::Update(float dt)
 {
 	if (App->input->keyboard[SDL_SCANCODE_M] == KEY_DOWN)
 	{
@@ -70,7 +71,7 @@ update_status ModuleSceneIntro::Update(float dt)
 }
 
 
-void ModuleSceneIntro::DrawCubeDirectMode()
+void ModuleScene::DrawCubeDirectMode()
 {
 	//CUBE 1 DIRECT MODE
 	float v0[] = { 1.0f, 1.0f, 0.0f };
@@ -166,7 +167,7 @@ void ModuleSceneIntro::DrawCubeDirectMode()
 	glEnd();
 }
 
-void ModuleSceneIntro::DrawCubeVertexArrays()
+void ModuleScene::DrawCubeVertexArrays()
 {
 	//CUBE 2 VERTEX ARRAYS & GLDRAWARRAYS
 	float v0_VA[] = { 3.0f, 1.0f, 0.0f };
@@ -237,7 +238,7 @@ void ModuleSceneIntro::DrawCubeVertexArrays()
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-void ModuleSceneIntro::DrawCubeDrawElements()
+void ModuleScene::DrawCubeDrawElements()
 {
 	//CUBE 3 GLDRAWELEMENTS
 	float vertices_DE[] = {
@@ -275,7 +276,16 @@ void ModuleSceneIntro::DrawCubeDrawElements()
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-void ModuleSceneIntro::PlaySceneMusic()
+GameObject* ModuleScene::CreateGameObject(GameObject* gameobject)
 {
-	
+	GameObject* game_object = new GameObject(gameobject);
+
+	return game_object;
 }
+
+GameObject* ModuleScene::GetRootGameObject() const
+{
+	return scene_root_gameobject;
+}
+
+
