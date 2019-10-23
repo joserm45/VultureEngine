@@ -2,6 +2,10 @@
 #include "Components.h"
 #include "GameObject.h"
 
+Components::Components()
+{
+}
+
 Components::Components(GameObject* parent) : gameObject(parent)
 {
 }

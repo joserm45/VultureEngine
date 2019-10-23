@@ -5,11 +5,8 @@
 #include "Module.h"
 #include "Globals.h"
 #include "Components.h"
-//#include <vector>
+#include <vector>
 
-class CompMaterial;
-class CompAudio;
-class CompMesh;
 
 class GameObject
 {
@@ -36,13 +33,12 @@ private:
 	bool active = true;
 
 	GameObject* parent = nullptr;
-	//std::vector<GameObject*> childs;
+	std::vector<GameObject*> childs;
 
 public:
 
 	CompTransform* transform = nullptr;
 	CompMaterial* material = nullptr;
-	CompAudio* audio = nullptr;
 	CompMesh* mesh = nullptr;
 };
 

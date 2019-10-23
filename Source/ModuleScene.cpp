@@ -40,7 +40,7 @@ bool ModuleScene::Start()
 bool ModuleScene::CleanUp()
 {
 	LOG("Unloading Intro scene");
-	//RELEASE(scene_root_gameobject);
+	RELEASE(scene_root_gameobject);
 
 	return true;
 }

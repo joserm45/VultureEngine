@@ -115,7 +115,7 @@ update_status ModuleInput::PreUpdate(float dt)
 			break;
 
 			case SDL_DROPFILE:
-			App->load_mesh->LoadMesh(e.drop.file);
+			App->importer->LoadMesh(e.drop.file);
 			LOG("File Dropped");
 		
 		}

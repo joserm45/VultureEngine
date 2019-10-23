@@ -18,12 +18,12 @@ GameObject::GameObject(GameObject* root)
 
 GameObject::~GameObject()
 {
-	/*for (int i = 0; i < childs.size(); i++)
+	for (int i = 0; i < childs.size(); i++)
 		RELEASE(childs[i]);
 	childs.clear();
 
 	RELEASE(transform, 0,"");	//CLEAN ALL COMPONENTS
-	*/
+	
 }
 
 void GameObject::Update()
@@ -47,13 +47,6 @@ Components* GameObject::CreateComponent(TYPECOMP type, int num_mesh, const char*
 			if (material == nullptr) {
 				//material = new CompMaterial(this);
 				//new_component = material;
-			}
-			break;
-
-		case AUDIO:
-			if (audio == nullptr) {
-				//audio = new CompAudio(this, path);
-				//new_component = audio;
 			}
 			break;
 

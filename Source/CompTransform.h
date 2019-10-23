@@ -27,6 +27,7 @@ public:
 
 
 private:
+
 	math::float4x4 global_matrix = math::float4x4::identity;
 	math::float4x4 local_matrix = math::float4x4::identity;
 	

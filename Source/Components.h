@@ -3,6 +3,8 @@
 
 class GameObject;
 class CompTransform;
+class CompMaterial;
+class CompMesh;
 
 enum TYPECOMP {
 	DEFAULT,
@@ -15,6 +17,8 @@ enum TYPECOMP {
 class Components
 {
 public:
+
+	Components();
 	Components(GameObject* parent);
 	virtual ~Components();
 
