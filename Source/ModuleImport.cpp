@@ -51,57 +51,19 @@ bool ModuleImport::Start()
 	LOG("Loading assets");
 	bool ret = true;
 	
-
-	//LoadMesh("Assets/BakerHouse.FBX");
-	LoadMesh(NULL, true, 1);
-
-	//text chess
-	/*
-	fbx.height = 25;
-	fbx.widht = 25;
-	fbx.size = 4;
-	
-	for (int i = 0; i < 25; i++)
-	{
-		for (int j = 0; j < 25; j++)
-		{
-			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
-
-			fbx.id_texture[i][j][0] = (GLuint)c;
-			fbx.id_texture[i][j][1] = (GLuint)c;
-			fbx.id_texture[i][j][2] = (GLuint)c;
-			fbx.id_texture[i][j][3] = (GLuint)255;
-		}
-	}
-	*/
 	ilInit();
 	iluInit();
 	ilutInit();
 	ilutRenderer(ILUT_OPENGL);
-	ILuint texture = 0;
-	ilGenImages(1, &texture);
-	ilBindImage(texture);
-	char* TexPath = "Assets/Baker_house.png";
-	if (ilLoad(IL_TYPE_UNKNOWN, TexPath) == IL_TRUE)
-	{
-		fbx.id_texture = ilutGLBindTexImage();
-		fbx.height = ilGetInteger(IL_IMAGE_WIDTH);
-		fbx.widht = ilGetInteger(IL_IMAGE_HEIGHT);
-		/*
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		*/
-		glBindTexture(GL_TEXTURE_2D, 0);
-		App->imgui->AddLogToConsole("Texture Loaded");
-	}
-	else
-		App->imgui->AddLogToConsole("Texture Not Loaded");
+	
+	//LoadMesh("Assets/BakerHouse.FBX");
+	LoadMesh(NULL, true, 1);
 
-	ilDeleteImages(1, &texture);
+	//LoadTexture("Assets/Baker_house.png");
+	LoadChessTexture();
+	
+	
+
 
 
 
@@ -293,6 +255,33 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 
 }
 
+void ModuleImport::LoadTexture(char* path)
+{
+	ILuint texture = 0;
+	ilGenImages(1, &texture);
+	ilBindImage(texture);
+	if (ilLoad(IL_TYPE_UNKNOWN, path) == IL_TRUE)
+	{
+		fbx.id_texture = ilutGLBindTexImage();
+		fbx.height = ilGetInteger(IL_IMAGE_WIDTH);
+		fbx.widht = ilGetInteger(IL_IMAGE_HEIGHT);
+		/*
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		*/
+		glBindTexture(GL_TEXTURE_2D, 0);
+		App->imgui->AddLogToConsole("Texture Loaded");
+	}
+	else
+		App->imgui->AddLogToConsole("Texture Not Loaded");
+
+	ilDeleteImages(1, &texture);
+}
+
 void ModuleImport::DrawMesh(bool is_parshape)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
@@ -360,6 +349,36 @@ void ModuleImport::ClearMeshData()
 		delete[] fbx.textcoord;
 		fbx.textcoord = nullptr;
 	}
+}
+
+void ModuleImport::LoadChessTexture()
+{
+	GLubyte chessImage[50][50][4];
+
+	for (int i = 0; i < 50; i++)
+	{
+		for (int j = 0; j < 50; j++)
+		{
+			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
+
+			chessImage[i][j][0] = (GLubyte)c;
+			chessImage[i][j][1] = (GLubyte)c;
+			chessImage[i][j][2] = (GLubyte)c;
+			chessImage[i][j][3] = (GLubyte)255;
+		}
+	}
+
+	glGenTextures(1, (GLuint*)&(fbx.id_texture));
+	glBindTexture(GL_TEXTURE_2D, fbx.id_texture);
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 50, 50, 0, GL_RGBA, GL_UNSIGNED_BYTE, chessImage);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 /*
