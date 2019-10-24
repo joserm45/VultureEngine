@@ -153,6 +153,18 @@ update_status ModuleImGui::HandleMainMenuBar()
 
 			ImGui::EndMenu();
 		}
+		if (ImGui::BeginMenu("Shapes"))
+		{
+			if (ImGui::MenuItem("Cube"))
+			{
+				App->importer->LoadParShape(1);
+			}
+			if (ImGui::MenuItem("Sphere"))
+			{
+				App->importer->LoadParShape(2);
+			}
+			ImGui::EndMenu();
+		}
 
 		ImGui::EndMainMenuBar();
 	}

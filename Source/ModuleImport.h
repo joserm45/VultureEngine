@@ -48,18 +48,16 @@ public:
 
 	void LoadMesh(char* path);
 	void DrawMesh(mesh_data fbx);
-	void ClearMeshData();
+	void ClearMeshData(mesh_data fbx);
 
-	void LoadParShapeCube();
-	void DrawParShapeCube();
+	void LoadParShape(uint i);
+	void DrawParShape();
 
 public:
 	mesh_data fbx;
-	mesh_data cube_data;
-	mesh_data sphere_data;
 
-	par_shapes_mesh* cube;
-	par_shapes_mesh* sphere;
+	mesh_data shape_data;
+	par_shapes_mesh* shape;
 };
 
 
