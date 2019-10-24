@@ -46,17 +46,17 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
-	void LoadMesh(char* path);
-	void DrawMesh(mesh_data fbx);
-	void ClearMeshData(mesh_data fbx);
+	void LoadMesh(char* path, bool is_parshape = false, uint i = 0);
+	void DrawMesh(bool is_parshape);
+	void ClearMeshData();
 
-	void LoadParShape(uint i);
-	void DrawParShape();
+	//void LoadParShape(uint i);
+	//void DrawParShape();
 
 public:
 	mesh_data fbx;
-
-	mesh_data shape_data;
+	bool par_shape = false;
+	//mesh_data shape_data;
 	par_shapes_mesh* shape;
 };
 

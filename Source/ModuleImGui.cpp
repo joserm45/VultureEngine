@@ -157,11 +157,11 @@ update_status ModuleImGui::HandleMainMenuBar()
 		{
 			if (ImGui::MenuItem("Cube"))
 			{
-				App->importer->LoadParShape(1);
+				App->importer->LoadMesh(nullptr, true, 1);
 			}
 			if (ImGui::MenuItem("Sphere"))
 			{
-				App->importer->LoadParShape(2);
+				App->importer->LoadMesh(nullptr, true, 2);
 			}
 			ImGui::EndMenu();
 		}
