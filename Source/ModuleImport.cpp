@@ -52,8 +52,57 @@ bool ModuleImport::Start()
 	bool ret = true;
 	
 
-	LoadMesh("Assets/BakerHouse.FBX");
+	//LoadMesh("Assets/BakerHouse.FBX");
+	LoadMesh(NULL, true, 1);
+
+	//text chess
+	/*
+	fbx.height = 25;
+	fbx.widht = 25;
+	fbx.size = 4;
 	
+	for (int i = 0; i < 25; i++)
+	{
+		for (int j = 0; j < 25; j++)
+		{
+			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
+
+			fbx.id_texture[i][j][0] = (GLuint)c;
+			fbx.id_texture[i][j][1] = (GLuint)c;
+			fbx.id_texture[i][j][2] = (GLuint)c;
+			fbx.id_texture[i][j][3] = (GLuint)255;
+		}
+	}
+	*/
+	ilInit();
+	iluInit();
+	ilutInit();
+	ilutRenderer(ILUT_OPENGL);
+	ILuint texture = 0;
+	ilGenImages(1, &texture);
+	ilBindImage(texture);
+	char* TexPath = "Assets/Baker_house.png";
+	if (ilLoad(IL_TYPE_UNKNOWN, TexPath) == IL_TRUE)
+	{
+		fbx.id_texture = ilutGLBindTexImage();
+		fbx.height = ilGetInteger(IL_IMAGE_WIDTH);
+		fbx.widht = ilGetInteger(IL_IMAGE_HEIGHT);
+		/*
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		*/
+		glBindTexture(GL_TEXTURE_2D, 0);
+		App->imgui->AddLogToConsole("Texture Loaded");
+	}
+	else
+		App->imgui->AddLogToConsole("Texture Not Loaded");
+
+	ilDeleteImages(1, &texture);
+
 
 
 	return ret;
@@ -247,36 +296,40 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 void ModuleImport::DrawMesh(bool is_parshape)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
-	
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, fbx.id_texture);
+	GLsizeiptr n_offset = fbx.v_size;
+	GLsizeiptr c_offset = n_offset + fbx.n_size;
+	GLsizeiptr t_offset = c_offset + fbx.c_size;
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glTexCoordPointer(2, GL_FLOAT, 0, (void*)t_offset);
 
 	if (is_parshape == false)
 	{
-		glEnableClientState(GL_NORMAL_ARRAY);
-		glEnableClientState(GL_COLOR_ARRAY);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		//glEnableClientState(GL_NORMAL_ARRAY);
+		//glEnableClientState(GL_COLOR_ARRAY);
+		
 		//glColor3f(0, 255, 0);
 
-		GLsizeiptr n_offset = fbx.v_size;
-		GLsizeiptr c_offset = n_offset + fbx.n_size;
-		GLsizeiptr t_offset = c_offset + fbx.c_size;
 
+		//glNormalPointer(GL_FLOAT, 0, (void*)n_offset);
+		//glColorPointer(3, GL_FLOAT, 0, (void*)c_offset);
 		
-		glNormalPointer(GL_FLOAT, 0, (void*)n_offset);
-		glColorPointer(3, GL_FLOAT, 0, (void*)c_offset);
-		glTexCoordPointer(2, GL_FLOAT, 0, (void*)t_offset);
 		glDrawElements(GL_TRIANGLES, fbx.num_index * 3, GL_UNSIGNED_INT, NULL);
-		glDisableClientState(GL_NORMAL_ARRAY);
-		glDisableClientState(GL_COLOR_ARRAY);
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		//glDisableClientState(GL_NORMAL_ARRAY);
+		//glDisableClientState(GL_COLOR_ARRAY);
+	
 	}
 	else if (is_parshape == true)
 	{
-		glColor3f(0, 255, 0);
+		//glColor3f(0, 255, 0);
 		glDrawElements(GL_TRIANGLES, fbx.num_index * 3, GL_UNSIGNED_SHORT, NULL);
 	}
+	glBindTexture(GL_TEXTURE_2D, NULL);
+	glDisable(GL_TEXTURE_2D);
 	glDisableClientState(GL_VERTEX_ARRAY);
-	
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 

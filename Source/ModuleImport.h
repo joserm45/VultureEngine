@@ -31,6 +31,10 @@ struct mesh_data
 	uint num_textcoord = 0;
 	float* textcoord = nullptr;
 	GLsizeiptr t_size = 0;
+	//texture
+	uint id_texture = 0;
+	uint widht = 0;
+	uint height = 0;
 };
 
 
