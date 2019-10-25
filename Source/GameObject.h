@@ -7,6 +7,9 @@
 #include "Components.h"
 #include <vector>
 
+class CompTransform;
+class CompMaterial;
+class CompMesh;
 
 class GameObject
 {

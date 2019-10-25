@@ -48,7 +48,7 @@ bool ModuleImport::Init()
 
 bool ModuleImport::Start()
 {
-	LOG("Loading assets");
+	App->imgui->AddLogToConsole("Loading Baker House");
 	bool ret = true;
 
 	ilInit();
@@ -67,11 +67,6 @@ bool ModuleImport::Start()
 	//LoadTexture("Assets/WoodenTower/textures/Wood_Tower_Col.jpg");;
 	//LoadTexture("Assets/Rifle/textures/KSR29sniperrifle_Base_Color.jpg");;
 	
-	LoadTexture("Assets/Baker_house.png");
-	LoadTexture("Assets/Baker_house.png");
-	LoadTexture("Assets/Baker_house.png");
-	LoadTexture("Assets/Baker_house.png");
-	LoadTexture("Assets/Baker_house.png");
 	LoadTexture("Assets/Baker_house.png");
 	
 	//LoadChessTexture();
@@ -107,11 +102,11 @@ update_status ModuleImport::PostUpdate(float dt)
 bool ModuleImport::CleanUp()
 {
 	LOG("Unloading assets");
-
 	ClearMeshData();
 
 	// detach log stream
 	aiDetachAllLogStreams();
+	
 
 	return true;
 }
@@ -147,7 +142,7 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 
 						if (mesh->mFaces[i].mNumIndices != 3)
 						{
-							LOG("WARNING, geometry face with != 3 indices!");
+							App->imgui->AddLogToConsole("WARNING, geometry face with != 3 indices!");
 						}
 						else
 						{
@@ -286,7 +281,7 @@ void ModuleImport::LoadTexture(char* path)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		*/
 		glBindTexture(GL_TEXTURE_2D, 0);
-		App->imgui->AddLogToConsole("Texture Loaded");
+		App->imgui->AddLogToConsole("Texture Loaded Succesfuly");
 	}
 	else
 		App->imgui->AddLogToConsole("Texture Not Loaded");

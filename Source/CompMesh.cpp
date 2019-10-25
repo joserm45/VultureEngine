@@ -1,20 +1,41 @@
 #include "CompMesh.h"
+#include "Globals.h"
+#include "Imgui\imgui.h"
 
-ComponentMesh::ComponentMesh(GameObject * parent, char * path, int num_mesh)
+CompMesh::CompMesh(GameObject* parent,const char* path, int num_mesh)
+{
+	type = MESH;
+	path_name = path;
+}
+
+CompMesh::~CompMesh()
+{
+	RELEASE_ARRAY(mesh_info.vertex);
+	RELEASE_ARRAY(mesh_info.index);
+}
+
+void CompMesh::AssignMesh(char * path)
 {
 
 }
 
-ComponentMesh::~ComponentMesh()
-{
-}
-
-void ComponentMesh::AssignMesh(char * path)
-{
-}
-
-bool ComponentMesh::IsPrimitive() const
+bool CompMesh::IsPrimitive() const
 {
 	return false;
+}
+
+void CompMesh::Draw()
+{
+	if (ImGui::CollapsingHeader("Mesh")) {
+		ImGui::Text("Mesh path: ");
+
+		ImGui::SameLine();
+
+		if (path_name)
+			ImGui::TextColored(ImVec4(0.3f, 0.5f, 0.5f, 1.0f), path_name);
+		else
+			ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "\0");
+
+	}
 }
 

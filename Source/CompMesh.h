@@ -6,25 +6,23 @@
 #include "ModuleImport.h"
 
 
-class ComponentMesh : public Components
+class CompMesh : public Components
 {
 public:
 
-	ComponentMesh(GameObject* parent, char* path, int num_mesh);
-	~ComponentMesh();
+	CompMesh(GameObject* parent,const char* path, int num_mesh);
+	~CompMesh();
 
 	void AssignMesh(char* path);
-
 	bool IsPrimitive() const;
-
-	void  DrawInspector();
+	void  Draw();
 
 	void FillPrimitiveDrawInfo(mesh_data info);
 
 private:
 
 	mesh_data mesh_info;
-	const char* path = nullptr;
+	const char* path_name = nullptr;
 	int num_mesh = 0;
 	int is_primitive = false;
 };

@@ -2,9 +2,6 @@
 #define __COMPONENTS_H__
 
 class GameObject;
-class CompTransform;
-class CompMaterial;
-class CompMesh;
 
 enum TYPECOMP {
 	DEFAULT,

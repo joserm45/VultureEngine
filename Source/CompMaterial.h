@@ -4,20 +4,22 @@
 #include "Components.h"
 
 
-class ComponentMaterial : public Components
+class CompMaterial : public Components
 {
 public:
 
-	ComponentMaterial(GameObject* parent);
-	~ComponentMaterial();
+	CompMaterial(GameObject* parent, const char* path);
+	~CompMaterial();
 
 	void AssignTexture(const char* path);
+	void Draw();
 	uint GetTexId()const;
 	void  DrawInspector();
 
 private:
 
-	const char* tex_path;
+	bool texture_active = false;
+	const char* path_name;
 	uint tex_id = 0;
 	int tex_width, tex_height;
 

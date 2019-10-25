@@ -10,6 +10,7 @@ PanelConsole::PanelConsole()
 
 PanelConsole::~PanelConsole()
 {
+	Clear();
 }
 
 void PanelConsole::Draw()

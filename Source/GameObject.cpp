@@ -3,8 +3,13 @@
 #include "GameObject.h"
 
 #include "Components.h"
+#include "CompTransform.h"
+#include "CompMaterial.h"
+#include "CompMesh.h"
 
 #include "imgui/imgui.h"
+
+
 
 GameObject::GameObject(GameObject* root)
 {
@@ -38,22 +43,22 @@ Components* GameObject::CreateComponent(TYPECOMP type, int num_mesh, const char*
 	{
 		case TRANSFORM:
 			if (transform == nullptr) {
-				//transform = new CompTransform(this);
-				//new_component = transform; TODO
+				transform = new CompTransform(this);
+				new_component = transform; 
 			}
 			break;
 		
 		case MATERIAL:
 			if (material == nullptr) {
-				//material = new CompMaterial(this);
-				//new_component = material;
+				material = new CompMaterial(this, path);
+				new_component = material;
 			}
 			break;
 
 		case MESH:
 			if (mesh == nullptr) {
-				//mesh = new CompMesh(this, path, num_mesh);
-				//new_component = mesh;
+				mesh = new CompMesh(this, path, num_mesh);
+				new_component = mesh;
 			}
 			break;
 
