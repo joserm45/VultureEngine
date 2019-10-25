@@ -9,6 +9,20 @@
 #include <gl/GLU.h>
 #include "Par\par_shapes.h"
 
+#include "Assimp/include/cimport.h"
+#include "Assimp/include/scene.h"
+#include "Assimp/include/postprocess.h"
+#include "Assimp/include/cfileio.h"
+
+#include "DevIL\include\il.h"
+#include "DevIL\include\ilu.h"
+#include "DevIL\include\ilut.h"
+
+#pragma comment (lib, "Assimp/libx86/assimp.lib")
+
+#pragma comment (lib, "DevIL\\libx86\\DevIL.lib")
+#pragma comment (lib, "DevIL\\libx86\\ILU.lib")
+#pragma comment (lib, "DevIL\\libx86\\ILUT.lib")
 
 struct mesh_data
 {
@@ -53,7 +67,7 @@ public:
 
 	void LoadMesh(char* path, bool is_parshape = false, uint i = 0);
 	void LoadTexture(char* path);
-	void DrawMesh(bool is_parshape);
+	void DrawMesh(bool is_parshape, mesh_data fbx);
 	void ClearMeshData();
 	void LoadChessTexture();
 	//void LoadParShape(uint i);
@@ -66,7 +80,8 @@ public:
 	par_shapes_mesh* shape;
 
 	//texture
-
+	list<mesh_data> gameobject;
+	ILuint texture = 0;
 };
 
 
