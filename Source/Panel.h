@@ -1,13 +1,11 @@
-#pragma once
 #ifndef __PANEL_H__
 #define __PANEL_H__
 
-class ModuleWindow;
 
 class Panel
 {
 public:
-	ModuleWindow *WindowAccess;
+
 	char* name = nullptr;
 	bool visibility = false;
 	
@@ -21,6 +19,11 @@ public:
 	virtual bool IsEnabled() const;
 	virtual char* GetName() const { return name; }
 
+protected:
+
+	bool resize = true;
+	bool active_panel = false;
+	int x, y, w, h = 0;
 };
 
 #endif

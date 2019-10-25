@@ -26,12 +26,15 @@ bool ModuleScene::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
-	//App->physics->debug = true;
 	App->camera->LookAt(vec3(3.0f, 3.0f, 0.0f));
-	//Music Level
-	//PlaySceneMusic();
-	CreateGameObject(scene_root_gameobject);
 
+	scene_root_gameobject = CreateGameObject(nullptr);
+	scene_root_gameobject->SetName("Scene");
+
+	scene_gameobject_pointer = CreateGameObject(scene_root_gameobject);
+	
+	scene_gameobject_pointer->CreateComponent(MESH, 0, "Assets/Meshes/BakerHouse.fbx");
+	scene_gameobject_pointer->SetName("Baker House");
 
 	return ret;
 }
@@ -65,7 +68,7 @@ update_status ModuleScene::Update(float dt)
 	//DrawCubeVertexArrays();
 
 	//DrawCubeDrawElements();
-	
+	Draw();
 
 	return UPDATE_CONTINUE;
 }
@@ -276,6 +279,11 @@ void ModuleScene::DrawCubeDrawElements()
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
+void ModuleScene::Draw()
+{
+	App->panel->Draw();
+}
+
 GameObject* ModuleScene::CreateGameObject(GameObject* gameobject)
 {
 	GameObject* game_object = new GameObject(gameobject);
@@ -286,6 +294,25 @@ GameObject* ModuleScene::CreateGameObject(GameObject* gameobject)
 GameObject* ModuleScene::GetRootGameObject() const
 {
 	return scene_root_gameobject;
+}
+
+void ModuleScene::FocusGameObject(GameObject* focused, GameObject* root) {
+
+	if (root->GetNumChilds() > 0) {
+
+		for (std::vector<GameObject*>::const_iterator it = root->childs.begin(); it < root->childs.end(); it++) {
+
+			if ((*it) == focused) {
+				(*it)->focused = true;
+				LOG("%c focused", (*it)->GetName());
+			}
+			else {
+				(*it)->focused = false;
+				LOG("%c NOT focused", (*it)->GetName());
+			}
+			FocusGameObject(focused, (*it));
+		}
+	}
 }
 
 

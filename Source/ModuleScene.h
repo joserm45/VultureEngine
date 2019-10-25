@@ -25,11 +25,12 @@ public:
 	void DrawCubeDrawElements();
 
 	void Draw();
+
 	GameObject* CreateCubePrimitive();
 	GameObject* CreateSpherePrimitive(int subdivisions);
 	GameObject* CreateGameObject(GameObject* gameobject);
 	GameObject* GetRootGameObject() const;
-
+	void FocusGameObject(GameObject* focused, GameObject* root);
 	//float my_color[] = { 0.0f, 0.0f, 1.0f };
 //	GLuint texture;
 	//const char ImageName[] = "Assets/lenna.png";

@@ -14,7 +14,6 @@ public:
 	void AssignTexture(const char* path);
 	void Draw();
 	uint GetTexId()const;
-	void  DrawInspector();
 
 private:
 

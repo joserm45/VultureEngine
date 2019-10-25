@@ -391,6 +391,9 @@
     <ClInclude Include="DevIL\include\ilut_config.h">
       <Filter>Sources\Third_Party\DevIL</Filter>
     </ClInclude>
+    <ClInclude Include="PanelGameObjects.h">
+      <Filter>Sources\Modules\Game\Comp&amp;GO</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -590,6 +593,9 @@
     </ClCompile>
     <ClCompile Include="par_shapes.cpp">
       <Filter>Sources\Third_Party</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelGameObjects.cpp">
+      <Filter>Sources\Modules\Game\Comp&amp;GO</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

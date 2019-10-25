@@ -1,5 +1,5 @@
-#ifndef __ModuleWindow_H__
-#define __ModuleWindow_H__
+#ifndef __MODULE_WINDOW_H__
+#define __MODULE_WINDOW_H__
 
 #include "Module.h"
 #include "SDL/include/SDL.h"
@@ -28,6 +28,7 @@ public:
 	void ChangeHeight(int height);
 
 public:
+
 	//The window we'll be rendering to
 	SDL_Window* window;
 

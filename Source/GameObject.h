@@ -1,6 +1,6 @@
 
-#ifndef GAMEOBJECT_H
-#define GAMEOBJECT_H
+#ifndef __GAME_OBJECT_H
+#define __GAME_OBJECT_H
 
 #include "Module.h"
 #include "Globals.h"
@@ -26,19 +26,25 @@ public:
 
 	GameObject* GetParent();
 	GameObject* GetChild(uint i);
+	uint GetNumChilds() const;
 
-
+	const char* GetName();
 	void SetName(const char* new_name);
+	void GameObject::PrintPanelGameObject(int& i, bool& clicked);
 
 private:
+
 	const char* name;
 
 	bool active = true;
 
+
 	GameObject* parent = nullptr;
-	std::vector<GameObject*> childs;
+
 
 public:
+	bool focused = false;
+	std::vector<GameObject*> childs;
 
 	CompTransform* transform = nullptr;
 	CompMaterial* material = nullptr;

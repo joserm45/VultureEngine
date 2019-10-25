@@ -17,7 +17,7 @@ GameObject::GameObject(GameObject* root)
 	if (root != nullptr)
 		//root->childs.push_back(this);
 
-	CreateComponent(TRANSFORM,5,"d");
+	CreateComponent(TRANSFORM,0,"null");
 }
 
 
@@ -27,8 +27,11 @@ GameObject::~GameObject()
 		RELEASE(childs[i]);
 	childs.clear();
 
-	RELEASE(transform, 0,"");	//CLEAN ALL COMPONENTS
-	
+	RELEASE(transform);	//CLEAN ALL COMPONENTS
+	RELEASE(mesh);
+	RELEASE(material);
+
+	parent = nullptr;
 }
 
 void GameObject::Update()
@@ -80,7 +83,12 @@ void GameObject::SetActive(bool active)
 }
 
 
-void GameObject::SetName(const char* new_name) 
+const char* GameObject::GetName()
+{
+	return name;
+}
+
+void GameObject::SetName(const char* new_name)
 {
 	name = new_name;
 }
@@ -92,8 +100,57 @@ GameObject* GameObject::GetParent()
 
 GameObject* GameObject::GetChild(uint number_child)
 {
-	//return childs[number_child];
-	return 0;
+	return childs[number_child];
+}
+
+uint GameObject::GetNumChilds() const
+{
+	return childs.size();
+}
+
+void GameObject::PrintPanelGameObject(int& i, bool& clicked) {
+	//Pop ID for each tree node
+	ImGui::PushID(i);
+
+	ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+	
+	if (GetNumChilds() == 0)
+		flags |= ImGuiTreeNodeFlags_Leaf;
+
+	if (focused)
+		flags |= ImGuiTreeNodeFlags_Selected;
+
+	if (ImGui::TreeNodeEx((void*)(intptr_t)i, flags, name)) 
+	{
+
+		if (ImGui::IsItemClicked() && !clicked) {
+			App->imgui->AddLogToConsole("Node clicked");
+			clicked = true;
+			App->scene_intro->GetRootGameObject()->focused = false;
+			App->scene_intro->FocusGameObject(this, App->scene_intro->GetRootGameObject()); //Focus
+		}
+
+
+		//Print each child of the gameobject
+
+
+
+		for (int j = 0; j < GetNumChilds(); j++) {
+			i++;
+			GetChild(j)->PrintPanelGameObject(i, clicked);
+
+		}
+
+		ImGui::TreePop();
+	}
+	//Set focused to print Inspector
+	if (ImGui::IsItemClicked() && !clicked) {
+		LOG("%s node clicked", name);
+		clicked = true;
+		App->scene_intro->GetRootGameObject()->focused = false;
+		App->scene_intro->FocusGameObject(this, App->scene_intro->GetRootGameObject());
+	}
+	ImGui::PopID();
 }
 
 

@@ -20,7 +20,6 @@ public:
 	virtual ~Components();
 
 	virtual void Enable() {};
-	virtual void Update() {};
 	virtual void Disable() {};
 
 	bool IsActive() const;

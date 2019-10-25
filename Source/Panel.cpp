@@ -1,7 +1,10 @@
 #include "Panel.h"
 
 
-Panel::Panel() { name = "panel"; }
+Panel::Panel() 
+{ 
+	name = "panel"; 
+}
 
 Panel::~Panel() {}
 
