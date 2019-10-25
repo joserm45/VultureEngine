@@ -50,12 +50,12 @@ bool ModuleImport::Start()
 {
 	LOG("Loading assets");
 	bool ret = true;
-	
+
 	ilInit();
 	iluInit();
 	ilutInit();
 	ilutRenderer(ILUT_OPENGL);
-	
+
 	//LoadMesh("Assets/WoodenTower/woodenwatchtower2.FBX");
 	//LoadMesh("Assets/Rifle/KSR-29 sniper rifle new_fbx_7.4_binary.FBX");
 
@@ -66,11 +66,18 @@ bool ModuleImport::Start()
 
 	//LoadTexture("Assets/WoodenTower/textures/Wood_Tower_Col.jpg");;
 	//LoadTexture("Assets/Rifle/textures/KSR29sniperrifle_Base_Color.jpg");;
-
+	
 	LoadTexture("Assets/Baker_house.png");
+	LoadTexture("Assets/Baker_house.png");
+	LoadTexture("Assets/Baker_house.png");
+	LoadTexture("Assets/Baker_house.png");
+	LoadTexture("Assets/Baker_house.png");
+	LoadTexture("Assets/Baker_house.png");
+	
 	//LoadChessTexture();
 	
-	
+
+
 
 
 
@@ -81,16 +88,16 @@ bool ModuleImport::Start()
 
 update_status ModuleImport::Update(float dt)
 {
-	
 
 
-	
+
+
 	return UPDATE_CONTINUE;
 }
 
 update_status ModuleImport::PostUpdate(float dt)
 {
-	
+
 	DrawMesh(par_shape);
 
 
@@ -113,7 +120,7 @@ bool ModuleImport::CleanUp()
 void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 {
 	//ClearMeshData();
-	
+
 	if (is_parshape == false)
 	{
 		par_shape = false;
@@ -122,90 +129,87 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 		{
 			for (int x = 0; x < scene->mNumMeshes; x++)
 			{
+				aiMesh* mesh = scene->mMeshes[x];
+				
 				//copy vertices
-				fbx.num_vertex = scene->mMeshes[x]->mNumVertices;
+				fbx.num_vertex = mesh->mNumVertices;
 				fbx.vertex = new float[fbx.num_vertex * 3];
-				memcpy(fbx.vertex, scene->mMeshes[x]->mVertices, sizeof(float) * fbx.num_vertex * 3);
+				memcpy(fbx.vertex, mesh->mVertices, sizeof(float) * fbx.num_vertex * 3);
 				LOG("New mesh with %d vertices", fbx.num_vertex);
 
 				//copy faces
-				if (scene->mMeshes[x]->HasFaces())
+				if (mesh->HasFaces())
 				{
-					fbx.num_index = scene->mMeshes[x]->mNumFaces * 3;
+					fbx.num_index = mesh->mNumFaces * 3;
 					fbx.index = new uint[fbx.num_index];
-					for (uint i = 0; i < scene->mMeshes[x]->mNumFaces; ++i)
+					for (uint i = 0; i < mesh->mNumFaces; ++i)
 					{
 
-						if (scene->mMeshes[x]->mFaces[i].mNumIndices != 3)
+						if (mesh->mFaces[i].mNumIndices != 3)
 						{
 							LOG("WARNING, geometry face with != 3 indices!");
 						}
 						else
 						{
-							memcpy(&fbx.index[i * 3], scene->mMeshes[x]->mFaces[i].mIndices, 3 * sizeof(uint));
+							memcpy(&fbx.index[i * 3], mesh->mFaces[i].mIndices, 3 * sizeof(uint));
 						}
 					}
 				}
 
 				//copy normal
-				if (scene->mMeshes[x]->HasNormals())
+				if (mesh->HasNormals())
 				{
-					fbx.num_normal = scene->mMeshes[x]->mNumVertices;
+					fbx.num_normal = mesh->mNumVertices;
 					fbx.normal = new float[fbx.num_normal * 3];
-					memcpy(fbx.normal, scene->mMeshes[x]->mNormals, sizeof(float) * fbx.num_normal * 3);
+					memcpy(fbx.normal, mesh->mNormals, sizeof(float) * fbx.num_normal * 3);
 					LOG("New mesh with %d normals", fbx.num_normal);
 				}
 
 				//copy color
-				if (scene->mMeshes[x]->HasVertexColors(0))
+				/*
+				if (mesh->HasVertexColors(0))
 				{
-					fbx.num_color = scene->mMeshes[x]->mNumVertices;
-					fbx.color = new float[fbx.num_color * 4];
-					for (uint i = 0; i < scene->mMeshes[x]->mNumVertices; ++i) {
-						memcpy(&fbx.color[i], &scene->mMeshes[x]->mColors[0][i].r, sizeof(float));
-						memcpy(&fbx.color[i + 1], &scene->mMeshes[x]->mColors[0][i].g, sizeof(float));
-						memcpy(&fbx.color[i + 2], &scene->mMeshes[x]->mColors[0][i].b, sizeof(float));
-						memcpy(&fbx.color[i + 3], &scene->mMeshes[x]->mColors[0][i].a, sizeof(float));
-					}
+				fbx.num_color = mesh->mNumVertices;
+				fbx.color = new float[fbx.num_color * 4];
+				for (uint i = 0; i < mesh->mNumVertices; ++i) {
+				memcpy(&fbx.color[i], &mesh->mColors[0][i].r, sizeof(float));
+				memcpy(&fbx.color[i + 1], &mesh->mColors[0][i].g, sizeof(float));
+				memcpy(&fbx.color[i + 2], &mesh->mColors[0][i].b, sizeof(float));
+				memcpy(&fbx.color[i + 3], &mesh->mColors[0][i].a, sizeof(float));
 				}
-
+				}
+				*/
 				//copy text coordinates
-				if (scene->mMeshes[x]->HasTextureCoords(0))
+				if (mesh->HasTextureCoords(0))
 				{
-					fbx.num_textcoord = scene->mMeshes[x]->mNumVertices;
+					fbx.num_textcoord = mesh->mNumVertices;
 					fbx.textcoord = new float[fbx.num_textcoord * 2];
 					//memcpy(fbx.textcoord, scene->mMeshes[0]->mTextureCoords, sizeof(float) * fbx.num_textcoord * 2);
-					for (uint i = 0; i < scene->mMeshes[x]->mNumVertices; ++i)
+					for (uint i = 0; i < mesh->mNumVertices; ++i)
 					{
-						memcpy(&fbx.textcoord[i], &scene->mMeshes[x]->mTextureCoords[0][i].x, sizeof(float));
-						memcpy(&fbx.textcoord[i], &scene->mMeshes[x]->mTextureCoords[0][i].y, sizeof(float));
+						memcpy(&fbx.textcoord[i * 2], &mesh->mTextureCoords[0][i].x, sizeof(float));
+						memcpy(&fbx.textcoord[(i * 2) + 1], &mesh->mTextureCoords[0][i].y, sizeof(float));
 					}
 				}
 
 				glGenBuffers(1, (GLuint*)&(fbx.id_vertex));
 				glGenBuffers(1, (GLuint*)&(fbx.id_index));
-
-				fbx.v_size = sizeof(float) * fbx.num_vertex * 3;
-				fbx.n_size = sizeof(float) * fbx.num_normal * 3;
-				fbx.c_size = sizeof(float) * fbx.num_color * 4;
-				fbx.t_size = sizeof(float) * fbx.num_textcoord * 2;
+				glGenBuffers(1, (GLuint*)&(fbx.id_texture));
 
 				glBindBuffer(GL_ARRAY_BUFFER, fbx.id_vertex);
-				//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * fbx.num_vertex * 3, fbx.vertex, GL_STATIC_DRAW);
-				glBufferData(GL_ARRAY_BUFFER, fbx.v_size + fbx.n_size + fbx.c_size + fbx.t_size, 0, GL_STATIC_DRAW);
-				glBufferSubData(GL_ARRAY_BUFFER, 0, fbx.v_size, fbx.vertex);
-				glBufferSubData(GL_ARRAY_BUFFER, fbx.v_size, fbx.n_size, fbx.normal);
-				glBufferSubData(GL_ARRAY_BUFFER, fbx.v_size + fbx.n_size, fbx.c_size, fbx.color);
-				glBufferSubData(GL_ARRAY_BUFFER, fbx.v_size + fbx.n_size + fbx.c_size, fbx.t_size, fbx.textcoord);
-
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * fbx.num_vertex * 3, fbx.vertex, GL_STATIC_DRAW);
+				//glBufferData(GL_ARRAY_BUFFER, fbx.v_size + fbx.n_size + fbx.c_size + fbx.t_size, 0, GL_STATIC_DRAW);
+				////glBufferSubData(GL_ARRAY_BUFFER, 0, fbx.v_size, fbx.vertex);
+				//glBufferSubData(GL_ARRAY_BUFFER, fbx.v_size, fbx.n_size, fbx.normal);
+				//glBufferSubData(GL_ARRAY_BUFFER, fbx.v_size + fbx.n_size, fbx.c_size, fbx.color);
+				//glBufferSubData(GL_ARRAY_BUFFER, fbx.v_size + fbx.n_size + fbx.c_size, fbx.t_size, fbx.textcoord);
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, fbx.id_index);
 				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * fbx.num_index, fbx.index, GL_STATIC_DRAW);
+				glBindBuffer(GL_ARRAY_BUFFER, fbx.id_texture);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(uint) * fbx.num_textcoord * 2, fbx.textcoord, GL_STATIC_DRAW);
 
 
 				//create gameobject
-
-
-
 			}
 			aiReleaseImport(scene);
 		}
@@ -296,27 +300,29 @@ void ModuleImport::DrawMesh(bool is_parshape)
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, fbx.id_texture);
-	GLsizeiptr n_offset = fbx.v_size;
-	GLsizeiptr c_offset = n_offset + fbx.n_size;
-	GLsizeiptr t_offset = c_offset + fbx.c_size;
+	//GLsizeiptr n_offset = fbx.v_size;
+	//GLsizeiptr c_offset = n_offset + fbx.n_size;
+	//GLsizeiptr t_offset = c_offset + fbx.c_size;
+	glBindBuffer(GL_ARRAY_BUFFER, fbx.id_vertex);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	glTexCoordPointer(2, GL_FLOAT, 0, (void*)t_offset);
+	glBindBuffer(GL_ARRAY_BUFFER, fbx.id_texture);
+	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
 	if (is_parshape == false)
 	{
 		//glEnableClientState(GL_NORMAL_ARRAY);
 		//glEnableClientState(GL_COLOR_ARRAY);
-		
+
 		//glColor3f(0, 255, 0);
 
 
 		//glNormalPointer(GL_FLOAT, 0, (void*)n_offset);
 		//glColorPointer(3, GL_FLOAT, 0, (void*)c_offset);
-		
+
 		glDrawElements(GL_TRIANGLES, fbx.num_index * 3, GL_UNSIGNED_INT, NULL);
 		//glDisableClientState(GL_NORMAL_ARRAY);
 		//glDisableClientState(GL_COLOR_ARRAY);
-	
+
 	}
 	else if (is_parshape == true)
 	{

@@ -9,6 +9,7 @@
 #include <gl/GLU.h>
 #include "Par\par_shapes.h"
 
+
 struct mesh_data
 {
 	uint id_index = 0;
@@ -55,7 +56,6 @@ public:
 	void DrawMesh(bool is_parshape);
 	void ClearMeshData();
 	void LoadChessTexture();
-
 	//void LoadParShape(uint i);
 	//void DrawParShape();
 
