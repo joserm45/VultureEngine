@@ -56,11 +56,19 @@ bool ModuleImport::Start()
 	ilutInit();
 	ilutRenderer(ILUT_OPENGL);
 	
-	//LoadMesh("Assets/BakerHouse.FBX");
-	LoadMesh(NULL, true, 1);
+	//LoadMesh("Assets/WoodenTower/woodenwatchtower2.FBX");
+	//LoadMesh("Assets/Rifle/KSR-29 sniper rifle new_fbx_7.4_binary.FBX");
 
-	//LoadTexture("Assets/Baker_house.png");
-	LoadChessTexture();
+	LoadMesh("Assets/BakerHouse.FBX");
+	//LoadMesh(NULL, true, 1);
+
+
+
+	//LoadTexture("Assets/WoodenTower/textures/Wood_Tower_Col.jpg");;
+	//LoadTexture("Assets/Rifle/textures/KSR29sniperrifle_Base_Color.jpg");;
+
+	LoadTexture("Assets/Baker_house.png");
+	//LoadChessTexture();
 	
 	
 

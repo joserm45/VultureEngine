@@ -115,9 +115,24 @@ update_status ModuleInput::PreUpdate(float dt)
 			break;
 
 			case SDL_DROPFILE:
-			App->importer->LoadMesh(e.drop.file);
-			LOG("File Dropped");
-		
+			{
+				LOG("File Dropped");
+				string type = e.drop.file;
+				type = type.erase(NULL, type.find_last_of("."));
+				if (type == ".fbx" || type == ".FBX" || type == ".obj" || type == ".OBJ")
+				{
+					App->importer->LoadMesh(e.drop.file);
+				}
+				else if(type == ".png" || type == ".PNG" || type == ".dds" || type == ".DDS" || type == ".jpg" || type == ".JPG"|| type == ".jpeg" || type == ".JPEG")
+				{
+					App->importer->LoadTexture(e.drop.file);
+				}
+				else
+				{
+					App->imgui->AddLogToConsole("File path incorrect");
+				}
+				
+			}
 		}
 	}
 
