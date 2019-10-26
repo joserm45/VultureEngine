@@ -60,7 +60,7 @@ bool ModuleImport::Start()
 
 
 	//LoadTexture("Assets/WoodenTower/textures/Wood_Tower_Col.jpg");
-	//LoadTexture("Assets/Rifle/textures/KSR29sniperrifle_Base_Color.jpg");
+	//LoadTexture("Assets/Rifle/textures/Sniper_KSR_29_Col.jpg");
 	LoadTexture("Assets/Baker_house.png");
 	//LoadChessTexture();
 	
@@ -119,6 +119,8 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 			{
 				aiMesh* mesh = scene->mMeshes[x];
 
+				
+
 				//copy vertices
 				fbx.num_vertex = mesh->mNumVertices;
 				fbx.vertex = new float[fbx.num_vertex * 3];
@@ -167,6 +169,7 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 				}
 				}
 				*/
+
 				//copy text coordinates
 				if (mesh->HasTextureCoords(0))
 				{
@@ -186,27 +189,25 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 
 				glBindBuffer(GL_ARRAY_BUFFER, fbx.id_vertex);
 				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * fbx.num_vertex * 3, fbx.vertex, GL_STATIC_DRAW);
-				//glBufferData(GL_ARRAY_BUFFER, fbx.v_size + fbx.n_size + fbx.c_size + fbx.t_size, 0, GL_STATIC_DRAW);
-				////glBufferSubData(GL_ARRAY_BUFFER, 0, fbx.v_size, fbx.vertex);
-				//glBufferSubData(GL_ARRAY_BUFFER, fbx.v_size, fbx.n_size, fbx.normal);
-				//glBufferSubData(GL_ARRAY_BUFFER, fbx.v_size + fbx.n_size, fbx.c_size, fbx.color);
-				//glBufferSubData(GL_ARRAY_BUFFER, fbx.v_size + fbx.n_size + fbx.c_size, fbx.t_size, fbx.textcoord);
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
+			
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, fbx.id_index);
 				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * fbx.num_index, fbx.index, GL_STATIC_DRAW);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
 				glBindBuffer(GL_ARRAY_BUFFER, fbx.id_texture);
 				glBufferData(GL_ARRAY_BUFFER, sizeof(uint) * fbx.num_textcoord * 2, fbx.textcoord, GL_STATIC_DRAW);
-
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 				//create gameobject
 				gameobject.push_back(fbx);
 			}
-			aiReleaseImport(scene);
 		}
 		else
 		{
 			LOG("ERROR LOADING SCENE %s", path);
 		}
-
+		aiReleaseImport(scene);
 	}
 	else if (is_parshape == true)
 	{
@@ -295,33 +296,18 @@ void ModuleImport::DrawMesh(bool is_parshape, mesh_data fbx)
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, texture);
-	//GLsizeiptr n_offset = fbx.v_size;
-	//GLsizeiptr c_offset = n_offset + fbx.n_size;
-	//GLsizeiptr t_offset = c_offset + fbx.c_size;
 	glBindBuffer(GL_ARRAY_BUFFER, fbx.id_vertex);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, fbx.id_index);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 	glBindBuffer(GL_ARRAY_BUFFER, fbx.id_texture);
 	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
 	if (is_parshape == false)
 	{
-		//glEnableClientState(GL_NORMAL_ARRAY);
-		//glEnableClientState(GL_COLOR_ARRAY);
-
-		//glColor3f(0, 255, 0);
-
-
-		//glNormalPointer(GL_FLOAT, 0, (void*)n_offset);
-		//glColorPointer(3, GL_FLOAT, 0, (void*)c_offset);
-
 		glDrawElements(GL_TRIANGLES, fbx.num_index * 3, GL_UNSIGNED_INT, NULL);
-		//glDisableClientState(GL_NORMAL_ARRAY);
-		//glDisableClientState(GL_COLOR_ARRAY);
-
 	}
 	else if (is_parshape == true)
 	{
-		//glColor3f(0, 255, 0);
 		glDrawElements(GL_TRIANGLES, fbx.num_index * 3, GL_UNSIGNED_SHORT, NULL);
 	}
 
@@ -337,7 +323,7 @@ void ModuleImport::ClearMeshData()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindTexture(GL_TEXTURE_2D, NULL);
-	for (list<mesh_data>::iterator i = gameobject.begin(), end = gameobject.end(); i != end; ++i)
+	for (list<mesh_data>::iterator i = gameobject.begin(); i != gameobject.end(); ++i)
 	{
 		if (i->index != nullptr)
 		{
