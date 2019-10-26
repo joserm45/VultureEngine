@@ -29,12 +29,12 @@ bool ModuleScene::Start()
 	App->camera->LookAt(vec3(0.0f, 0.0f, 0.0f));
 
 	scene_root_gameobject = CreateGameObject(nullptr);
-	scene_root_gameobject->SetName("Scene Game Object");
+	scene_root_gameobject->SetName("Scene Game Objects");
 
-	scene_gameobject_pointer = CreateGameObject(scene_root_gameobject);
+	//scene_gameobject_pointer = CreateGameObject(scene_root_gameobject);
 	
-	scene_gameobject_pointer->CreateComponent(MESH, 4, "BakerHouse.fbx");
-	scene_gameobject_pointer->SetName("Baker House");
+	//scene_gameobject_pointer->CreateComponent(MESH, 4, "BakerHouse.fbx");
+	//scene_gameobject_pointer->SetName("Baker House");
 
 	return ret;
 }

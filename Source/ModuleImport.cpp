@@ -203,7 +203,15 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 				gameobject.push_back(fbx);
 				GameObject* game_object = App->scene_intro->CreateGameObject(App->scene_intro->GetRootGameObject());
 				game_object->CreateComponent(MESH,0, path);
-				game_object->CreateComponent(MATERIAL, 0,path);
+				game_object->CreateComponent(MATERIAL, 0, path);
+				std::string path_name = path;
+				std::string namedotfbx = path_name.substr(path_name.find_last_of("/\\") + 1);
+				std::string::size_type const p(namedotfbx.find_last_of('.'));
+				std::string name_fbx = namedotfbx.substr(0, p);;
+				char* go_name = new char[name_fbx.size() + 1];
+				name_fbx.copy(go_name, name_fbx.size() + 1);
+				go_name[name_fbx.size()] = '\0';
+				game_object->SetName(go_name);
 			}
 		}
 		else
