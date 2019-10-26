@@ -26,10 +26,10 @@ bool ModuleScene::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
-	App->camera->LookAt(vec3(3.0f, 3.0f, 0.0f));
+	App->camera->LookAt(vec3(0.0f, 0.0f, 0.0f));
 
 	scene_root_gameobject = CreateGameObject(nullptr);
-	scene_root_gameobject->SetName("Scene");
+	scene_root_gameobject->SetName("Scene Game Object");
 
 	scene_gameobject_pointer = CreateGameObject(scene_root_gameobject);
 	
@@ -296,7 +296,8 @@ GameObject* ModuleScene::GetRootGameObject() const
 	return scene_root_gameobject;
 }
 
-void ModuleScene::FocusGameObject(GameObject* focused, GameObject* root) {
+void ModuleScene::FocusGameObject(GameObject* focused, GameObject* root) 
+{
 
 	if (root->GetNumChilds() > 0) {
 

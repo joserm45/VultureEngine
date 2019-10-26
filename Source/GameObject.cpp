@@ -14,8 +14,12 @@
 GameObject::GameObject(GameObject* root)
 {
 	this->parent = root;
+	name = "Game Object";
 	if (root != nullptr)
-		//root->childs.push_back(this);
+	{
+		root->childs.push_back(this);
+	}
+
 
 	CreateComponent(TRANSFORM,0,"null");
 }

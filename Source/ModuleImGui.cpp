@@ -91,6 +91,7 @@ bool ModuleImGui::CleanUp()
 	//Clearing up imGui
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
+	//if(App->imgui->q)
 	ImGui::DestroyContext();
 
 	//CleanUp panels
