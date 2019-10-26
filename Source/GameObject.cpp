@@ -11,6 +11,10 @@
 
 
 
+GameObject::GameObject()
+{
+}
+
 GameObject::GameObject(GameObject* root)
 {
 	this->parent = root;
@@ -134,10 +138,7 @@ void GameObject::PrintPanelGameObject(int& i, bool& clicked) {
 			App->scene_intro->FocusGameObject(this, App->scene_intro->GetRootGameObject()); //Focus
 		}
 
-
 		//Print each child of the gameobject
-
-
 
 		for (int j = 0; j < GetNumChilds(); j++) {
 			i++;
@@ -147,14 +148,43 @@ void GameObject::PrintPanelGameObject(int& i, bool& clicked) {
 
 		ImGui::TreePop();
 	}
-	//Set focused to print Inspector
-	if (ImGui::IsItemClicked() && !clicked) {
+	//Focus
+	if (!clicked && ImGui::IsItemClicked()) {
 		LOG("%s node clicked", name);
 		clicked = true;
 		App->scene_intro->GetRootGameObject()->focused = false;
 		App->scene_intro->FocusGameObject(this, App->scene_intro->GetRootGameObject());
 	}
 	ImGui::PopID();
+}
+
+void GameObject::DrawInspector()
+{
+	if (ImGui::CollapsingHeader("GameObject")) {
+		ImGui::PushID(0);
+		ImGui::Text("Name:");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(0.7f, 0.8f, 0.0f, 1.0f), name);
+		ImGui::PopID();
+	}
+
+	if (transform != NULL) {
+		ImGui::PushID(1);
+		transform->Draw();
+		ImGui::PopID();
+	}
+
+	if (mesh != NULL) {
+		ImGui::PushID(2);
+		mesh->Draw();
+		ImGui::PopID();
+	}
+
+	if (material != NULL) {
+		ImGui::PushID(3);
+		material->Draw();
+		ImGui::PopID();
+	}
 }
 
 

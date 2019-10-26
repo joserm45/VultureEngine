@@ -8,6 +8,11 @@ Panel::Panel()
 
 Panel::~Panel() {}
 
+bool Panel::IsActive()
+{
+	return active_panel;
+}
+
 void Panel::ToggleVisibility()
 {
 	visibility = !visibility;

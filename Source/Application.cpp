@@ -16,6 +16,7 @@ Application::Application()
 	imgui = new ModuleImGui(this);
 	importer = new ModuleImport(this);
 	panel = new PanelGameObjects();
+
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
 	// They will CleanUp() in reverse order

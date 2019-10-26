@@ -6,6 +6,8 @@ class Panel;
 class PanelConfiguration;
 class PanelConsole;
 class PanelAbout;
+class PanelGameObjects;
+class PanelInspector;
 
 using namespace std;
 
@@ -26,12 +28,14 @@ public:
 	void AddLogToConsole(const char* log);
 	void RequestBrowser(const char* url) const;
 
+	list<Panel*> panels;
 private:
 
 	//Panels
-	list<Panel*> panels;
+
 	PanelConfiguration* config;
 	PanelConsole* console;
 	PanelAbout* about;
-
+	PanelGameObjects* game_objects;
+	PanelInspector* inspector;
 };

@@ -12,6 +12,7 @@ public:
 	Panel();
 	virtual ~Panel();
 
+	bool IsActive();
 	virtual void Draw() {};
 	virtual void SetVisibility(bool set_value);
 	virtual void ToggleVisibility();
@@ -21,7 +22,6 @@ public:
 
 protected:
 
-	bool resize = true;
 	bool active_panel = false;
 	int x, y, w, h = 0;
 };

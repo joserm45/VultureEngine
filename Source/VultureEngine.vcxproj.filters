@@ -394,6 +394,9 @@
     <ClInclude Include="PanelGameObjects.h">
       <Filter>Sources\Modules\Game\Comp&amp;GO</Filter>
     </ClInclude>
+    <ClInclude Include="PanelInspector.h">
+      <Filter>Sources\Modules\Game\Comp&amp;GO</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -595,6 +598,9 @@
       <Filter>Sources\Third_Party</Filter>
     </ClCompile>
     <ClCompile Include="PanelGameObjects.cpp">
+      <Filter>Sources\Modules\Game\Comp&amp;GO</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelInspector.cpp">
       <Filter>Sources\Modules\Game\Comp&amp;GO</Filter>
     </ClCompile>
   </ItemGroup>

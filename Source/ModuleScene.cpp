@@ -33,7 +33,7 @@ bool ModuleScene::Start()
 
 	scene_gameobject_pointer = CreateGameObject(scene_root_gameobject);
 	
-	scene_gameobject_pointer->CreateComponent(MESH, 0, "Assets/Meshes/BakerHouse.fbx");
+	scene_gameobject_pointer->CreateComponent(MESH, 4, "BakerHouse.fbx");
 	scene_gameobject_pointer->SetName("Baker House");
 
 	return ret;
@@ -281,7 +281,14 @@ void ModuleScene::DrawCubeDrawElements()
 
 void ModuleScene::Draw()
 {
-	App->panel->Draw();
+	//App->panel->Draw();
+	list<Panel*>::const_iterator panel = App->imgui->panels.begin();
+	while (panel != App->imgui->panels.end())
+	{
+		if ((*panel)->IsActive())
+			(*panel)->Draw();
+		panel++;
+	}
 }
 
 GameObject* ModuleScene::CreateGameObject(GameObject* gameobject)

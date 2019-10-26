@@ -15,6 +15,7 @@ class GameObject
 {
 public:
 
+	GameObject();
 	GameObject(GameObject* parent);
 	virtual ~GameObject();
 
@@ -31,6 +32,7 @@ public:
 	const char* GetName();
 	void SetName(const char* new_name);
 	void GameObject::PrintPanelGameObject(int& i, bool& clicked);
+	void GameObject::DrawInspector();
 
 private:
 

@@ -107,6 +107,7 @@ bool ModuleImport::CleanUp()
 
 void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 {
+
 	ClearMeshData();
 	if (is_parshape == false)
 	{
@@ -179,6 +180,7 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 						memcpy(&fbx.textcoord[i * 2], &mesh->mTextureCoords[0][i].x, sizeof(float));
 						memcpy(&fbx.textcoord[(i * 2) + 1], &mesh->mTextureCoords[0][i].y, sizeof(float));
 					}
+
 				}
 
 				glGenBuffers(1, (GLuint*)&(fbx.id_vertex));
@@ -199,6 +201,9 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 
 				//create gameobject
 				gameobject.push_back(fbx);
+				GameObject* game_object = App->scene_intro->CreateGameObject(App->scene_intro->GetRootGameObject());
+				game_object->CreateComponent(MESH,0, path);
+				game_object->CreateComponent(MATERIAL, 0,path);
 			}
 		}
 		else

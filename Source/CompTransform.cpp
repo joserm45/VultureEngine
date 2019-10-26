@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "CompTransform.h"
 #include "GameObject.h"
+#include "imgui.h"
 
 #include "MathGeoLib/include/MathGeoLib.h"
 
@@ -49,5 +50,28 @@ void CompTransform::SetScale(math::float3 scale) {
 math::float4x4 CompTransform::GetGlobalMatrix() const {
 
 	return global_matrix;
+}
+
+void CompTransform::Draw()
+{
+	if (ImGui::CollapsingHeader("Transform")) {
+
+		ImGui::Text("Position");
+		ImGui::SameLine();
+		ImGui::DragFloat3("p", &position[0], 0.1f);
+
+		ImGui::Text("Rotation");
+		ImGui::SameLine();
+		if (ImGui::DragFloat3("r", &rotation[0], 0.1f)) {
+			SetRotation(rotation);
+		}
+
+		ImGui::Text("Scale   ");
+		ImGui::SameLine();
+		ImGui::DragFloat3("s", &scale[0], 0.1f);
+
+
+	}
+
 }
 

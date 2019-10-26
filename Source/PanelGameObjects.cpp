@@ -30,7 +30,7 @@ void PanelGameObjects::Draw()
 
 void PanelGameObjects::DrawPanelGameObjects(GameObject* game_object, int& node_id)
 {
-	if (game_object != App->scene_intro->GetRootGameObject()) 
+	if (game_object == App->scene_intro->GetRootGameObject()) 
 	{
 		bool click = false;
 		

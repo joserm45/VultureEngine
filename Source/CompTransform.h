@@ -23,7 +23,7 @@ public:
 	void SetScale(math::float3 scale);
 
 	math::float4x4 GetGlobalMatrix() const;
-
+	void Draw();
 
 
 private:
