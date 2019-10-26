@@ -108,7 +108,6 @@ bool ModuleImport::CleanUp()
 void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 {
 	ClearMeshData();
-
 	if (is_parshape == false)
 	{
 	
@@ -125,7 +124,7 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 				fbx.vertex = new float[fbx.num_vertex * 3];
 				memcpy(fbx.vertex, mesh->mVertices, sizeof(float) * fbx.num_vertex * 3);
 				LOG("New mesh with %d vertices", fbx.num_vertex);
-
+				
 				//copy faces
 				if (mesh->HasFaces())
 				{
@@ -195,7 +194,7 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 				glBindBuffer(GL_ARRAY_BUFFER, fbx.id_texture);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(uint) * fbx.num_textcoord * 2, fbx.textcoord, GL_STATIC_DRAW);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * fbx.num_textcoord * 2, fbx.textcoord, GL_STATIC_DRAW);
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 				//create gameobject
@@ -306,11 +305,11 @@ void ModuleImport::DrawMesh(bool is_parshape, mesh_data fbx)
 
 	if (is_parshape == false)
 	{
-		glDrawElements(GL_TRIANGLES, fbx.num_index * 3, GL_UNSIGNED_INT, NULL);
+		glDrawElements(GL_TRIANGLES, fbx.num_index, GL_UNSIGNED_INT, NULL);
 	}
 	else if (is_parshape == true)
 	{
-		glDrawElements(GL_TRIANGLES, fbx.num_index * 3, GL_UNSIGNED_SHORT, NULL);
+		glDrawElements(GL_TRIANGLES, fbx.num_index, GL_UNSIGNED_SHORT, NULL);
 	}
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
