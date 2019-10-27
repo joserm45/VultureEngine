@@ -22,6 +22,7 @@ private:
 	vector<float> fps_log;
 	vector<float> ms_log;
 	const uint perfor_vec_size = 70;
+	bool a = false, b = false, c = false, d = false;
 };
 
 #endif

@@ -234,7 +234,7 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 					uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
 					aiString path_material;
 					material->GetTexture(aiTextureType_DIFFUSE, 0, &path_material);
-					if(path_material.length != 0)
+					//if(path_material.length != 0)
 						game_object->CreateComponent(MATERIAL, 0, path_material.data);
 				}
 			}

@@ -146,14 +146,39 @@ void PanelConfiguration::Draw()
 		}
 	}
 
-	if (ImGui::CollapsingHeader("File System"))
+	if (ImGui::CollapsingHeader("Renderer"))
 	{ 
-	
+		ImGui::Checkbox("GL_DEPTH_TEST", &a);
+		if (a == false)
+			glEnable(GL_DEPTH_TEST);
+		else if(a == true)
+			glDisable(GL_DEPTH_TEST);
+
+		ImGui::Checkbox("GL_CULL_FACE", &b);
+		if (b == false)
+			glEnable(GL_CULL_FACE);
+		else if (b == true)
+			glDisable(GL_CULL_FACE);
+
+		ImGui::Checkbox("Draw Grid", &App->renderer3D->grid);
 	}
 
 	if (ImGui::CollapsingHeader("Input"))
 	{ 
-	
+
+		ImGui::Text("Mouse position:");
+		ImGui::Text("x: %d", App->input->GetMouseX());
+		ImGui::SameLine();
+		ImGui::Text("y: %d", App->input->GetMouseY());
+
+		ImGui::Text("Mouse motion:");
+		ImGui::Text("x: %d", App->input->GetMouseXMotion());
+		ImGui::SameLine();
+		ImGui::Text("y: %d", App->input->GetMouseYMotion());
+
+		ImGui::Text("Mouse Wheel: ");
+		ImGui::SameLine();
+		ImGui::Text("%d", App->input->GetMouseZ());
 	}
 
 	if (ImGui::CollapsingHeader("Hardware"))
@@ -239,6 +264,35 @@ void PanelConfiguration::Draw()
 		}
 
 		ImGui::Separator();
+
+		GLint total_availabe_memory;
+		GLint current_available_memory = 0;
+		GLint memory_usage = 0;
+
+		glGetIntegerv(GL_GPU_MEMORY_INFO_TOTAL_AVAILABLE_MEMORY_NVX, &total_availabe_memory);
+		glGetIntegerv(GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &current_available_memory);
+		memory_usage = total_availabe_memory - current_available_memory;
+
+		ImGui::Text("GPU: ");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(0, 0, 1, 1), "%s", glGetString(GL_VENDOR));
+
+		ImGui::Text("Brand: ");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(0, 0, 1, 1), "%s", glGetString(GL_RENDERER));
+
+		ImGui::Text("Total Memory: ");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(0, 0, 1, 1), "%d Mb", total_availabe_memory / 1000);
+
+		ImGui::Text("Available Memory: ");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(0, 0, 1, 1), "%d Mb", current_available_memory / 1000);
+
+		ImGui::Text("Memory Usage: ");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(0, 0, 1, 1), "%d Mb", memory_usage / 1000);
+
 	}
 
 	ImGui::End();

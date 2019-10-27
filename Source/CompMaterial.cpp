@@ -15,10 +15,6 @@ CompMaterial::CompMaterial(GameObject * parent, const char* path)
 	App->importer->LoadTexture(path_copy);
 
 	strcpy(App->importer->texture.name, path_copy);
-
-	tex_id = App->importer->texture.texture;
-	tex_width = App->importer->texture.widht;
-	tex_height = App->importer->texture.height;
 }
 
 CompMaterial::~CompMaterial()
@@ -28,6 +24,7 @@ CompMaterial::~CompMaterial()
 void CompMaterial::Draw()
 {
 	strcpy(path_copy, App->importer->texture.name);
+	tex_id = App->importer->texture.texture;
 	tex_width = App->importer->texture.widht;
 	tex_height = App->importer->texture.height;
 	if (ImGui::CollapsingHeader("Material")) {

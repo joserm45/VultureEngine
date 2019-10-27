@@ -154,19 +154,21 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	for(uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
 
-	glBegin(GL_LINES);
-	glColor3f(255, 255, 255);
-	for (int i = -20; i <= 20; i++) {
+	if (grid)
+	{
+		glBegin(GL_LINES);
+		glColor3f(255, 255, 255);
+		for (int i = -20; i <= 20; i++) {
 
-		glVertex3f(-20, 0, i);
-		glVertex3f(20, 0, i);
+			glVertex3f(-20, 0, i);
+			glVertex3f(20, 0, i);
 
-		glVertex3f(i, 0, -20);
-		glVertex3f(i, 0, 20);
+			glVertex3f(i, 0, -20);
+			glVertex3f(i, 0, 20);
 
+		}
+		glEnd();
 	}
-	glEnd();
-	
 	//ImGui_ImplOpenGL3_NewFrame();
 	//ImGui_ImplSDL2_NewFrame(App->window->window);
 	//ImGui::NewFrame();

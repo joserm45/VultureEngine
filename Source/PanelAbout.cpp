@@ -48,6 +48,10 @@ void PanelAbout::Draw()
 		ShellExecute(NULL, "open", "https://github.com/juj/MathGeoLib", NULL, NULL, SW_SHOWNORMAL);
 	if (ImGui::Button(" * OpenGL 3.1"))
 		ShellExecute(NULL, "open", "https://www.opengl.org/?", NULL, NULL, SW_SHOWNORMAL);
+	if (ImGui::Button(" * Assimp 4.1.0"))
+		ShellExecute(NULL, "open", "http://www.assimp.org/index.php/downloads", NULL, NULL, SW_SHOWNORMAL);
+	if (ImGui::Button(" * DevIL 1.8.0"))
+		ShellExecute(NULL, "open", "http://openil.sourceforge.net/download.php", NULL, NULL, SW_SHOWNORMAL);
 	ImGui::Text("\n");
 
 	ImGui::Text("License");
