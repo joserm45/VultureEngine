@@ -126,6 +126,7 @@ update_status ModuleInput::PreUpdate(float dt)
 				else if(type == ".png" || type == ".PNG" || type == ".dds" || type == ".DDS" || type == ".jpg" || type == ".JPG"|| type == ".jpeg" || type == ".JPEG")
 				{
 					App->importer->LoadTexture(e.drop.file);
+					strcpy(App->importer->texture.name, e.drop.file);
 				}
 				else
 				{

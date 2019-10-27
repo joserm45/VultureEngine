@@ -52,6 +52,13 @@ struct mesh_data
 	uint height = 0;
 };
 
+struct text_data 
+{
+	char name[100];
+	ILuint texture = 0;
+	uint widht = 0;
+	uint height = 0;
+};
 
 class ModuleImport : public Module
 {
@@ -66,10 +73,11 @@ public:
 	bool CleanUp();
 
 	void LoadMesh(char* path, bool is_parshape = false, uint i = 0);
-	void LoadTexture(char* path);
+	void LoadTexture(const char* path);
 	void DrawMesh(bool is_parshape, mesh_data fbx);
 	void ClearMeshData();
 	void LoadChessTexture();
+	text_data LoadTextureData(ILuint id, uint w, uint h);
 	//void LoadParShape(uint i);
 	//void DrawParShape();
 
@@ -80,8 +88,8 @@ public:
 	par_shapes_mesh* shape;
 
 	//texture
-	list<mesh_data> gameobject;
-	ILuint texture = 0;
+	list<mesh_data> mesh_list;
+	text_data texture;
 };
 
 

@@ -61,7 +61,7 @@ bool ModuleImport::Start()
 
 	//LoadTexture("Assets/WoodenTower/textures/Wood_Tower_Col.jpg");
 	//LoadTexture("Assets/Rifle/textures/Sniper_KSR_29_Col.jpg");
-	LoadTexture("Assets/Baker_house.png");
+	//LoadTexture("Assets/Baker_house.png");
 	//LoadTexture("Assets/Baker_house__ddsTest.DDS");
 	//LoadChessTexture();
 	
@@ -83,7 +83,7 @@ update_status ModuleImport::Update(float dt)
 update_status ModuleImport::PostUpdate(float dt)
 {
 
-	for (list<mesh_data>::iterator i = gameobject.begin(); i != gameobject.end(); ++i)
+	for (list<mesh_data>::iterator i = mesh_list.begin(); i != mesh_list.end(); ++i)
 	{
 		DrawMesh(par_shape, *i);
 	}
@@ -114,6 +114,9 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 	
 		par_shape = false;
 		const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
+		if (scene == NULL)
+			App->imgui->AddLogToConsole("Error Loading File, please try different file.");
+
 		if (scene != NULL && scene->HasMeshes())
 		{
 			for (int x = 0; x < scene->mNumMeshes; x++)
@@ -200,10 +203,10 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 				//create gameobject
-				gameobject.push_back(fbx);
+				mesh_list.push_back(fbx);
 				GameObject* game_object = App->scene_intro->CreateGameObject(App->scene_intro->GetRootGameObject());
 				game_object->CreateComponent(MESH,0, path);
-				game_object->CreateComponent(MATERIAL, 0, path);
+				//game_object->CreateComponent(MATERIAL, 0, path);
 				std::string path_name = path;
 				std::string namedotfbx = path_name.substr(path_name.find_last_of("/\\") + 1);
 				std::string::size_type const p(namedotfbx.find_last_of('.'));
@@ -212,6 +215,16 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 				name_fbx.copy(go_name, name_fbx.size() + 1);
 				go_name[name_fbx.size()] = '\0';
 				game_object->SetName(go_name);
+
+				//Material
+				aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+				if (material != nullptr) {
+					uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
+					aiString path_material;
+					material->GetTexture(aiTextureType_DIFFUSE, 0, &path_material);
+					if(path_material.length != 0)
+						game_object->CreateComponent(MATERIAL, 0, path_material.data);
+				}
 			}
 		}
 		else
@@ -265,27 +278,34 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(PAR_SHAPES_T) * fbx.num_index, fbx.index, GL_STATIC_DRAW);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-		gameobject.push_back(fbx);
+		mesh_list.push_back(fbx);
+		GameObject* game_object = App->scene_intro->CreateGameObject(App->scene_intro->GetRootGameObject());
+		game_object->CreateComponent(MESH, 0);
+		game_object->CreateComponent(MATERIAL, 0);
+		if (i == 1)
+			game_object->SetName("Cube");
+		else if (i == 2)
+			game_object->SetName("Sphere");
 
 		par_shapes_free_mesh(shape);
 	}
 
 }
 
-void ModuleImport::LoadTexture(char* path)
+void ModuleImport::LoadTexture(const char* path)
 {
 	ilInit();
 	iluInit();
 	ilutInit();
 	ilutRenderer(ILUT_OPENGL);
 
-	ilGenImages(1, &texture);
-	ilBindImage(texture);
+	ilGenImages(1, &texture.texture);
+	ilBindImage(texture.texture);
 	if (ilLoad(IL_TYPE_UNKNOWN, path) == IL_TRUE)
 	{
-		texture = ilutGLBindTexImage();
-		fbx.height = ilGetInteger(IL_IMAGE_WIDTH);
-		fbx.widht = ilGetInteger(IL_IMAGE_HEIGHT);
+		texture.texture = ilutGLBindTexImage();
+		texture.height = ilGetInteger(IL_IMAGE_WIDTH);
+		texture.widht = ilGetInteger(IL_IMAGE_HEIGHT);
 		/*
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -299,8 +319,8 @@ void ModuleImport::LoadTexture(char* path)
 	}
 	else
 		App->imgui->AddLogToConsole("Texture Not Loaded");
-
-	ilDeleteImages(1, &texture);
+	
+	ilDeleteImages(1, &texture.texture);
 }
 
 void ModuleImport::DrawMesh(bool is_parshape, mesh_data fbx)
@@ -309,7 +329,7 @@ void ModuleImport::DrawMesh(bool is_parshape, mesh_data fbx)
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glEnable(GL_TEXTURE_2D);
 
-	glBindTexture(GL_TEXTURE_2D, texture);
+	glBindTexture(GL_TEXTURE_2D, texture.texture);
 	glBindBuffer(GL_ARRAY_BUFFER, fbx.id_vertex);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, fbx.id_index);
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
@@ -336,7 +356,7 @@ void ModuleImport::DrawMesh(bool is_parshape, mesh_data fbx)
 
 void ModuleImport::ClearMeshData()
 {
-	for (list<mesh_data>::iterator i = gameobject.begin(); i != gameobject.end(); ++i)
+	for (list<mesh_data>::iterator i = mesh_list.begin(); i != mesh_list.end(); ++i)
 	{
 		if (i->index != nullptr)
 		{
@@ -367,7 +387,7 @@ void ModuleImport::ClearMeshData()
 			}
 		}
 	}
-	gameobject.clear();
+	mesh_list.clear();
 
 }
 
@@ -388,8 +408,8 @@ void ModuleImport::LoadChessTexture()
 		}
 	}
 
-	glGenTextures(1, (GLuint*)&(texture));
-	glBindTexture(GL_TEXTURE_2D, texture);
+	glGenTextures(1, (GLuint*)&(texture.texture));
+	glBindTexture(GL_TEXTURE_2D, texture.texture);
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);

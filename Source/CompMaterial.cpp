@@ -1,10 +1,20 @@
 #include "CompMaterial.h"
 #include "Imgui\imgui.h"
+#include "Application.h"
 
 CompMaterial::CompMaterial(GameObject * parent, const char* path)
 {
 	type = MATERIAL;
 	path_name = path;
+
+	char* path_start = "Assets/";
+	strcpy(path_copy, path_start);
+	strcat(path_copy, path);
+	App->importer->LoadTexture(path_copy);
+	strcpy(App->importer->texture.name, path_copy);
+	tex_id = App->importer->texture.texture;
+	tex_width = App->importer->texture.widht;
+	tex_height = App->importer->texture.height;
 }
 
 CompMaterial::~CompMaterial()
@@ -13,13 +23,16 @@ CompMaterial::~CompMaterial()
 
 void CompMaterial::Draw()
 {
+	strcpy(path_copy, App->importer->texture.name);
+	tex_width = App->importer->texture.widht;
+	tex_height = App->importer->texture.height;
 	if (ImGui::CollapsingHeader("Material")) {
 		ImGui::Text("Texture path: ");
 		ImGui::SameLine();
 
 		if (texture_active) 
 		{
-			ImGui::TextColored(ImVec4(0.3f, 0.5f, 0.5f, 1.0f), path_name);
+			ImGui::TextColored(ImVec4(0.3f, 0.5f, 0.5f, 1.0f), path_copy);
 
 			ImGui::Text("Texture size: %i x %i", tex_width, tex_height);
 
@@ -31,7 +44,17 @@ void CompMaterial::Draw()
 
 		ImGui::Text("Options");
 
-		ImGui::Checkbox("Draw Texture", &texture_active);
+		if (ImGui::Checkbox("Draw Texture", &texture_active))
+		{
+			chess_texture = false;
+			App->importer->LoadTexture(path_copy);
+		}
+
+		if (ImGui::Checkbox("Chess Texture", &chess_texture))
+		{
+			texture_active = false;
+			App->importer->LoadChessTexture();
+		}
 
 	}
 }

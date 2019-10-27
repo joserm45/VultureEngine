@@ -37,7 +37,7 @@ GameObject::~GameObject()
 
 	RELEASE(transform);	//CLEAN ALL COMPONENTS
 	RELEASE(mesh);
-	RELEASE(material);
+	//RELEASE(material); //crash
 
 	parent = nullptr;
 }

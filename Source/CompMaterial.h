@@ -14,13 +14,16 @@ public:
 	void AssignTexture(const char* path);
 	void Draw();
 	uint GetTexId()const;
-
+	char path_copy[100];
+	uint tex_id = 0;
+	int tex_width = 0, tex_height = 0;
 private:
 
-	bool texture_active = false;
+	bool texture_active = true;
+	bool chess_texture = false;
 	const char* path_name;
-	uint tex_id = 0;
-	int tex_width, tex_height;
+	
+	
 
 };
 
