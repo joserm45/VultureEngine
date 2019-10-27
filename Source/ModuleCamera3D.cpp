@@ -144,6 +144,7 @@ update_status ModuleCamera3D::Update(float dt)
 		}
 
 		Position = Reference + Z * length(Position);
+		LookAt(X);
 	}
 
 	// Recalculate matrix -------------
