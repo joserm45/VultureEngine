@@ -9,7 +9,7 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
-#include "imgui.h"
+#include "Imgui\imgui.h"
 #include "imgui\imgui_impl_sdl.h"
 #include "imgui\imgui_impl_opengl3.h"
 

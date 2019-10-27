@@ -1,7 +1,7 @@
 #include "Globals.h"
 #include "CompTransform.h"
 #include "GameObject.h"
-#include "imgui.h"
+#include "Imgui\imgui.h"
 
 #include "MathGeoLib/include/MathGeoLib.h"
 
