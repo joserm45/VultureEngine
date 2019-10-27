@@ -177,7 +177,7 @@ update_status ModuleImGui::HandleMainMenuBar()
 	}
 
 	if (quit == true) 
-		return UPDATE_STOP;
+		//return UPDATE_STOP;
 	if (demo == true)
 	{
 		ImGui::ShowDemoWindow(&demo);
