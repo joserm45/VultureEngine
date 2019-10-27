@@ -26,6 +26,7 @@ public:
 
 	update_status HandleMainMenuBar();
 	void AddLogToConsole(const char* log);
+	void AddLogToConsole(const char* log, const char* dlog);
 	void RequestBrowser(const char* url) const;
 
 	list<Panel*> panels;

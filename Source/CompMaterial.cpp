@@ -8,10 +8,14 @@ CompMaterial::CompMaterial(GameObject * parent, const char* path)
 	path_name = path;
 
 	char* path_start = "Assets/";
+
 	strcpy(path_copy, path_start);
 	strcat(path_copy, path);
+
 	App->importer->LoadTexture(path_copy);
+
 	strcpy(App->importer->texture.name, path_copy);
+
 	tex_id = App->importer->texture.texture;
 	tex_width = App->importer->texture.widht;
 	tex_height = App->importer->texture.height;

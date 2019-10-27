@@ -43,6 +43,14 @@ void PanelConsole::ShowLog(const char* log)
 	scroll = true;
 }
 
+void PanelConsole::ShowLog(const char* log, const char* dlog)
+{
+	buff.appendf(log);
+	buff.appendf(dlog);
+	buff.appendf("\n");
+	scroll = true;
+}
+
 void PanelConsole::Clear()
 {
 	buff.clear();

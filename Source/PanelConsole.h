@@ -13,6 +13,7 @@ public:
 
 	void Draw();
 	void ShowLog(const char* log);
+	void ShowLog(const char* log, const char* dlog);
 
 private:
 

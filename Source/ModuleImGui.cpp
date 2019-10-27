@@ -185,9 +185,14 @@ update_status ModuleImGui::HandleMainMenuBar()
 	return UPDATE_CONTINUE;
 }
 
-void ModuleImGui::AddLogToConsole(const char * log)
+void ModuleImGui::AddLogToConsole(const char* log)
 {
 	console->ShowLog(log);
+}
+
+void ModuleImGui::AddLogToConsole(const char* log, const char* dlog)
+{
+	console->ShowLog(log, dlog);
 }
 
 void ModuleImGui::RequestBrowser(const char* url) const

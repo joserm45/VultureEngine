@@ -114,8 +114,11 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 	
 		par_shape = false;
 		const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
+		App->imgui->AddLogToConsole("Initialazing Assimp Correctly");
 		if (scene == NULL)
 			App->imgui->AddLogToConsole("Error Loading File, please try different file.");
+
+		App->imgui->AddLogToConsole("Opening file: ", path);
 
 		if (scene != NULL && scene->HasMeshes())
 		{
@@ -127,7 +130,8 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 				fbx.num_vertex = mesh->mNumVertices;
 				fbx.vertex = new float[fbx.num_vertex * 3];
 				memcpy(fbx.vertex, mesh->mVertices, sizeof(float) * fbx.num_vertex * 3);
-				LOG("New mesh with %d vertices", fbx.num_vertex);
+				string str = "New mesh with " + std::to_string(fbx.num_vertex) + " vertices";
+				App->imgui->AddLogToConsole(str.c_str());
 				
 				//copy faces
 				if (mesh->HasFaces())
@@ -154,6 +158,8 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 					fbx.num_normal = mesh->mNumVertices;
 					fbx.normal = new float[fbx.num_normal * 3];
 					memcpy(fbx.normal, mesh->mNormals, sizeof(float) * fbx.num_normal * 3);
+					string str = "New mesh with " + std::to_string(fbx.num_vertex) + " normals";
+					App->imgui->AddLogToConsole(str.c_str());
 					LOG("New mesh with %d normals", fbx.num_normal);
 				}
 
@@ -204,20 +210,26 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 
 				//create gameobject
 				mesh_list.push_back(fbx);
+
 				GameObject* game_object = App->scene_intro->CreateGameObject(App->scene_intro->GetRootGameObject());
+
 				game_object->CreateComponent(MESH,0, path);
 				//game_object->CreateComponent(MATERIAL, 0, path);
+
 				std::string path_name = path;
 				std::string namedotfbx = path_name.substr(path_name.find_last_of("/\\") + 1);
 				std::string::size_type const p(namedotfbx.find_last_of('.'));
 				std::string name_fbx = namedotfbx.substr(0, p);;
+
 				char* go_name = new char[name_fbx.size() + 1];
+
 				name_fbx.copy(go_name, name_fbx.size() + 1);
 				go_name[name_fbx.size()] = '\0';
 				game_object->SetName(go_name);
 
 				//Material
 				aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+
 				if (material != nullptr) {
 					uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
 					aiString path_material;
@@ -255,7 +267,8 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 		fbx.num_vertex = shape->npoints;
 		fbx.vertex = new float[fbx.num_vertex * 3];
 		memcpy(fbx.vertex, shape->points, sizeof(float) * fbx.num_vertex * 3);
-		LOG("New mesh with %d vertices", fbx.num_vertex);
+		string str = "New mesh with " + std::to_string(fbx.num_vertex) + " vertices";
+		App->imgui->AddLogToConsole(str.c_str());
 
 		//copy faces
 		fbx.num_index = shape->ntriangles * 3;
@@ -266,7 +279,8 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 		fbx.num_normal = shape->npoints;
 		fbx.normal = new float[fbx.num_normal * 3];
 		memcpy(fbx.normal, shape->points, sizeof(float) * fbx.num_normal * 3);
-		LOG("New mesh with %d normals", fbx.num_normal);
+		str = "New mesh with " + std::to_string(fbx.num_vertex) + " normals";
+		App->imgui->AddLogToConsole(str.c_str());
 
 		glGenBuffers(1, (GLuint*)&(fbx.id_vertex));
 		glGenBuffers(1, (GLuint*)&(fbx.id_index));
@@ -301,6 +315,9 @@ void ModuleImport::LoadTexture(const char* path)
 
 	ilGenImages(1, &texture.texture);
 	ilBindImage(texture.texture);
+
+	App->imgui->AddLogToConsole("Loading Texture");
+
 	if (ilLoad(IL_TYPE_UNKNOWN, path) == IL_TRUE)
 	{
 		texture.texture = ilutGLBindTexImage();
@@ -315,7 +332,9 @@ void ModuleImport::LoadTexture(const char* path)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		*/
 		glBindTexture(GL_TEXTURE_2D, 0);
-		App->imgui->AddLogToConsole("Texture Loaded Succesfuly");
+		App->imgui->AddLogToConsole("Texture Loaded Succesfuly: ", path);
+		string size_text = "Texture size: " + std::to_string(texture.widht) + " X " + std::to_string(texture.height);
+		App->imgui->AddLogToConsole(size_text.c_str());
 	}
 	else
 		App->imgui->AddLogToConsole("Texture Not Loaded");

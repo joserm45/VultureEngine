@@ -16,9 +16,6 @@
     <Filter Include="Sources\Helpers">
       <UniqueIdentifier>{121f8e6b-df36-4ab0-be0d-601ddfc9e503}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Modules\Game">
-      <UniqueIdentifier>{83f46af7-e02f-40c0-9e56-41d76082527b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sources\Third_Party">
       <UniqueIdentifier>{4e8c494c-a2dd-48ba-9b55-8cf99066719e}</UniqueIdentifier>
     </Filter>
@@ -55,11 +52,11 @@
     <Filter Include="Sources\Third_Party\MathGeoLib\Time">
       <UniqueIdentifier>{9dba58ea-3c65-4811-b491-ec97848ecfb6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Modules\Game\Comp&amp;GO">
-      <UniqueIdentifier>{fd921b28-3ef8-49bc-a8ae-a629b9f9f187}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sources\Third_Party\DevIL">
       <UniqueIdentifier>{0f2da6cb-cbe7-4ffa-8e52-ca3f81bafa65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Modules\Comp&amp;GO">
+      <UniqueIdentifier>{fd921b28-3ef8-49bc-a8ae-a629b9f9f187}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -346,26 +343,20 @@
     <ClInclude Include="j1PerfTimer.h">
       <Filter>Sources\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleScene.h">
-      <Filter>Sources\Modules\Game</Filter>
-    </ClInclude>
     <ClInclude Include="Components.h">
-      <Filter>Sources\Modules\Game\Comp&amp;GO</Filter>
+      <Filter>Sources\Modules\Comp&amp;GO</Filter>
     </ClInclude>
     <ClInclude Include="CompTransform.h">
-      <Filter>Sources\Modules\Game\Comp&amp;GO</Filter>
+      <Filter>Sources\Modules\Comp&amp;GO</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
-      <Filter>Sources\Modules\Game\Comp&amp;GO</Filter>
+      <Filter>Sources\Modules\Comp&amp;GO</Filter>
     </ClInclude>
     <ClInclude Include="CompMesh.h">
-      <Filter>Sources\Modules\Game\Comp&amp;GO</Filter>
+      <Filter>Sources\Modules\Comp&amp;GO</Filter>
     </ClInclude>
     <ClInclude Include="CompMaterial.h">
-      <Filter>Sources\Modules\Game\Comp&amp;GO</Filter>
-    </ClInclude>
-    <ClInclude Include="ModuleImport.h">
-      <Filter>Sources\Modules\Game</Filter>
+      <Filter>Sources\Modules\Comp&amp;GO</Filter>
     </ClInclude>
     <ClInclude Include="DevIL\include\devil_cpp_wrapper.hpp">
       <Filter>Sources\Third_Party\DevIL</Filter>
@@ -392,10 +383,16 @@
       <Filter>Sources\Third_Party\DevIL</Filter>
     </ClInclude>
     <ClInclude Include="PanelGameObjects.h">
-      <Filter>Sources\Modules\Game\Comp&amp;GO</Filter>
+      <Filter>Sources\Modules\Comp&amp;GO</Filter>
     </ClInclude>
     <ClInclude Include="PanelInspector.h">
-      <Filter>Sources\Modules\Game\Comp&amp;GO</Filter>
+      <Filter>Sources\Modules\Comp&amp;GO</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleImport.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleScene.h">
+      <Filter>Sources\Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -573,35 +570,35 @@
     <ClCompile Include="j1PerfTimer.cpp">
       <Filter>Sources\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="ModuleScene.cpp">
-      <Filter>Sources\Modules\Game</Filter>
-    </ClCompile>
     <ClCompile Include="Components.cpp">
-      <Filter>Sources\Modules\Game\Comp&amp;GO</Filter>
+      <Filter>Sources\Modules\Comp&amp;GO</Filter>
     </ClCompile>
     <ClCompile Include="CompTransform.cpp">
-      <Filter>Sources\Modules\Game\Comp&amp;GO</Filter>
+      <Filter>Sources\Modules\Comp&amp;GO</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
-      <Filter>Sources\Modules\Game\Comp&amp;GO</Filter>
+      <Filter>Sources\Modules\Comp&amp;GO</Filter>
     </ClCompile>
     <ClCompile Include="CompMesh.cpp">
-      <Filter>Sources\Modules\Game\Comp&amp;GO</Filter>
+      <Filter>Sources\Modules\Comp&amp;GO</Filter>
     </ClCompile>
     <ClCompile Include="CompMaterial.cpp">
-      <Filter>Sources\Modules\Game\Comp&amp;GO</Filter>
-    </ClCompile>
-    <ClCompile Include="ModuleImport.cpp">
-      <Filter>Sources\Modules\Game</Filter>
+      <Filter>Sources\Modules\Comp&amp;GO</Filter>
     </ClCompile>
     <ClCompile Include="par_shapes.cpp">
       <Filter>Sources\Third_Party</Filter>
     </ClCompile>
     <ClCompile Include="PanelGameObjects.cpp">
-      <Filter>Sources\Modules\Game\Comp&amp;GO</Filter>
+      <Filter>Sources\Modules\Comp&amp;GO</Filter>
     </ClCompile>
     <ClCompile Include="PanelInspector.cpp">
-      <Filter>Sources\Modules\Game\Comp&amp;GO</Filter>
+      <Filter>Sources\Modules\Comp&amp;GO</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleImport.cpp">
+      <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleScene.cpp">
+      <Filter>Sources\Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
