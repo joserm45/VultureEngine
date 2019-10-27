@@ -86,7 +86,8 @@ public:
 	uint GetMaxFramerate()const;
 	float GetFPS();
 	float GetMS();
-	
+	float GetDt() const;
+
 
 private:
 

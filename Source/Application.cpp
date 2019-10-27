@@ -341,3 +341,8 @@ float Application::GetMS()
 {
 	return float(1000 / prev_last_sec_frame_count);
 }
+
+float Application::GetDt() const
+{
+	return dt;
+}

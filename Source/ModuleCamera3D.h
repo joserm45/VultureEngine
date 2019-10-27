@@ -3,6 +3,9 @@
 #include "Globals.h"
 #include "glmath.h"
 
+#include "MathGeoLib\include\Math\float3.h"
+#include "MathGeoLib\include\Geometry\Frustum.h"
+#include "MathGeoLib\include\Geometry\AABB.h"
 
 class ModuleCamera3D : public Module
 {
@@ -16,6 +19,9 @@ public:
 
 	void Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference = false);
 	void LookAt(const vec3 &Spot);
+	void LookAt(const math::float3& reference, float radius) const;
+	void LookAround(const math::float3& reference, float pitch, float yaw) const;
+	
 	void Move(const vec3 &Movement);
 	float* GetViewMatrix();
 
@@ -30,7 +36,8 @@ private:
 public:
 	
 	vec3 X, Y, Z, Position, Reference;
-
+	math::Frustum frustum;
+	math::float3 reference = { 0.0f,0.0f,0.0f };
 private:
 
 	mat4x4 ViewMatrix, ViewMatrixInverse;

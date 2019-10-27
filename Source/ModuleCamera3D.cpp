@@ -2,6 +2,8 @@
 #include "Application.h"
 #include "ModuleCamera3D.h"
 
+#include "MathGeoLib\include\Math\MathAll.h"
+
 ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	name = "Camera";
@@ -50,7 +52,25 @@ update_status ModuleCamera3D::Update(float dt)
 			speed *= 2.0f;
 		
 		if (App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT) newPos.y += speed;
-		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) newPos.y -= speed;
+
+		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT)
+		{
+			LookAt(X);
+		}
+
+		if ((App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RALT) == KEY_REPEAT) &&
+			App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
+		{
+			int dx = -App->input->GetMouseXMotion(); 
+			int dy = -App->input->GetMouseYMotion(); 
+
+			if (dx != 0 || dy != 0)
+			{
+				float cameraRotationSpeed = speed * App->GetDt();
+
+				LookAround(reference, (float)dy * speed, (float)dx * cameraRotationSpeed);
+			}
+		}
 
 		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed;
 		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += Z * speed;
@@ -139,6 +159,38 @@ void ModuleCamera3D::LookAt( const vec3 &Spot)
 	Y = cross(Z, X);
 
 	CalculateViewMatrix();
+}
+
+void ModuleCamera3D::LookAt(const math::float3& reference, float radius) const
+{
+	math::float3 Z = -(frustum.pos - reference).Normalized(); // Direction the camera is looking at (reverse direction of what the camera is targeting)
+	math::float3 X = math::Cross(math::float3(0.0f, 1.0f, 0.0f), Z).Normalized(); // X is perpendicular to vectors Y and Z
+	math::float3 Y = math::Cross(Z, X); // Y is perpendicular to vectors Z and X
+
+	(float3)frustum.front = Z;
+	(float3)frustum.up = Y;
+
+	if (radius != 0.0f)
+	{
+		float distance = (frustum.pos - reference).Length();
+		distance -= radius;
+
+		//frustum.Translate(frustum.front * distance);
+	}
+}
+
+void ModuleCamera3D::LookAround(const math::float3 & reference, float pitch, float yaw) const
+{
+	math::Quat rotationX = math::Quat::RotateAxisAngle({ 0.0f,1.0f,0.0f }, yaw * DEGTORAD);
+	math::Quat rotationY = math::Quat::RotateAxisAngle(frustum.WorldRight(), pitch * DEGTORAD);
+
+	math::Quat finalRotation = rotationX * rotationY;
+
+	//frustum.up = finalRotation * frustum.up;
+	//frustum.front = finalRotation * frustum.front;
+
+	float distance = (frustum.pos - reference).Length();
+	//frustum.pos = reference + (-frustum.front * distance);
 }
 
 
