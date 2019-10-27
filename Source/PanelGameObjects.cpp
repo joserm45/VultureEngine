@@ -9,7 +9,7 @@ PanelGameObjects::PanelGameObjects()
 {
 	name = "Panel Game Objects";
 	active_panel = true;
-	x = 0, y = 20, w = 180, h = 800;
+	x = 1, y = 45, w = 236, h = 733;
 }
 
 

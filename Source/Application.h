@@ -12,8 +12,6 @@
 #include "ModuleImGui.h"
 #include "ModuleImport.h"
 #include "Components.h"
-#include "GameObject.h"
-#include "PanelGameObjects.h"
 
 #include "PCG\pcg_variants.h"
 
@@ -28,7 +26,7 @@ public:
 	ModuleCamera3D* camera = nullptr;
 	ModuleImGui* imgui = nullptr;
 	ModuleImport* importer = nullptr;
-	PanelGameObjects* panel = nullptr;
+
 
 	pcg32_random_t random_num;
 	//fps

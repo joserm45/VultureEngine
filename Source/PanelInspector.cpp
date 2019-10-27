@@ -8,7 +8,7 @@ PanelInspector::PanelInspector()
 {
 	name = "inspector";
 	active_panel = true;
-	x = 1261, y = 20, w = 303, h = 794;
+	x = 1005, y = 18, w = 277, h = 525;
 }
 
 

@@ -5,6 +5,7 @@
 #include "imgui.h"
 #include "ModuleInput.h"
 #include "GameObject.h"
+#include "Panel.h"
 
 #include "glew\include\GL\glew.h"
 #include "SDL\include\SDL_opengl.h"

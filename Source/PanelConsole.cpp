@@ -16,8 +16,8 @@ PanelConsole::~PanelConsole()
 void PanelConsole::Draw()
 {
 	//Set window position and size
-	ImGui::SetNextWindowPos({ 100,50 }, ImGuiCond_Once);
-	ImGui::SetNextWindowSize(ImVec2(500, 250), ImGuiCond_Once);
+	ImGui::SetNextWindowPos({ 0,803 }, ImGuiCond_Once);
+	ImGui::SetNextWindowSize(ImVec2(694, 209), ImGuiCond_Once);
 
 	static bool autom_scroll = true;
 

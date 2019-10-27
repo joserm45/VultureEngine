@@ -20,8 +20,8 @@ PanelConfiguration::~PanelConfiguration()
 void PanelConfiguration::Draw()
 {
 	//Set window position and size
-	ImGui::SetNextWindowPos({ 450,100 }, ImGuiWindowFlags_MenuBar);
-	ImGui::SetNextWindowSize(ImVec2(320, 700), ImGuiCond_Once);
+	ImGui::SetNextWindowPos({ 827,575 }, ImGuiWindowFlags_MenuBar);
+	ImGui::SetNextWindowSize(ImVec2(451, 437), ImGuiCond_Once);
 
 	//Window
 	ImGui::Begin("Configuration", &visibility, ImGuiWindowFlags_None);

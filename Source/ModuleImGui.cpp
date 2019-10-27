@@ -11,6 +11,7 @@
 #include "PanelConsole.h"
 #include "PanelAbout.h"
 #include "PanelInspector.h"
+#include "PanelGameObjects.h"
 
 
 ModuleImGui::ModuleImGui(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -48,7 +49,7 @@ bool ModuleImGui::Init()
 	inspector = new PanelInspector();
 	panels.push_back(inspector);
 
-	AddLogToConsole("Initializing ImGui");
+	AddLogToConsole("Initialized ImGui Correctly");
 
 	return true;
 }
