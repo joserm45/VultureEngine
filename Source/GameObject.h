@@ -6,6 +6,7 @@
 #include "Globals.h"
 #include "Components.h"
 #include <vector>
+#include "MathGeoLib/include/MathGeoLib.h"
 
 class CompTransform;
 class CompMaterial;
@@ -33,6 +34,12 @@ public:
 	void SetName(const char* new_name);
 	void GameObject::PrintPanelGameObject(int& i, bool& clicked);
 	void GameObject::DrawInspector();
+
+	//transform
+	math::float4x4& GetLocalMatrix();
+	math::float4x4 GetGlobalMatrix();
+	void SetPosition(float3 position);
+	void SetRotation(float3 rotation);
 
 private:
 

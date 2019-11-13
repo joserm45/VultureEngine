@@ -90,6 +90,9 @@ public:
 	//texture
 	list<mesh_data> mesh_list;
 	text_data texture;
+
+	//testing transformation
+	GameObject* last_GO = nullptr;
 };
 
 

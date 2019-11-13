@@ -9,7 +9,7 @@
 
 #include "imgui/imgui.h"
 
-
+#include "MathGeoLib/include/MathGeoLib.h"
 
 GameObject::GameObject()
 {
@@ -187,5 +187,22 @@ void GameObject::DrawInspector()
 	}
 }
 
-
+math::float4x4& GameObject::GetLocalMatrix()
+{
+	return float4x4::FromTRS(transform->position, transform->rotation, transform->scale);
+}
+math::float4x4 GameObject::GetGlobalMatrix()
+{
+	float4x4 local_matrix = GetLocalMatrix();
+	//transform->GetGlobalMatrix() * local_matrix;
+	return local_matrix;
+}
+void GameObject::SetPosition(float3 position)
+{
+	transform->position = position;
+}
+void GameObject::SetRotation(float3 rotation)
+{
+	transform->rotation = Quat::FromEulerXYZ(rotation.x * DEGTORAD, rotation.y * DEGTORAD, rotation.z *DEGTORAD);
+}
 

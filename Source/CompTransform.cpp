@@ -27,12 +27,12 @@ void CompTransform::SetPosition(math::float3 pos) {
 	position = pos;
 }
 
-math::float3 CompTransform::GetRotation() {
+math::Quat CompTransform::GetRotation() {
 
 	return rotation;
 }
 
-void CompTransform::SetRotation(math::float3 rot) {
+void CompTransform::SetRotation(math::Quat rot) {
 
 	rotation = rot;
 }
@@ -58,17 +58,24 @@ void CompTransform::Draw()
 
 		ImGui::Text("Position");
 		ImGui::SameLine();
-		ImGui::DragFloat3("p", &position[0], 0.1f);
+		if(ImGui::DragFloat3("p", &position[0], 0.1f))
+		{
+			gameObject->SetPosition(position);
+		}
 
+		float3 rotate = rotation.ToEulerXYZ() * RADTODEG;
 		ImGui::Text("Rotation");
 		ImGui::SameLine();
-		if (ImGui::DragFloat3("r", &rotation[0], 0.1f)) {
-			SetRotation(rotation);
+		if (ImGui::DragFloat3("r", &rotate[0], 0.1f)) {
+			gameObject->SetRotation(rotate);
 		}
 
 		ImGui::Text("Scale   ");
 		ImGui::SameLine();
-		ImGui::DragFloat3("s", &scale[0], 0.1f);
+		if (ImGui::DragFloat3("s", &scale[0], 0.1f))
+		{
+
+		}
 
 
 	}

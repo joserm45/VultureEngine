@@ -16,8 +16,8 @@ public:
 	math::float3 GetPosition();
 	void SetPosition(math::float3 pos);
 
-	math::float3 GetRotation();
-	void SetRotation(math::float3 rot);
+	math::Quat GetRotation();
+	void SetRotation(math::Quat rot);
 
 	math::float3 GetScale();
 	void SetScale(math::float3 scale);
@@ -26,13 +26,13 @@ public:
 	void Draw();
 
 
-private:
+public:
 
 	math::float4x4 global_matrix = math::float4x4::identity;
 	math::float4x4 local_matrix = math::float4x4::identity;
-	
+
 	math::float3 position = math::float3::zero;
-	math::float3 rotation = math::float3::zero;
+	math::Quat rotation = math::Quat::identity;
 	math::float3 scale = math::float3::one;	
 
 };

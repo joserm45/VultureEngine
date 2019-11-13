@@ -227,6 +227,8 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 				go_name[name_fbx.size()] = '\0';
 				game_object->SetName(go_name);
 
+			
+
 				//Material
 				aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
@@ -237,6 +239,8 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 					//if(path_material.length != 0)
 						game_object->CreateComponent(MATERIAL, 0, path_material.data);
 				}
+
+				last_GO = game_object;
 			}
 		}
 		else
@@ -301,6 +305,7 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 		else if (i == 2)
 			game_object->SetName("Sphere");
 
+		last_GO = game_object;
 		par_shapes_free_mesh(shape);
 	}
 
@@ -344,6 +349,10 @@ void ModuleImport::LoadTexture(const char* path)
 
 void ModuleImport::DrawMesh(bool is_parshape, mesh_data fbx)
 {
+	//testing transformation
+	glPushMatrix();
+	glMultMatrixf(last_GO->GetGlobalMatrix().Transposed().ptr());
+
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glEnable(GL_TEXTURE_2D);
@@ -370,6 +379,8 @@ void ModuleImport::DrawMesh(bool is_parshape, mesh_data fbx)
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glBindTexture(GL_TEXTURE_2D, NULL);
+
+	glPopMatrix();
 }
 
 
