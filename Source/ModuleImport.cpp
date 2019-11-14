@@ -372,6 +372,7 @@ void ModuleImport::DrawMesh(bool is_parshape, mesh_data fbx)
 	{
 		glDrawElements(GL_TRIANGLES, fbx.num_index, GL_UNSIGNED_SHORT, NULL);
 	}
+	last_GO->DrawBBox();
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -381,6 +382,8 @@ void ModuleImport::DrawMesh(bool is_parshape, mesh_data fbx)
 	glBindTexture(GL_TEXTURE_2D, NULL);
 
 	glPopMatrix();
+
+	
 }
 
 

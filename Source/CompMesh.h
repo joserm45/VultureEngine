@@ -19,9 +19,11 @@ public:
 
 	void FillPrimitiveDrawInfo(mesh_data info);
 
-private:
 
 	mesh_data mesh_info;
+private:
+
+	
 	const char* path_name = nullptr;
 	int num_mesh = 0;
 	int is_primitive = false;

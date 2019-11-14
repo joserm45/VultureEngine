@@ -6,12 +6,13 @@ CompMesh::CompMesh(GameObject* parent,const char* path, int num_mesh)
 {
 	type = MESH;
 	path_name = path;
+	mesh_info = App->importer->fbx;
 }
 
 CompMesh::~CompMesh()
 {
-	RELEASE_ARRAY(mesh_info.vertex);
-	RELEASE_ARRAY(mesh_info.index);
+	//RELEASE_ARRAY(mesh_info.vertex);
+	//RELEASE_ARRAY(mesh_info.index);
 }
 
 void CompMesh::AssignMesh(char * path)
@@ -38,4 +39,5 @@ void CompMesh::Draw()
 
 	}
 }
+
 

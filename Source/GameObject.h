@@ -41,6 +41,10 @@ public:
 	void SetPosition(float3 position);
 	void SetRotation(float3 rotation);
 
+	void CreateBBox();
+	void DrawBBox();
+
+	math::AABB BBox;
 private:
 
 	const char* name;

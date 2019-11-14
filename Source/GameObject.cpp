@@ -70,6 +70,7 @@ Components* GameObject::CreateComponent(TYPECOMP type, int num_mesh, const char*
 			if (mesh == nullptr) {
 				mesh = new CompMesh(this, path, num_mesh);
 				new_component = mesh;
+				CreateBBox();
 			}
 			break;
 
@@ -206,3 +207,36 @@ void GameObject::SetRotation(float3 rotation)
 	transform->rotation = Quat::FromEulerXYZ(rotation.x * DEGTORAD, rotation.y * DEGTORAD, rotation.z *DEGTORAD);
 }
 
+void GameObject::CreateBBox()
+{
+	BBox.SetNegativeInfinity();
+	BBox.Enclose((math::float3*)mesh->mesh_info.vertex, mesh->mesh_info.num_vertex);
+	//we create the obb if we transform the gameobject
+	math::OBB obb;
+	obb.SetFrom(BBox);
+	if (transform != nullptr)
+	{
+		obb.Transform(GetGlobalMatrix());
+	}
+	BBox = obb.MinimalEnclosingAABB();
+	for (uint i = 0; i < childs.size(); ++i) {
+		childs[i]->CreateBBox();
+	}
+}
+
+void GameObject::DrawBBox()
+{
+	glBegin(GL_LINES);
+	glLineWidth(1.0f);
+
+	for (uint i = 0; i < BBox.NumEdges(); i++)
+	{
+		glVertex3f(BBox.Edge(i).a.x, BBox.Edge(i).a.y, BBox.Edge(i).a.z);
+		glVertex3f(BBox.Edge(i).b.x, BBox.Edge(i).b.y, BBox.Edge(i).b.z);
+	}
+	glEnd();
+	for (uint i = 0; i < childs.size(); ++i)
+	{
+		childs[i]->DrawBBox();
+	}
+}
