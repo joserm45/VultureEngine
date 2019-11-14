@@ -11,6 +11,7 @@
 class CompTransform;
 class CompMaterial;
 class CompMesh;
+class CompCamera;
 
 class GameObject
 {
@@ -62,6 +63,7 @@ public:
 	CompTransform* transform = nullptr;
 	CompMaterial* material = nullptr;
 	CompMesh* mesh = nullptr;
+	CompCamera* camera = nullptr;
 };
 
 #endif

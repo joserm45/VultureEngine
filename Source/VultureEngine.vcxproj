@@ -79,6 +79,7 @@
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="CompCamera.h" />
     <ClInclude Include="CompMaterial.h" />
     <ClInclude Include="CompMesh.h" />
     <ClInclude Include="Components.h" />
@@ -193,6 +194,7 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Color.cpp" />
+    <ClCompile Include="CompCamera.cpp" />
     <ClCompile Include="CompMaterial.cpp" />
     <ClCompile Include="CompMesh.cpp" />
     <ClCompile Include="Components.cpp" />

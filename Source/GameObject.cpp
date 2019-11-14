@@ -6,6 +6,7 @@
 #include "CompTransform.h"
 #include "CompMaterial.h"
 #include "CompMesh.h"
+#include "CompCamera.h"
 
 #include "imgui/imgui.h"
 
@@ -38,6 +39,7 @@ GameObject::~GameObject()
 	RELEASE(transform);	//CLEAN ALL COMPONENTS
 	RELEASE(mesh);
 	//RELEASE(material); //crash
+	RELEASE(camera);
 
 	parent = nullptr;
 }
@@ -71,6 +73,13 @@ Components* GameObject::CreateComponent(TYPECOMP type, int num_mesh, const char*
 				mesh = new CompMesh(this, path, num_mesh);
 				new_component = mesh;
 				CreateBBox();
+			}
+			break;
+
+		case CAMERA:
+			if (camera == nullptr) {
+				camera = new CompCamera(this);
+				new_component = camera;
 			}
 			break;
 
@@ -201,10 +210,12 @@ math::float4x4 GameObject::GetGlobalMatrix()
 void GameObject::SetPosition(float3 position)
 {
 	transform->position = position;
+	camera->Transform();
 }
 void GameObject::SetRotation(float3 rotation)
 {
 	transform->rotation = Quat::FromEulerXYZ(rotation.x * DEGTORAD, rotation.y * DEGTORAD, rotation.z *DEGTORAD);
+	camera->Transform();
 }
 
 void GameObject::CreateBBox()

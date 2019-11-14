@@ -9,6 +9,7 @@ enum TYPECOMP {
 	MATERIAL,
 	AUDIO,
 	MESH,
+	CAMERA,
 };
 
 class Components

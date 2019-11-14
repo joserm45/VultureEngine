@@ -42,5 +42,6 @@ public:
 private:
 
 	GameObject* scene_root_gameobject = nullptr;
+	GameObject* camera = nullptr;
 
 };

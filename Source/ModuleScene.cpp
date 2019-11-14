@@ -6,7 +6,7 @@
 #include "ModuleInput.h"
 #include "GameObject.h"
 #include "Panel.h"
-
+#include "CompCamera.h"
 #include "glew\include\GL\glew.h"
 #include "SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
@@ -37,6 +37,9 @@ bool ModuleScene::Start()
 	//scene_gameobject_pointer->CreateComponent(MESH, 4, "BakerHouse.fbx");
 	//scene_gameobject_pointer->SetName("Baker House");
 
+	camera = CreateGameObject(GetRootGameObject());
+	camera->CreateComponent(CAMERA, 0, NULL);
+
 	return ret;
 }
 
@@ -45,6 +48,7 @@ bool ModuleScene::CleanUp()
 {
 	LOG("Unloading Intro scene");
 	RELEASE(scene_root_gameobject);
+	//RELEASE(camera);
 
 	return true;
 }
@@ -70,6 +74,8 @@ update_status ModuleScene::Update(float dt)
 
 	//DrawCubeDrawElements();
 	Draw();
+
+	camera->camera->Draw();
 
 	return UPDATE_CONTINUE;
 }
