@@ -349,6 +349,7 @@ void ModuleImport::LoadTexture(const char* path)
 
 void ModuleImport::DrawMesh(bool is_parshape, mesh_data fbx)
 {
+	glDisable(GL_LIGHTING);
 	//testing transformation
 	glPushMatrix();
 	glMultMatrixf(last_GO->GetGlobalMatrix().Transposed().ptr());
@@ -372,7 +373,9 @@ void ModuleImport::DrawMesh(bool is_parshape, mesh_data fbx)
 	{
 		glDrawElements(GL_TRIANGLES, fbx.num_index, GL_UNSIGNED_SHORT, NULL);
 	}
+	//glDisable(GL_LIGHTING);
 	last_GO->DrawBBox();
+	//glEnable(GL_LIGHTING);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);

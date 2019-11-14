@@ -29,6 +29,18 @@ CompCamera::~CompCamera()
 
 }
 
+void CompCamera::SetFov()
+{
+	frustum.verticalFov = DEGTORAD * fov;
+	//frustum.horizontalFov = 2.f * atanf((tanf(frustum.verticalFov * 0.5f)) * (aspect_ratio));
+	frustum.horizontalFov = atan(aspect_ratio*tan(frustum.verticalFov / 2)) * 2;
+}
+
+void CompCamera::SetVerticalFOV(float value)
+{
+	frustum.verticalFov = value;
+	frustum.horizontalFov = 2 * atanf(tanf(value * 0.5f) * (aspect_ratio));
+}
 void CompCamera::SetAspectRatio(float ratio)
 {
 	frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * ratio);
@@ -36,8 +48,9 @@ void CompCamera::SetAspectRatio(float ratio)
 	aspect_ratio = ratio;
 }
 
-void CompCamera::Draw() 
+void CompCamera::DrawCamera() 
 {
+	glDisable(GL_LIGHTING);
 	glBegin(GL_LINES);
 	glLineWidth(1.0f);
 	glColor4f(0.1f, 0.3f, 0.7f, 0.8f);
@@ -51,6 +64,7 @@ void CompCamera::Draw()
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
 	glEnd();
+	glEnable(GL_LIGHTING);
 }
 
 void CompCamera::Transform()
@@ -61,5 +75,50 @@ void CompCamera::Transform()
 		frustum.pos = matrix.TranslatePart();
 		frustum.front = matrix.WorldZ().Normalized();
 		frustum.up = matrix.WorldY().Normalized();
+		UpdateMatrix();
 	}
+}
+
+void CompCamera::Draw()
+{
+	if (ImGui::CollapsingHeader("Camera")) {
+
+		ImGui::DragFloat("Near Distance", &frustum.nearPlaneDistance, 0.5, 0.0, frustum.farPlaneDistance);
+
+		ImGui::DragFloat("Far Distance", &frustum.farPlaneDistance, 0.5);
+
+		if (ImGui::DragFloat("Field of View", &fov, 0.5))
+		{
+			frustum.verticalFov = DEGTORAD * fov;
+			frustum.horizontalFov = atan(aspect_ratio*tan(frustum.verticalFov / 2)) * 2;
+		}
+	}
+	UpdateMatrix();
+}
+
+void CompCamera::UpdateMatrix()
+{
+	view_matrix = frustum.ViewMatrix();
+	view_matrix.Transpose();
+
+	projection_matrix = frustum.ProjectionMatrix();
+	projection_matrix.Transpose();
+}
+
+
+
+
+float * CompCamera::GetProjectionMatrix() const
+{
+	return (float*)projection_matrix.v;
+}
+
+float * CompCamera::GetViewMatrix() const
+{
+	return (float*)view_matrix.v;
+}
+
+math::Frustum  CompCamera::GetFrustum() const
+{
+	return frustum;
 }

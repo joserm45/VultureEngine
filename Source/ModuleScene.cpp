@@ -39,7 +39,6 @@ bool ModuleScene::Start()
 
 	camera = CreateGameObject(GetRootGameObject());
 	camera->CreateComponent(CAMERA, 0, NULL);
-
 	return ret;
 }
 
@@ -75,7 +74,7 @@ update_status ModuleScene::Update(float dt)
 	//DrawCubeDrawElements();
 	Draw();
 
-	camera->camera->Draw();
+	camera->camera->DrawCamera();
 
 	return UPDATE_CONTINUE;
 }

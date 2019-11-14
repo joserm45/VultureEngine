@@ -13,7 +13,18 @@ public:
 
 	void SetAspectRatio(float ratio);
 	void Draw();
+	void DrawCamera();
 	void Transform();
+
+	void SetFov();
+	void SetVerticalFOV(float value);
+
+
+	void UpdateMatrix();
+	//camera view 
+	float* GetViewMatrix()const;
+	float* GetProjectionMatrix()const;
+	math::Frustum GetFrustum() const;
 
 private:
 	math::Frustum frustum;

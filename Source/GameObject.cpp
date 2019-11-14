@@ -195,6 +195,12 @@ void GameObject::DrawInspector()
 		material->Draw();
 		ImGui::PopID();
 	}
+
+	if (camera != NULL) {
+		ImGui::PushID(4);
+		camera->Draw();
+		ImGui::PopID();
+	}
 }
 
 math::float4x4& GameObject::GetLocalMatrix()
