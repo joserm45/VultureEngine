@@ -12,6 +12,11 @@
 
 #include "MathGeoLib/include/MathGeoLib.h"
 
+#include "glew\include\GL\glew.h"
+#include "SDL\include\SDL_opengl.h"
+#include <gl/GL.h>
+#include <gl/GLU.h>
+
 GameObject::GameObject()
 {
 }
@@ -255,5 +260,49 @@ void GameObject::DrawBBox()
 	for (uint i = 0; i < childs.size(); ++i)
 	{
 		childs[i]->DrawBBox();
+	}
+}
+
+void GameObject::Draw()
+{
+	if (camera == NULL)
+	{
+		glDisable(GL_LIGHTING);
+		//testing transformation
+		glPushMatrix();
+		glMultMatrixf(GetGlobalMatrix().Transposed().ptr());
+
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glEnable(GL_TEXTURE_2D);
+		
+		glBindTexture(GL_TEXTURE_2D, mesh->text_info.texture);
+
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->mesh_info.id_vertex);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->mesh_info.id_index);
+		glVertexPointer(3, GL_FLOAT, 0, NULL);
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->mesh_info.id_texture);
+		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+
+		if (mesh->mesh_info.par_shape == false)
+		{
+			glDrawElements(GL_TRIANGLES, mesh->mesh_info.num_index, GL_UNSIGNED_INT, NULL);
+		}
+		else if (mesh->mesh_info.par_shape == true)
+		{
+			glDrawElements(GL_TRIANGLES, mesh->mesh_info.num_index, GL_UNSIGNED_SHORT, NULL);
+		}
+		//glDisable(GL_LIGHTING);
+		DrawBBox();
+		//glEnable(GL_LIGHTING);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glDisable(GL_TEXTURE_2D);
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		glBindTexture(GL_TEXTURE_2D, NULL);
+
+		glPopMatrix();
 	}
 }

@@ -50,6 +50,7 @@ struct mesh_data
 	uint id_texture = 0;
 	uint widht = 0;
 	uint height = 0;
+	bool par_shape = false;
 };
 
 struct text_data 
@@ -83,7 +84,7 @@ public:
 
 public:
 	mesh_data fbx;
-	bool par_shape = false;
+	
 	//mesh_data shape_data;
 	par_shapes_mesh* shape;
 

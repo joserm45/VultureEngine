@@ -74,6 +74,10 @@ update_status ModuleScene::Update(float dt)
 	//DrawCubeDrawElements();
 	Draw();
 
+	for (std::vector<GameObject*>::const_iterator i = GO_list.begin(); i != GO_list.end(); ++i)
+	{
+		(*i)->Draw();
+	}
 	camera->camera->DrawCamera();
 
 	return UPDATE_CONTINUE;

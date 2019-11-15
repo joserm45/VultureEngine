@@ -6,6 +6,9 @@
 #include "ModuleImport.h"
 
 
+struct mesh_data;
+struct text_data;
+
 class CompMesh : public Components
 {
 public:
@@ -19,8 +22,10 @@ public:
 
 	void FillPrimitiveDrawInfo(mesh_data info);
 
+	void SetTexture(text_data tex);
 
 	mesh_data mesh_info;
+	text_data text_info;
 private:
 
 	

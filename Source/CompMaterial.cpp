@@ -1,4 +1,5 @@
 #include "CompMaterial.h"
+#include "CompMesh.h"
 #include "Imgui\imgui.h"
 #include "Application.h"
 
@@ -15,6 +16,8 @@ CompMaterial::CompMaterial(GameObject * parent, const char* path)
 	App->importer->LoadTexture(path_copy);
 
 	strcpy(App->importer->texture.name, path_copy);
+
+	//text_info = App->importer->texture;
 }
 
 CompMaterial::~CompMaterial()
@@ -64,3 +67,9 @@ uint CompMaterial::GetTexId() const
 {
 	return tex_id;
 }
+
+
+//void CompMaterial::SetTexture(text_data tex)
+//{
+	//text_info = tex;
+//}

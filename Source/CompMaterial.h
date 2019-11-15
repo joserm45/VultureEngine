@@ -4,6 +4,7 @@
 #include "Components.h"
 
 
+
 class CompMaterial : public Components
 {
 public:
@@ -17,6 +18,9 @@ public:
 	char path_copy[100];
 	uint tex_id = 0;
 	int tex_width = 0, tex_height = 0;
+	//void SetTexture(text_data tex);
+
+	//text_data text_info;
 private:
 
 	bool texture_active = true;

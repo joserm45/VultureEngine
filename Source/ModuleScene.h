@@ -39,9 +39,12 @@ public:
 	float f = 1.0f;
 	GameObject* scene_gameobject_pointer = nullptr;
 
+	std::vector<GameObject*> GO_list;
+
 private:
 
 	GameObject* scene_root_gameobject = nullptr;
 	GameObject* camera = nullptr;
-
+	
+	
 };

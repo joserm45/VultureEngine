@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "Globals.h"
 #include "ModuleImport.h"
+#include "CompMesh.h"
 
 #include "glew\include\GL\glew.h"
 #include "SDL\include\SDL_opengl.h"
@@ -83,10 +84,10 @@ update_status ModuleImport::Update(float dt)
 update_status ModuleImport::PostUpdate(float dt)
 {
 
-	for (list<mesh_data>::iterator i = mesh_list.begin(); i != mesh_list.end(); ++i)
-	{
-		DrawMesh(par_shape, *i);
-	}
+	//for (list<mesh_data>::iterator i = mesh_list.begin(); i != mesh_list.end(); ++i)
+	//{
+		//DrawMesh(fbx.par_shape, *i);
+	//}
 
 
 	return UPDATE_CONTINUE;
@@ -112,7 +113,7 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 	if (is_parshape == false)
 	{
 	
-		par_shape = false;
+		fbx.par_shape = false;
 		const aiScene* scene = aiImportFile(path, aiProcessPreset_TargetRealtime_MaxQuality);
 		App->imgui->AddLogToConsole("Initialazing Assimp Correctly");
 		if (scene == NULL)
@@ -211,9 +212,9 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 				//create gameobject
 				mesh_list.push_back(fbx);
 
-				GameObject* game_object = App->scene_intro->CreateGameObject(App->scene_intro->GetRootGameObject());
+				last_GO = App->scene_intro->CreateGameObject(App->scene_intro->GetRootGameObject());
 
-				game_object->CreateComponent(MESH,0, path);
+				last_GO->CreateComponent(MESH,0, path);
 				//game_object->CreateComponent(MATERIAL, 0, path);
 
 				std::string path_name = path;
@@ -225,7 +226,7 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 
 				name_fbx.copy(go_name, name_fbx.size() + 1);
 				go_name[name_fbx.size()] = '\0';
-				game_object->SetName(go_name);
+				last_GO->SetName(go_name);
 
 			
 
@@ -237,10 +238,12 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 					aiString path_material;
 					material->GetTexture(aiTextureType_DIFFUSE, 0, &path_material);
 					//if(path_material.length != 0)
-						game_object->CreateComponent(MATERIAL, 0, path_material.data);
+					last_GO->CreateComponent(MATERIAL, 0, path_material.data);
+					last_GO->mesh->SetTexture(texture);
 				}
 
-				last_GO = game_object;
+				
+				App->scene_intro->GO_list.push_back(last_GO);
 			}
 		}
 		else
@@ -252,7 +255,7 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 	else if (is_parshape == true)
 	{
 		//ClearMeshData();
-		par_shape = true;
+		fbx.par_shape = true;
 		if (i == 1)
 			shape = par_shapes_create_cube();
 		else if (i == 2)
@@ -297,15 +300,16 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 		mesh_list.push_back(fbx);
-		GameObject* game_object = App->scene_intro->CreateGameObject(App->scene_intro->GetRootGameObject());
-		game_object->CreateComponent(MESH, 0);
-		game_object->CreateComponent(MATERIAL, 0);
+		last_GO = App->scene_intro->CreateGameObject(App->scene_intro->GetRootGameObject());
+		last_GO->CreateComponent(MESH, 0);
+		last_GO->CreateComponent(MATERIAL, 0);
 		if (i == 1)
-			game_object->SetName("Cube");
+			last_GO->SetName("Cube");
 		else if (i == 2)
-			game_object->SetName("Sphere");
+			last_GO->SetName("Sphere");
 
-		last_GO = game_object;
+		App->scene_intro->GO_list.push_back(last_GO);
+
 		par_shapes_free_mesh(shape);
 	}
 
@@ -340,13 +344,25 @@ void ModuleImport::LoadTexture(const char* path)
 		App->imgui->AddLogToConsole("Texture Loaded Succesfuly: ", path);
 		string size_text = "Texture size: " + std::to_string(texture.widht) + " X " + std::to_string(texture.height);
 		App->imgui->AddLogToConsole(size_text.c_str());
+		
+
+
+		//DROPPING TEXTURE FILE TO DO: 
+		//FIND SELECTED GAMEOBJECT AND APPLY "->mesh->SetTexture(texture);" TO IT!!!!!!!
+		//SEE BELOW
+		//if(last_GO->focused)
+		last_GO->mesh->SetTexture(texture);
+
+
 	}
 	else
 		App->imgui->AddLogToConsole("Texture Not Loaded");
 	
+	
 	ilDeleteImages(1, &texture.texture);
 }
 
+/*
 void ModuleImport::DrawMesh(bool is_parshape, mesh_data fbx)
 {
 	glDisable(GL_LIGHTING);
@@ -365,11 +381,11 @@ void ModuleImport::DrawMesh(bool is_parshape, mesh_data fbx)
 	glBindBuffer(GL_ARRAY_BUFFER, fbx.id_texture);
 	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
-	if (is_parshape == false)
+	if (fbx.par_shape == false)
 	{
 		glDrawElements(GL_TRIANGLES, fbx.num_index, GL_UNSIGNED_INT, NULL);
 	}
-	else if (is_parshape == true)
+	else if (fbx.par_shape == true)
 	{
 		glDrawElements(GL_TRIANGLES, fbx.num_index, GL_UNSIGNED_SHORT, NULL);
 	}
@@ -385,10 +401,8 @@ void ModuleImport::DrawMesh(bool is_parshape, mesh_data fbx)
 	glBindTexture(GL_TEXTURE_2D, NULL);
 
 	glPopMatrix();
-
-	
 }
-
+*/
 
 void ModuleImport::ClearMeshData()
 {
@@ -424,7 +438,6 @@ void ModuleImport::ClearMeshData()
 		}
 	}
 	mesh_list.clear();
-
 }
 
 void ModuleImport::LoadChessTexture()
@@ -454,6 +467,15 @@ void ModuleImport::LoadChessTexture()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 50, 50, 0, GL_RGBA, GL_UNSIGNED_BYTE, chessImage);
+
+
+	//DROPPING TEXTURE FILE TO DO: 
+	//FIND SELECTED GAMEOBJECT AND APPLY "->mesh->SetTexture(texture);" TO IT!!!!!!!
+	//SEE BELOW
+	//if(last_GO->focused)
+	last_GO->mesh->SetTexture(texture);
+
+
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 

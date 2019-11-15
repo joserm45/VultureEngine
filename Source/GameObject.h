@@ -36,6 +36,8 @@ public:
 	void GameObject::PrintPanelGameObject(int& i, bool& clicked);
 	void GameObject::DrawInspector();
 
+	void Draw();
+
 	//transform
 	math::float4x4& GetLocalMatrix();
 	math::float4x4 GetGlobalMatrix();

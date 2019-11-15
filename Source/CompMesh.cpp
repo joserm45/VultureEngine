@@ -1,12 +1,14 @@
 #include "CompMesh.h"
 #include "Globals.h"
 #include "Imgui\imgui.h"
+#include "ModuleImport.h"
 
 CompMesh::CompMesh(GameObject* parent,const char* path, int num_mesh)
 {
 	type = MESH;
 	path_name = path;
 	mesh_info = App->importer->fbx;
+	text_info = App->importer->texture;
 }
 
 CompMesh::~CompMesh()
@@ -41,3 +43,7 @@ void CompMesh::Draw()
 }
 
 
+void CompMesh::SetTexture(text_data tex)
+{
+	text_info = tex;
+}
