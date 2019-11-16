@@ -37,6 +37,8 @@ bool ModuleScene::Start()
 	//scene_gameobject_pointer->CreateComponent(MESH, 4, "BakerHouse.fbx");
 	//scene_gameobject_pointer->SetName("Baker House");
 
+
+
 	camera = CreateGameObject(GetRootGameObject());
 	camera->CreateComponent(CAMERA, 0, NULL);
 	return ret;

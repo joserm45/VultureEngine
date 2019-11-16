@@ -41,10 +41,10 @@ public:
 
 	std::vector<GameObject*> GO_list;
 
-private:
+public:
 
 	GameObject* scene_root_gameobject = nullptr;
 	GameObject* camera = nullptr;
 	
-	
+	GameObject* parent_GO = nullptr;
 };

@@ -221,11 +221,17 @@ math::float4x4 GameObject::GetGlobalMatrix()
 void GameObject::SetPosition(float3 position)
 {
 	transform->position = position;
+	for (uint i = 0; i < childs.size(); ++i) {
+		childs[i]->transform->position = position;
+	}
 	camera->Transform();
 }
 void GameObject::SetRotation(float3 rotation)
 {
 	transform->rotation = Quat::FromEulerXYZ(rotation.x * DEGTORAD, rotation.y * DEGTORAD, rotation.z *DEGTORAD);
+	for (uint i = 0; i < childs.size(); ++i) {
+		childs[i]->transform->rotation = Quat::FromEulerXYZ(rotation.x * DEGTORAD, rotation.y * DEGTORAD, rotation.z *DEGTORAD);
+	}
 	camera->Transform();
 }
 

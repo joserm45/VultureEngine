@@ -74,7 +74,9 @@ void CompTransform::Draw()
 		ImGui::SameLine();
 		if (ImGui::DragFloat3("s", &scale[0], 0.1f))
 		{
-
+			for (uint i = 0; i < gameObject->childs.size(); ++i) {
+				gameObject->childs[i]->transform->scale = scale;
+			}
 		}
 
 

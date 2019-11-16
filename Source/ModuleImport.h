@@ -74,6 +74,7 @@ public:
 	bool CleanUp();
 
 	void LoadMesh(char* path, bool is_parshape = false, uint i = 0);
+	void LoadChilds(const aiScene* scene, aiNode* node, GameObject* game_object, const char* path);
 	void LoadTexture(const char* path);
 	void DrawMesh(bool is_parshape, mesh_data fbx);
 	void ClearMeshData();

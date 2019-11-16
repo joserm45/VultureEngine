@@ -123,128 +123,13 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 
 		if (scene != NULL && scene->HasMeshes())
 		{
-			for (int x = 0; x < scene->mNumMeshes; x++)
+			App->scene_intro->parent_GO = App->scene_intro->CreateGameObject(App->scene_intro->GetRootGameObject());
+			aiNode* rootNode = scene->mRootNode;
+			for (int i = 0; i < rootNode->mNumChildren; ++i)
 			{
-				aiMesh* mesh = scene->mMeshes[x];
-
-				//copy vertices
-				fbx.num_vertex = mesh->mNumVertices;
-				fbx.vertex = new float[fbx.num_vertex * 3];
-				memcpy(fbx.vertex, mesh->mVertices, sizeof(float) * fbx.num_vertex * 3);
-				string str = "New mesh with " + std::to_string(fbx.num_vertex) + " vertices";
-				App->imgui->AddLogToConsole(str.c_str());
-				
-				//copy faces
-				if (mesh->HasFaces())
-				{
-					fbx.num_index = mesh->mNumFaces * 3;
-					fbx.index = new uint[fbx.num_index];
-					for (uint i = 0; i < mesh->mNumFaces; ++i)
-					{
-
-						if (mesh->mFaces[i].mNumIndices != 3)
-						{
-							App->imgui->AddLogToConsole("WARNING, geometry face with != 3 indices!");
-						}
-						else
-						{
-							memcpy(&fbx.index[i * 3], mesh->mFaces[i].mIndices, 3 * sizeof(uint));
-						}
-					}
-				}
-
-				//copy normal
-				if (mesh->HasNormals())
-				{
-					fbx.num_normal = mesh->mNumVertices;
-					fbx.normal = new float[fbx.num_normal * 3];
-					memcpy(fbx.normal, mesh->mNormals, sizeof(float) * fbx.num_normal * 3);
-					string str = "New mesh with " + std::to_string(fbx.num_vertex) + " normals";
-					App->imgui->AddLogToConsole(str.c_str());
-					LOG("New mesh with %d normals", fbx.num_normal);
-				}
-
-				//copy color
-				/*
-				if (mesh->HasVertexColors(0))
-				{
-				fbx.num_color = mesh->mNumVertices;
-				fbx.color = new float[fbx.num_color * 4];
-				for (uint i = 0; i < mesh->mNumVertices; ++i) {
-				memcpy(&fbx.color[i], &mesh->mColors[0][i].r, sizeof(float));
-				memcpy(&fbx.color[i + 1], &mesh->mColors[0][i].g, sizeof(float));
-				memcpy(&fbx.color[i + 2], &mesh->mColors[0][i].b, sizeof(float));
-				memcpy(&fbx.color[i + 3], &mesh->mColors[0][i].a, sizeof(float));
-				}
-				}
-				*/
-
-				//copy text coordinates
-				if (mesh->HasTextureCoords(0))
-				{
-					fbx.num_textcoord = mesh->mNumVertices;
-					fbx.textcoord = new float[fbx.num_textcoord * 2];
-					//memcpy(fbx.textcoord, scene->mMeshes[0]->mTextureCoords, sizeof(float) * fbx.num_textcoord * 2);
-					for (uint i = 0; i < mesh->mNumVertices; ++i)
-					{
-						memcpy(&fbx.textcoord[i * 2], &mesh->mTextureCoords[0][i].x, sizeof(float));
-						memcpy(&fbx.textcoord[(i * 2) + 1], &mesh->mTextureCoords[0][i].y, sizeof(float));
-					}
-
-				}
-
-				glGenBuffers(1, (GLuint*)&(fbx.id_vertex));
-				glGenBuffers(1, (GLuint*)&(fbx.id_index));
-				glGenBuffers(1, (GLuint*)&(fbx.id_texture));
-
-				glBindBuffer(GL_ARRAY_BUFFER, fbx.id_vertex);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * fbx.num_vertex * 3, fbx.vertex, GL_STATIC_DRAW);
-				glBindBuffer(GL_ARRAY_BUFFER, 0);
-			
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, fbx.id_index);
-				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * fbx.num_index, fbx.index, GL_STATIC_DRAW);
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-				glBindBuffer(GL_ARRAY_BUFFER, fbx.id_texture);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * fbx.num_textcoord * 2, fbx.textcoord, GL_STATIC_DRAW);
-				glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-				//create gameobject
-				mesh_list.push_back(fbx);
-
-				last_GO = App->scene_intro->CreateGameObject(App->scene_intro->GetRootGameObject());
-
-				last_GO->CreateComponent(MESH,0, path);
-				//game_object->CreateComponent(MATERIAL, 0, path);
-
-				std::string path_name = path;
-				std::string namedotfbx = path_name.substr(path_name.find_last_of("/\\") + 1);
-				std::string::size_type const p(namedotfbx.find_last_of('.'));
-				std::string name_fbx = namedotfbx.substr(0, p);;
-
-				char* go_name = new char[name_fbx.size() + 1];
-
-				name_fbx.copy(go_name, name_fbx.size() + 1);
-				go_name[name_fbx.size()] = '\0';
-				last_GO->SetName(go_name);
-
-			
-
-				//Material
-				aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-
-				if (material != nullptr) {
-					uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
-					aiString path_material;
-					material->GetTexture(aiTextureType_DIFFUSE, 0, &path_material);
-					//if(path_material.length != 0)
-					last_GO->CreateComponent(MATERIAL, 0, path_material.data);
-					last_GO->mesh->SetTexture(texture);
-				}
-
-				
-				App->scene_intro->GO_list.push_back(last_GO);
+				LoadChilds(scene, rootNode->mChildren[i], App->scene_intro->parent_GO, path);
 			}
+			
 		}
 		else
 		{
@@ -315,6 +200,142 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 
 }
 
+void ModuleImport::LoadChilds(const aiScene* scene, aiNode* node, GameObject* game_object, const char* path)
+{
+	if (node->mNumMeshes > 0)
+	{
+
+		aiMesh* mesh = scene->mMeshes[node->mMeshes[0]];
+
+		//copy vertices
+		fbx.num_vertex = mesh->mNumVertices;
+		fbx.vertex = new float[fbx.num_vertex * 3];
+		memcpy(fbx.vertex, mesh->mVertices, sizeof(float) * fbx.num_vertex * 3);
+		string str = "New mesh with " + std::to_string(fbx.num_vertex) + " vertices";
+		App->imgui->AddLogToConsole(str.c_str());
+
+		//copy faces
+		if (mesh->HasFaces())
+		{
+			fbx.num_index = mesh->mNumFaces * 3;
+			fbx.index = new uint[fbx.num_index];
+			for (uint i = 0; i < mesh->mNumFaces; ++i)
+			{
+
+				if (mesh->mFaces[i].mNumIndices != 3)
+				{
+					App->imgui->AddLogToConsole("WARNING, geometry face with != 3 indices!");
+				}
+				else
+				{
+					memcpy(&fbx.index[i * 3], mesh->mFaces[i].mIndices, 3 * sizeof(uint));
+				}
+			}
+		}
+
+		//copy normal
+		if (mesh->HasNormals())
+		{
+			fbx.num_normal = mesh->mNumVertices;
+			fbx.normal = new float[fbx.num_normal * 3];
+			memcpy(fbx.normal, mesh->mNormals, sizeof(float) * fbx.num_normal * 3);
+			string str = "New mesh with " + std::to_string(fbx.num_vertex) + " normals";
+			App->imgui->AddLogToConsole(str.c_str());
+			LOG("New mesh with %d normals", fbx.num_normal);
+		}
+
+		//copy color
+		/*
+		if (mesh->HasVertexColors(0))
+		{
+		fbx.num_color = mesh->mNumVertices;
+		fbx.color = new float[fbx.num_color * 4];
+		for (uint i = 0; i < mesh->mNumVertices; ++i) {
+		memcpy(&fbx.color[i], &mesh->mColors[0][i].r, sizeof(float));
+		memcpy(&fbx.color[i + 1], &mesh->mColors[0][i].g, sizeof(float));
+		memcpy(&fbx.color[i + 2], &mesh->mColors[0][i].b, sizeof(float));
+		memcpy(&fbx.color[i + 3], &mesh->mColors[0][i].a, sizeof(float));
+		}
+		}
+		*/
+
+		//copy text coordinates
+		if (mesh->HasTextureCoords(0))
+		{
+			fbx.num_textcoord = mesh->mNumVertices;
+			fbx.textcoord = new float[fbx.num_textcoord * 2];
+			//memcpy(fbx.textcoord, scene->mMeshes[0]->mTextureCoords, sizeof(float) * fbx.num_textcoord * 2);
+			for (uint i = 0; i < mesh->mNumVertices; ++i)
+			{
+				memcpy(&fbx.textcoord[i * 2], &mesh->mTextureCoords[0][i].x, sizeof(float));
+				memcpy(&fbx.textcoord[(i * 2) + 1], &mesh->mTextureCoords[0][i].y, sizeof(float));
+			}
+
+		}
+
+		glGenBuffers(1, (GLuint*)&(fbx.id_vertex));
+		glGenBuffers(1, (GLuint*)&(fbx.id_index));
+		glGenBuffers(1, (GLuint*)&(fbx.id_texture));
+
+		glBindBuffer(GL_ARRAY_BUFFER, fbx.id_vertex);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * fbx.num_vertex * 3, fbx.vertex, GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, fbx.id_index);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * fbx.num_index, fbx.index, GL_STATIC_DRAW);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+		glBindBuffer(GL_ARRAY_BUFFER, fbx.id_texture);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * fbx.num_textcoord * 2, fbx.textcoord, GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+		//create gameobject
+		//mesh_list.push_back(fbx);
+
+		
+		//game_object->CreateComponent(MATERIAL, 0, path);
+
+		std::string path_name = path;
+		std::string namedotfbx = path_name.substr(path_name.find_last_of("/\\") + 1);
+		std::string::size_type const p(namedotfbx.find_last_of('.'));
+		std::string name_fbx = namedotfbx.substr(0, p);;
+
+		char* go_name = new char[name_fbx.size() + 1];
+
+		name_fbx.copy(go_name, name_fbx.size() + 1);
+		go_name[name_fbx.size()] = '\0';
+		game_object->SetName(go_name);
+
+
+
+		//Material
+		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+		aiString path_material;
+		if (material != nullptr) {
+			uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE);
+			material->GetTexture(aiTextureType_DIFFUSE, 0, &path_material);
+		}
+
+	
+		if (scene->mNumMeshes != 0)
+		{
+			last_GO = App->scene_intro->CreateGameObject(game_object);
+			last_GO->CreateComponent(MESH, 0, path);
+			last_GO->CreateComponent(MATERIAL, 0, path_material.data);
+			last_GO->mesh->SetTexture(texture);
+			last_GO->SetName(go_name);
+		}
+
+		App->scene_intro->GO_list.push_back(last_GO);
+	}
+
+	for (int i = 0; i < node->mNumChildren; ++i)
+	{
+		LoadChilds(scene, node->mChildren[i], game_object, path);
+	}
+}
+
+
 void ModuleImport::LoadTexture(const char* path)
 {
 	ilInit();
@@ -352,7 +373,6 @@ void ModuleImport::LoadTexture(const char* path)
 		//SEE BELOW
 		//if(last_GO->focused)
 		last_GO->mesh->SetTexture(texture);
-
 
 	}
 	else
