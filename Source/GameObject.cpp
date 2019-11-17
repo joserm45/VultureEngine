@@ -235,6 +235,16 @@ void GameObject::SetRotation(float3 rotation)
 	camera->Transform();
 }
 
+void GameObject::SetScale(float3 scale)
+{
+	transform->scale = scale;
+	for (uint i = 0; i < childs.size(); ++i) {
+		childs[i]->transform->scale = scale;
+	}
+}
+
+
+
 void GameObject::CreateBBox()
 {
 	BBox.SetNegativeInfinity();
@@ -310,5 +320,68 @@ void GameObject::Draw()
 		glBindTexture(GL_TEXTURE_2D, NULL);
 
 		glPopMatrix();
+	}
+}
+
+void GameObject::ShowGizmos()
+{
+	ImGuizmo::Enable(true);
+
+	static ImGuizmo::OPERATION operation(ImGuizmo::TRANSLATE);
+	bool needs_update = false;
+
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN) {
+		operation = ImGuizmo::TRANSLATE;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
+		operation = ImGuizmo::ROTATE;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN) {
+		operation = ImGuizmo::SCALE;
+	}
+
+	float* viewMatrix = App->scene_intro->camera->camera->GetViewMatrix();
+	float* projMatrix = App->scene_intro->camera->camera->GetProjectionMatrix();
+	math::float4x4 transMatrix = this->GetGlobalMatrix().Transposed();
+
+	ImGuiIO& io = ImGui::GetIO();
+	ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
+
+	ImGuizmo::Manipulate(viewMatrix, projMatrix, operation, ImGuizmo::MODE::LOCAL, (float*)&transMatrix);
+	
+	if (ImGuizmo::IsUsing())
+	{
+		
+		transMatrix.Transpose();
+
+		if (parent == App->scene_intro->GetRootGameObject())
+		{
+			transform->local_matrix = transMatrix;
+		}
+		else
+		{
+			transform->local_matrix = parent->GetGlobalMatrix().Inverted() * transMatrix;
+		}
+	
+		transform->local_matrix.Decompose(transform->position, transform->rotation, transform->scale);
+		transform->rotate = transform->rotation.ToEulerXYZ() * RADTODEG;
+		needs_update = true;
+	}
+
+	if (needs_update)
+	{
+		//transform->local_matrix = math::float4x4::FromTRS(transform->position, transform->rotation, transform->scale);
+
+		//if (parent != nullptr && parent != App->scene_intro->GetRootGameObject())
+		//{
+		//	transform->global_matrix = parent->GetGlobalMatrix() * transform->local_matrix;
+		//}
+		//else
+		//{
+		//	transform->global_matrix = transform->local_matrix;
+		//}
+
+		
+		needs_update = false;
 	}
 }

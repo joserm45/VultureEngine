@@ -43,9 +43,11 @@ public:
 	math::float4x4 GetGlobalMatrix();
 	void SetPosition(float3 position);
 	void SetRotation(float3 rotation);
+	void SetScale(float3 scale);
 
 	void CreateBBox();
 	void DrawBBox();
+	void ShowGizmos();
 
 	math::AABB BBox;
 private:

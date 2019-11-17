@@ -35,5 +35,7 @@ public:
 	math::Quat rotation = math::Quat::identity;
 	math::float3 scale = math::float3::one;	
 
+	math::float3 rotate = math::float3::zero;
+
 };
 #endif

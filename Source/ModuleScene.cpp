@@ -41,6 +41,7 @@ bool ModuleScene::Start()
 
 	camera = CreateGameObject(GetRootGameObject());
 	camera->CreateComponent(CAMERA, 0, NULL);
+	//camera->SetPosition(math::float3(0.0, 0.0, -20.0));
 	return ret;
 }
 

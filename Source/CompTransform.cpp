@@ -63,7 +63,7 @@ void CompTransform::Draw()
 			gameObject->SetPosition(position);
 		}
 
-		float3 rotate = rotation.ToEulerXYZ() * RADTODEG;
+		rotate = rotation.ToEulerXYZ() * RADTODEG;
 		ImGui::Text("Rotation");
 		ImGui::SameLine();
 		if (ImGui::DragFloat3("r", &rotate[0], 0.1f)) {
@@ -74,13 +74,9 @@ void CompTransform::Draw()
 		ImGui::SameLine();
 		if (ImGui::DragFloat3("s", &scale[0], 0.1f))
 		{
-			for (uint i = 0; i < gameObject->childs.size(); ++i) {
-				gameObject->childs[i]->transform->scale = scale;
-			}
+			gameObject->SetScale(scale);
 		}
-
-
 	}
-
+	gameObject->ShowGizmos();
 }
 
