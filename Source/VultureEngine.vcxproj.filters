@@ -58,6 +58,9 @@
     <Filter Include="Sources\Modules\Comp&amp;GO">
       <UniqueIdentifier>{fd921b28-3ef8-49bc-a8ae-a629b9f9f187}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Third_Party\ImGuizmo">
+      <UniqueIdentifier>{92b9b7e4-8323-44cf-9676-fc8d0d6b37d2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -397,6 +400,9 @@
     <ClInclude Include="CompCamera.h">
       <Filter>Sources\Modules\Comp&amp;GO</Filter>
     </ClInclude>
+    <ClInclude Include="ImGuizmo\ImGuizmo.h">
+      <Filter>Sources\Third_Party\ImGuizmo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -605,6 +611,9 @@
     </ClCompile>
     <ClCompile Include="CompCamera.cpp">
       <Filter>Sources\Modules\Comp&amp;GO</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGuizmo\ImGuizmo.cpp">
+      <Filter>Sources\Third_Party\ImGuizmo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

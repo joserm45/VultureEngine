@@ -5,6 +5,7 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_sdl.h"
 #include "imgui/imgui_impl_opengl3.h"
+#include "ImGuizmo\ImGuizmo.h"
 
 #include "Panel.h"
 #include "PanelConfiguration.h"
@@ -60,6 +61,8 @@ update_status ModuleImGui::PreUpdate(float dt)
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
+
+	ImGuizmo::BeginFrame();
 
 	return UPDATE_CONTINUE;
 }

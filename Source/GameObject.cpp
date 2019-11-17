@@ -9,7 +9,7 @@
 #include "CompCamera.h"
 
 #include "imgui/imgui.h"
-
+#include "ImGuizmo\ImGuizmo.h"
 #include "MathGeoLib/include/MathGeoLib.h"
 
 #include "glew\include\GL\glew.h"

@@ -331,6 +331,7 @@ void ModuleScene::FocusGameObject(GameObject* focused, GameObject* root)
 				LOG("%c NOT focused", (*it)->GetName());
 			}
 			FocusGameObject(focused, (*it));
+			focused_GO = focused;
 		}
 	}
 }

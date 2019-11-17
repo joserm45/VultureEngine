@@ -47,4 +47,5 @@ public:
 	GameObject* camera = nullptr;
 	
 	GameObject* parent_GO = nullptr;
+	GameObject* focused_GO = nullptr;
 };
