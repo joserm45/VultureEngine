@@ -7,8 +7,8 @@
 PanelInspector::PanelInspector()
 {
 	name = "inspector";
-	active_panel = true;
-	x = 1016, y = 18, w = 262, h = 557;
+	visibility = true;
+	x = 1016, y = 115, w = 262, h = 557;
 }
 
 
@@ -18,6 +18,15 @@ PanelInspector::~PanelInspector()
 
 void PanelInspector::Draw()
 {
+	if (resize) 
+	{
+		int x, y;
+		App->window->GetWinSize(x, y);
+		ImGui::SetNextWindowPos(ImVec2(x-w, this->y), ImGuiCond_Always);
+		ImGui::SetNextWindowSize(ImVec2(w, h), ImGuiCond_Always);
+		resize = false;
+	}
+
 	ImGui::Begin("Inspector");
 
 	GameObject* focus_game_objetct = GetFocusedGameObject(App->scene_intro->GetRootGameObject());

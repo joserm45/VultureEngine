@@ -428,14 +428,14 @@ void ModuleScene::CalculateQuadtreeSize(float3& min_point, float3& max_point)
 	}
 }
 
-/*void ModuleScene::CheckIfRebuildQuadtree(GameObject * go)
+void ModuleScene::CheckIfRebuildQuadtree(GameObject * go)
 {
 	float3 min_point = go->BBox.minPoint;
 	float3 max_point = go->BBox.maxPoint;
 	bool rebuild = false;
 
 	//Min point
-	if (min_point.x < quadtree->.x || min_point.x > quadtree->min_point.x && min_point.x < 30
+	if (min_point.x < quadtree->min_point.x || min_point.x > quadtree->min_point.x && min_point.x < 30
 		|| min_point.y < quadtree->min_point.y || min_point.y > quadtree->min_point.y && min_point.y < 30
 		|| min_point.z < quadtree->min_point.z || min_point.z > quadtree->min_point.z && min_point.y < 30)
 		rebuild = true;
@@ -446,8 +446,8 @@ void ModuleScene::CalculateQuadtreeSize(float3& min_point, float3& max_point)
 		rebuild = true;
 
 	if (rebuild)
-		BuildQuadtree();
-}*/
+		GenQuadtree();
+}
 
 bool ModuleScene::EraseObjFromStatic(GameObject* go)
 {

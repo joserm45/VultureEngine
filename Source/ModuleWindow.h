@@ -26,6 +26,7 @@ public:
 	void ChangeBrightness(float brightness);
 	void ChangeWidth(int width);
 	void ChangeHeight(int height);
+	void GetWinSize(int& x, int& y) const;
 
 public:
 

@@ -7,7 +7,7 @@ PanelState::PanelState()
 {
 	name = "Play/Pause";
 	visibility = true;
-	//x = 0, y = 21, w = 297, h = 80;
+	x = 0, y = 18, w = 783, h = 95;
 
 }
 
@@ -18,9 +18,16 @@ PanelState::~PanelState()
 
 void PanelState::Draw()
 {
-	ImGui::SetNextWindowPos({ 236,25 }, ImGuiCond_Once);
-	ImGui::SetNextWindowSize(ImVec2(743, 129), ImGuiCond_Once);
+	if (resize) 
+	{
+		int x, y;
+		App->window->GetWinSize(x, y);
+		this->w = x;
 
+		ImGui::SetNextWindowPos(ImVec2(this->x, this->y), ImGuiCond_Always);
+		ImGui::SetNextWindowSize(ImVec2(this->w, this->h), ImGuiCond_Always);
+		resize = false;
+	}
 	static const char* play = "Play";
 	static const char* pause = "Pause";
 
@@ -33,7 +40,7 @@ void PanelState::Draw()
 	ImGui::SetCursorPos({ (float)(w / 2 - 35), (float)(h / 3) });
 
 	//Play/Stop
-	if (ImGui::Button(play, { 60, 60 })) {
+	if (ImGui::Button(play, { 65, 40 })) {
 		if (engine_state != ENGINE_STATE_EDITOR) {
 			App->Stop();
 			play = "Play";
@@ -47,7 +54,7 @@ void PanelState::Draw()
 
 	//Pause
 	ImGui::SetCursorPos({ (float)(w / 2 + 35), (float)(h / 3) });
-	if (ImGui::Button(pause, { 600, 15 })) {
+	if (ImGui::Button(pause, { 65, 40 })) {
 		if (engine_state == ENGINE_STATE_PLAY)
 			pause = "Unpaused";
 		else if (engine_state == ENGINE_STATE_PAUSE)

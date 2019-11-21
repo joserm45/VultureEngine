@@ -1,11 +1,12 @@
 #include "PanelConsole.h"
 #include "imgui/imgui.h"
-
+#include "Application.h"
 
 PanelConsole::PanelConsole()
 {
 	name = "console";
 	visibility = true;
+	x = 0, y = 780, w = 694, h = 209;
 }
 
 PanelConsole::~PanelConsole()
@@ -15,9 +16,23 @@ PanelConsole::~PanelConsole()
 
 void PanelConsole::Draw()
 {
-	//Set window position and size
+	/*
 	ImGui::SetNextWindowPos({ 0,803 }, ImGuiCond_Once);
 	ImGui::SetNextWindowSize(ImVec2(694, 209), ImGuiCond_Once);
+	*/
+	int x, y;
+	App->window->GetWinSize(x, y);
+	if (resize) {
+		ImGui::SetNextWindowPos(ImVec2(this->x, y-h), ImGuiCond_Always);
+		w = x - 360;
+		ImGui::SetNextWindowSize(ImVec2(w-h, h), ImGuiCond_Always);
+		resize = false;
+	}
+	else
+	{
+		ImGui::SetNextWindowPos({ 0,803 }, ImGuiCond_Once);
+		ImGui::SetNextWindowSize(ImVec2(694, 209), ImGuiCond_Once);
+	}
 
 	static bool autom_scroll = true;
 

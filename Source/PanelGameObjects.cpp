@@ -9,7 +9,7 @@ PanelGameObjects::PanelGameObjects()
 {
 	name = "Panel Game Objects";
 	visibility = true;
-	//x = 1, y = 45, w = 236, h = 733;
+	x = 1, y = 115, w = 236, h = 653;
 }
 
 
@@ -19,9 +19,14 @@ PanelGameObjects::~PanelGameObjects()
 
 void PanelGameObjects::Draw()
 {
-	ImGui::SetNextWindowPos({ 1,25 }, ImGuiCond_Once);
-	ImGui::SetNextWindowSize(ImVec2(236, 733), ImGuiCond_Once);
-
+	if (resize)
+	{
+		int x, y;
+		App->window->GetWinSize(x, y);
+		ImGui::SetNextWindowPos(ImVec2(this->x , this->y), ImGuiCond_Always);
+		ImGui::SetNextWindowSize(ImVec2(w, h), ImGuiCond_Always);
+		resize = false;
+	}
 	ImGui::Begin("Scene", &visibility, ImGuiWindowFlags_None);
 
 	int node_index = 0;

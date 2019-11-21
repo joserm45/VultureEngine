@@ -26,6 +26,7 @@ public:
 	bool CleanUp();
 
 	update_status HandleMainMenuBar();
+	void ResizePanels();
 	void AddLogToConsole(const char* log);
 	void AddLogToConsole(const char* log, const char* dlog);
 	void RequestBrowser(const char* url) const;

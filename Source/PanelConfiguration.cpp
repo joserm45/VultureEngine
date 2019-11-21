@@ -11,6 +11,7 @@ PanelConfiguration::PanelConfiguration()
 {
 	name = "Panel config";
 	visibility = true;
+	x = 828, y = 675, w = 451, h = 337;
 }
 
 PanelConfiguration::~PanelConfiguration()
@@ -19,9 +20,20 @@ PanelConfiguration::~PanelConfiguration()
 
 void PanelConfiguration::Draw()
 {
-	//Set window position and size
-	ImGui::SetNextWindowPos({ 828,575 }, ImGuiWindowFlags_MenuBar);
-	ImGui::SetNextWindowSize(ImVec2(451, 437), ImGuiCond_Once);
+	if (resize)
+	{
+		int x, y;
+		App->window->GetWinSize(x, y);
+		ImGui::SetNextWindowPos(ImVec2(x - w, y-h), ImGuiCond_Always);
+		ImGui::SetNextWindowSize(ImVec2(w, h), ImGuiCond_Always);
+		resize = false;
+	}
+	else
+	{
+		//ImGui::SetNextWindowPos({ 828,575 }, ImGuiWindowFlags_MenuBar);
+		//ImGui::SetNextWindowSize(ImVec2(451, 437), ImGuiCond_Once);
+
+	}
 
 	//Window
 	ImGui::Begin("Configuration", &visibility, ImGuiWindowFlags_None);

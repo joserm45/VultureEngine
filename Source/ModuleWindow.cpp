@@ -164,3 +164,7 @@ void ModuleWindow::ChangeHeight(int height)
 	SDL_SetWindowSize(window, width_win, height);
 	App->renderer3D->OnResize(width_win, height);
 }
+void ModuleWindow::GetWinSize(int& x, int& y) const
+{
+	SDL_GetWindowSize(window, &x, &y);
+}

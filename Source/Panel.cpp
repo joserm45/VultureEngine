@@ -22,6 +22,10 @@ void Panel::SetVisibility(bool set_value)
 {
 	visibility = set_value;
 }
+void Panel::IsResizePanel()
+{
+	resize = true;
+}
 bool Panel::IsEnabled() const
 {
 	return visibility;

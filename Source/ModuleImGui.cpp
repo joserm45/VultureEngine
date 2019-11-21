@@ -196,6 +196,18 @@ update_status ModuleImGui::HandleMainMenuBar()
 	return UPDATE_CONTINUE;
 }
 
+void ModuleImGui::ResizePanels()
+{
+	//Resize panels
+	list<Panel*>::const_iterator panel = panels.begin();
+	while (panel != panels.end())
+	{
+		if ((*panel)->IsEnabled())
+			(*panel)->IsResizePanel();
+		panel++;
+	}
+}
+
 void ModuleImGui::AddLogToConsole(const char* log)
 {
 	console->ShowLog(log);

@@ -198,13 +198,14 @@ void GameObject::DrawInspector()
 
 	if (ImGui::Checkbox("Static", &game_object_static)) 
 	{
-		if (game_object_static == true)
-		{
+		if (game_object_static == true) {
 			App->scene_intro->quadtree->Insert(this);
+			App->scene_intro->statics_game_objects.push_back(this);
+			App->scene_intro->CheckIfRebuildQuadtree(this);
 		}
-		for (int i = 0; i < childs.size(); ++i)
-		{
-			childs[i]->game_object_static = game_object_static;
+		else {
+			App->scene_intro->quadtree->Remove(this);
+			App->scene_intro->EraseObjFromStatic(this);
 		}
 	}
 
