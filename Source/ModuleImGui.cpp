@@ -13,7 +13,7 @@
 #include "PanelAbout.h"
 #include "PanelInspector.h"
 #include "PanelGameObjects.h"
-
+#include "PanelState.h"
 
 ModuleImGui::ModuleImGui(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -49,6 +49,8 @@ bool ModuleImGui::Init()
 	panels.push_back(game_objects);
 	inspector = new PanelInspector();
 	panels.push_back(inspector);
+	state = new PanelState();
+	panels.push_back(state);
 
 	AddLogToConsole("Initialized ImGui Correctly");
 
@@ -143,6 +145,12 @@ update_status ModuleImGui::HandleMainMenuBar()
 
 			if (ImGui::MenuItem("Configuration","", config->IsEnabled()))
 				config->ToggleVisibility();
+
+			if (ImGui::MenuItem("Scene GO", "", game_objects->IsEnabled()))
+				game_objects->ToggleVisibility();
+
+			if (ImGui::MenuItem("Play/Pause", "", state->IsEnabled()))
+				state->ToggleVisibility();
 
 			ImGui::EndMenu();
 		}

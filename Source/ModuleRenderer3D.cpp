@@ -2,7 +2,8 @@
 #include "Application.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleImGui.h"
-
+#include "Quadtree.h"
+#include "CompCamera.h"
 #include "glew\include\GL\glew.h"
 #include "SDL\include\SDL_opengl.h"
 
@@ -203,6 +204,17 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glLoadIdentity();
 	ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
 	glLoadMatrixf(&ProjectionMatrix);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+}
+
+void ModuleRenderer3D::RecalculateProjMat()
+{
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	glLoadMatrixf(App->camera->curr_camera->GetProjectionMatrix());
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();

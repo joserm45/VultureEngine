@@ -346,3 +346,71 @@ float Application::GetDt() const
 {
 	return dt;
 }
+
+void Application::SetState(EngineState state)
+{
+	state = state;
+}
+
+EngineState Application::GetState() const
+{
+	return state;
+}
+
+bool Application::Play()
+{
+	switch (state) {
+	case ENGINE_STATE_EDITOR:
+		if (scene_intro->GetMainCamera() != nullptr) {
+			//Change camera view
+			camera->curr_camera = scene_intro->GetMainCamera();
+			renderer3D->RecalculateProjMat();
+
+			scene_intro->rebuild_quadtree = true;
+
+			SetState(ENGINE_STATE_PLAY);
+
+			return true;
+		}
+		else
+			imgui->AddLogToConsole("ERROR: Losed scene camera!");
+
+		break;
+	}
+
+	return false;
+}
+
+void Application::Pause()
+{
+	switch (state) {
+	case ENGINE_STATE_PAUSE:
+		SetState(ENGINE_STATE_PAUSE);
+		break;
+	case  ENGINE_STATE_PLAY:
+		SetState(ENGINE_STATE_PLAY);
+		break;
+	}
+}
+
+void Application::Stop()
+{
+	switch (state == false) 
+	{
+	case ENGINE_STATE_PLAY:
+	case ENGINE_STATE_PAUSE:
+
+		//Change camera view
+		camera->curr_camera = App->camera->editor_camera;
+		renderer3D->RecalculateProjMat();
+
+		SetState(ENGINE_STATE_EDITOR);
+
+		scene_intro->rebuild_quadtree = true;
+
+		time->ResetGameTimer();
+
+		break;
+	}
+}
+

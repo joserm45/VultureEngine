@@ -8,6 +8,7 @@ class PanelConsole;
 class PanelAbout;
 class PanelGameObjects;
 class PanelInspector;
+class PanelState;
 
 using namespace std;
 
@@ -34,9 +35,10 @@ private:
 
 	//Panels
 
-	PanelConfiguration* config;
-	PanelConsole* console;
-	PanelAbout* about;
-	PanelGameObjects* game_objects;
-	PanelInspector* inspector;
+	PanelConfiguration* config = nullptr;
+	PanelConsole* console = nullptr;
+	PanelAbout* about = nullptr;
+	PanelGameObjects* game_objects = nullptr;
+	PanelInspector* inspector = nullptr;
+	PanelState* state = nullptr;
 };

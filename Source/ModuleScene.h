@@ -7,7 +7,7 @@
 struct PhysBody3D;
 struct PhysMotor3D;
 
-
+class Quadtree;
 
 class ModuleScene : public Module
 {
@@ -31,6 +31,7 @@ public:
 	GameObject* CreateGameObject(GameObject* gameobject);
 	GameObject* GetRootGameObject() const;
 	void FocusGameObject(GameObject* focused, GameObject* root);
+	CompCamera * ModuleScene::GetMainCamera() const;
 	//float my_color[] = { 0.0f, 0.0f, 1.0f };
 //	GLuint texture;
 	//const char ImageName[] = "Assets/lenna.png";
@@ -45,7 +46,19 @@ public:
 
 	GameObject* scene_root_gameobject = nullptr;
 	GameObject* camera = nullptr;
-	
+
 	GameObject* parent_GO = nullptr;
 	GameObject* focused_GO = nullptr;
+
+	CompCamera* main_camera = nullptr;
+	CompCamera* active_camera = nullptr;
+
+
+
+
+
+	Quadtree* quadtree = nullptr;
+	bool rebuild_quadtree = false;
+
+	bool draw_quadtree = false;
 };

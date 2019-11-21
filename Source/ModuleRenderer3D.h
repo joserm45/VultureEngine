@@ -18,7 +18,7 @@ public:
 	bool CleanUp();
 
 	void OnResize(int width, int height);
-
+	void RecalculateProjMat();
 public:
 
 	Light lights[MAX_LIGHTS];

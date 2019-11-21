@@ -12,8 +12,16 @@
 #include "ModuleImGui.h"
 #include "ModuleImport.h"
 #include "Components.h"
+#include "ModuleTimeEditor.h"
 
 #include "PCG\pcg_variants.h"
+
+enum EngineState {
+	
+	ENGINE_STATE_PLAY,
+	ENGINE_STATE_PAUSE,
+	ENGINE_STATE_EDITOR
+};
 
 class Application
 {
@@ -26,7 +34,7 @@ public:
 	ModuleCamera3D* camera = nullptr;
 	ModuleImGui* imgui = nullptr;
 	ModuleImport* importer = nullptr;
-
+	ModuleTimeEditor* time = nullptr;
 
 	pcg32_random_t random_num;
 	//fps
@@ -64,7 +72,7 @@ private:
 	JSON_Value* root_value;
 	JSON_Object* root_object;
 
-
+	EngineState state = ENGINE_STATE_EDITOR;
 public:
 
 	Application();
@@ -88,6 +96,14 @@ public:
 	float GetMS();
 	float GetDt() const;
 
+	//Start/Stop
+
+	void SetState(EngineState state);
+	EngineState GetState() const;
+
+	bool Play();
+	void Pause();
+	void Stop();
 
 private:
 

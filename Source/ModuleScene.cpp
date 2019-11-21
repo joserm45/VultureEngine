@@ -336,5 +336,9 @@ void ModuleScene::FocusGameObject(GameObject* focused, GameObject* root)
 		}
 	}
 }
+CompCamera * ModuleScene::GetMainCamera() const
+{
+	return main_camera;
+}
 
 

@@ -385,12 +385,6 @@
     <ClInclude Include="DevIL\include\ilut_config.h">
       <Filter>Sources\Third_Party\DevIL</Filter>
     </ClInclude>
-    <ClInclude Include="PanelGameObjects.h">
-      <Filter>Sources\Modules\Comp&amp;GO</Filter>
-    </ClInclude>
-    <ClInclude Include="PanelInspector.h">
-      <Filter>Sources\Modules\Comp&amp;GO</Filter>
-    </ClInclude>
     <ClInclude Include="ModuleImport.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
@@ -405,6 +399,18 @@
     </ClInclude>
     <ClInclude Include="Quadtree.h">
       <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelState.h">
+      <Filter>Sources\Modules\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleTimeEditor.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelGameObjects.h">
+      <Filter>Sources\Modules\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelInspector.h">
+      <Filter>Sources\Modules\GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -600,12 +606,6 @@
     <ClCompile Include="par_shapes.cpp">
       <Filter>Sources\Third_Party</Filter>
     </ClCompile>
-    <ClCompile Include="PanelGameObjects.cpp">
-      <Filter>Sources\Modules\Comp&amp;GO</Filter>
-    </ClCompile>
-    <ClCompile Include="PanelInspector.cpp">
-      <Filter>Sources\Modules\Comp&amp;GO</Filter>
-    </ClCompile>
     <ClCompile Include="ModuleImport.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
@@ -620,6 +620,18 @@
     </ClCompile>
     <ClCompile Include="Quadtree.cpp">
       <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelState.cpp">
+      <Filter>Sources\Modules\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleTimeEditor.cpp">
+      <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelGameObjects.cpp">
+      <Filter>Sources\Modules\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelInspector.cpp">
+      <Filter>Sources\Modules\GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

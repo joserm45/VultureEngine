@@ -38,6 +38,10 @@ public:
 	vec3 X, Y, Z, Position, Reference;
 	math::Frustum frustum;
 	math::float3 reference = { 0.0f,0.0f,0.0f };
+
+	CompCamera* curr_camera = nullptr;
+	CompCamera* editor_camera = nullptr;
+
 private:
 
 	mat4x4 ViewMatrix, ViewMatrixInverse;
