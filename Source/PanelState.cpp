@@ -24,7 +24,7 @@ void PanelState::Draw()
 	static const char* play = "Play";
 	static const char* pause = "Pause";
 
-	static uint time_scale_width = 100;
+	//static uint time_scale_width = 100;
 
 	EngineState engine_state = App->GetState();
 	ImGui::Begin("Play/Pause", &visibility, ImGuiWindowFlags_None);
@@ -33,7 +33,7 @@ void PanelState::Draw()
 	ImGui::SetCursorPos({ (float)(w / 2 - 35), (float)(h / 3) });
 
 	//Play/Stop
-	if (ImGui::Button(play, { 55, 35 })) {
+	if (ImGui::Button(play, { 60, 60 })) {
 		if (engine_state != ENGINE_STATE_EDITOR) {
 			App->Stop();
 			play = "Play";
@@ -47,7 +47,7 @@ void PanelState::Draw()
 
 	//Pause
 	ImGui::SetCursorPos({ (float)(w / 2 + 35), (float)(h / 3) });
-	if (ImGui::Button(pause, { 55, 35 })) {
+	if (ImGui::Button(pause, { 600, 15 })) {
 		if (engine_state == ENGINE_STATE_PLAY)
 			pause = "Unpaused";
 		else if (engine_state == ENGINE_STATE_PAUSE)
@@ -58,9 +58,9 @@ void PanelState::Draw()
 
 
 	//Time scale slider
-	ImGui::PushItemWidth(time_scale_width);
+	/*ImGui::PushItemWidth(time_scale_width);
 	ImGui::SetCursorPos({ (float)(w / 2 + time_scale_width), (float)(h / 2.5f) });
-	ImGui::SliderFloat("Time scale", &App->time->time_scale, 0.0f, 2.0f, "%.1f");
+	ImGui::SliderFloat("Time scale", &App->time->time_scale, 0.0f, 2.0f, "%.1f");*/
 
 	ImGui::End();
 

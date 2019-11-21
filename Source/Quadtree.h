@@ -34,6 +34,7 @@ public:
 
 	void Subdivide();
 	void DistributeObjects();
+	void DebugDraw();
 
 	void DrawQuadtree();
 
@@ -62,12 +63,14 @@ public:
 
 	void Remove(GameObject* to_remove);
 	void Insert(GameObject* gameObject);
+	void DebugDraw();
 
 	template<typename Type>
 	inline void CollectIntersections(std::vector<GameObject*>& objects, Type & primitive);
 
 public:
-
+	float3 min_point;
+	float3 max_point;
 	QuadtreeNode* root = nullptr;
 };
 

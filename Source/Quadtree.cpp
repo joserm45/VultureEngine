@@ -17,6 +17,8 @@ QuadtreeNode::QuadtreeNode(const math::AABB bbox, QuadtreeNode* parent) : bbox(b
 
 QuadtreeNode::~QuadtreeNode()
 {
+	for (int i = 0; i < 4; ++i)
+		RELEASE(childs[i]);
 }
 
 bool QuadtreeNode::IsLeaf() //only if you are a leaf you subdivide by 4 once you get out of space
@@ -150,6 +152,19 @@ void QuadtreeNode::DistributeObjects()
 	}
 }
 
+void QuadtreeNode::DebugDraw()
+{
+	for (uint i = 0; i < bbox.NumEdges(); i++)
+	{
+		glVertex3f(bbox.Edge(i).a.x, bbox.Edge(i).a.y, bbox.Edge(i).a.z);
+		glVertex3f(bbox.Edge(i).b.x, bbox.Edge(i).b.y, bbox.Edge(i).b.z);
+	}
+
+	if (!IsLeaf())
+		for (int i = 0; i < 4; ++i)
+			childs[i]->DebugDraw();
+}
+
 void QuadtreeNode::DrawQuadtree()
 {
 	glBegin(GL_LINES);
@@ -189,12 +204,14 @@ void Quadtree::Boundaries(math::AABB limits)
 {
 	Clear();
 	root = new QuadtreeNode(limits);
+
+	min_point = limits.minPoint;
+	max_point = limits.maxPoint;
 }
 
 void Quadtree::Clear()
 {
-	delete root;
-	root = nullptr;
+	RELEASE(root);
 }
 
 void Quadtree::Remove(GameObject * to_remove)
@@ -207,15 +224,19 @@ void Quadtree::Remove(GameObject * to_remove)
 
 void Quadtree::Insert(GameObject * gameObject)
 {
-	if (root != nullptr && &gameObject->BBox != nullptr)
-	{
-		if (gameObject->BBox.IsFinite())
-		{
-			if (gameObject->BBox.Intersects(root->bbox))
-			{
-				root->Insert(gameObject);
-			}
-		}
-	}
+	if (root)
+		root->Insert(gameObject);
+}
+
+void Quadtree::DebugDraw()
+{
+	glBegin(GL_LINES);
+	glColor4f(0.0f, 1.0f, 0.0f, 1.0f); //Green
+
+	if (root)
+		root->DebugDraw();
+
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glEnd();
 
 }

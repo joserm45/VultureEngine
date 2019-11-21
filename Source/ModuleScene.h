@@ -18,6 +18,7 @@ public:
 
 	bool Start();
 	update_status Update(float dt);
+	update_status PostUpdate(float dt);
 	bool CleanUp();
 
 	void DrawCubeDirectMode();
@@ -25,13 +26,21 @@ public:
 	void DrawCubeDrawElements();
 
 	void Draw();
+	void DebugDraw();
 
 	GameObject* CreateCubePrimitive();
 	GameObject* CreateSpherePrimitive(int subdivisions);
 	GameObject* CreateGameObject(GameObject* gameobject);
 	GameObject* GetRootGameObject() const;
 	void FocusGameObject(GameObject* focused, GameObject* root);
-	CompCamera * ModuleScene::GetMainCamera() const;
+	CompCamera* GetMainCamera() const;
+	//Quadtree functions
+	void GenQuadtree();
+	void GetStaticObjects(GameObject* static_candidate);
+	void CalculateQuadtreeSize(float3& min_point, float3& max_point);
+	void CheckIfRebuildQuadtree(GameObject* go);
+	bool EraseObjFromStatic(GameObject* go);
+
 	//float my_color[] = { 0.0f, 0.0f, 1.0f };
 //	GLuint texture;
 	//const char ImageName[] = "Assets/lenna.png";
@@ -55,7 +64,7 @@ public:
 
 
 
-
+	std::vector<GameObject*> statics_game_objects;
 
 	Quadtree* quadtree = nullptr;
 	bool rebuild_quadtree = false;

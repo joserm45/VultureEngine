@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "Globals.h"
 #include "GameObject.h"
+#include "Quadtree.h"
 
 #include "Components.h"
 #include "CompTransform.h"
@@ -60,21 +61,24 @@ Components* GameObject::CreateComponent(TYPECOMP type, int num_mesh, const char*
 	switch (type) 
 	{
 		case TRANSFORM:
-			if (transform == nullptr) {
+			if (transform == nullptr) 
+			{
 				transform = new CompTransform(this);
 				new_component = transform; 
 			}
 			break;
 		
 		case MATERIAL:
-			if (material == nullptr) {
+			if (material == nullptr) 
+			{
 				material = new CompMaterial(this, path);
 				new_component = material;
 			}
 			break;
 
 		case MESH:
-			if (mesh == nullptr) {
+			if (mesh == nullptr) 
+			{
 				mesh = new CompMesh(this, path, num_mesh);
 				new_component = mesh;
 				CreateBBox();
@@ -82,7 +86,8 @@ Components* GameObject::CreateComponent(TYPECOMP type, int num_mesh, const char*
 			break;
 
 		case CAMERA:
-			if (camera == nullptr) {
+			if (camera == nullptr) 
+			{
 				camera = new CompCamera(this);
 				new_component = camera;
 			}
@@ -131,6 +136,11 @@ uint GameObject::GetNumChilds() const
 	return childs.size();
 }
 
+bool GameObject::IsStatic() const
+{
+	return game_object_static;
+}
+
 void GameObject::PrintPanelGameObject(int& i, bool& clicked) {
 	//Pop ID for each tree node
 	ImGui::PushID(i);
@@ -145,8 +155,8 @@ void GameObject::PrintPanelGameObject(int& i, bool& clicked) {
 
 	if (ImGui::TreeNodeEx((void*)(intptr_t)i, flags, name)) 
 	{
-
-		if (ImGui::IsItemClicked() && !clicked) {
+		if (ImGui::IsItemClicked() && !clicked) 
+		{
 			App->imgui->AddLogToConsole("Node clicked");
 			clicked = true;
 			App->scene_intro->GetRootGameObject()->focused = false;
@@ -155,7 +165,8 @@ void GameObject::PrintPanelGameObject(int& i, bool& clicked) {
 
 		//Print each child of the gameobject
 
-		for (int j = 0; j < GetNumChilds(); j++) {
+		for (int j = 0; j < GetNumChilds(); j++) 
+		{
 			i++;
 			GetChild(j)->PrintPanelGameObject(i, clicked);
 
@@ -164,7 +175,8 @@ void GameObject::PrintPanelGameObject(int& i, bool& clicked) {
 		ImGui::TreePop();
 	}
 	//Focus
-	if (!clicked && ImGui::IsItemClicked()) {
+	if (!clicked && ImGui::IsItemClicked()) 
+	{
 		LOG("%s node clicked", name);
 		clicked = true;
 		App->scene_intro->GetRootGameObject()->focused = false;
@@ -175,12 +187,25 @@ void GameObject::PrintPanelGameObject(int& i, bool& clicked) {
 
 void GameObject::DrawInspector()
 {
-	if (ImGui::CollapsingHeader("GameObject")) {
+	if (ImGui::CollapsingHeader("GameObject")) 
+	{
 		ImGui::PushID(0);
 		ImGui::Text("Name:");
 		ImGui::SameLine();
 		ImGui::TextColored(ImVec4(0.7f, 0.8f, 0.0f, 1.0f), name);
 		ImGui::PopID();
+	}
+
+	if (ImGui::Checkbox("Static", &game_object_static)) 
+	{
+		if (game_object_static == true)
+		{
+			App->scene_intro->quadtree->Insert(this);
+		}
+		for (int i = 0; i < childs.size(); ++i)
+		{
+			childs[i]->game_object_static = game_object_static;
+		}
 	}
 
 	if (transform != NULL) {

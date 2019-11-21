@@ -7,8 +7,11 @@
 #include "GameObject.h"
 #include "Panel.h"
 #include "CompCamera.h"
+#include "Quadtree.h"
+
 #include "glew\include\GL\glew.h"
 #include "SDL\include\SDL_opengl.h"
+
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
@@ -42,6 +45,10 @@ bool ModuleScene::Start()
 	camera = CreateGameObject(GetRootGameObject());
 	camera->CreateComponent(CAMERA, 0, NULL);
 	//camera->SetPosition(math::float3(0.0, 0.0, -20.0));
+
+	//Quadtree 
+	GenQuadtree();
+
 	return ret;
 }
 
@@ -83,6 +90,16 @@ update_status ModuleScene::Update(float dt)
 	}
 	camera->camera->DrawCamera();
 
+	return UPDATE_CONTINUE;
+}
+
+update_status ModuleScene::PostUpdate(float dt)
+{
+	if (rebuild_quadtree) {
+		rebuild_quadtree = false;
+
+		GenQuadtree();
+	}
 	return UPDATE_CONTINUE;
 }
 
@@ -302,6 +319,18 @@ void ModuleScene::Draw()
 			(*panel)->Draw();
 		panel++;
 	}
+	if (App->GetState() == ENGINE_STATE_EDITOR)
+		DebugDraw();
+}
+
+void ModuleScene::DebugDraw()
+{
+	glDisable(GL_LIGHTING);
+
+	if (draw_quadtree)
+		quadtree->DebugDraw();
+
+	glEnable(GL_LIGHTING);
 }
 
 GameObject* ModuleScene::CreateGameObject(GameObject* gameobject)
@@ -339,6 +368,95 @@ void ModuleScene::FocusGameObject(GameObject* focused, GameObject* root)
 CompCamera * ModuleScene::GetMainCamera() const
 {
 	return main_camera;
+}
+
+void ModuleScene::GenQuadtree()
+{
+	//If there's quadtree, delete it
+	if (quadtree)
+		RELEASE(quadtree);
+
+	//Get a vector of static GameObjects
+	statics_game_objects.clear();
+	for (int i = 0; i < scene_root_gameobject->GetNumChilds(); ++i)
+		GetStaticObjects(scene_root_gameobject->GetChild(i));
+
+	//Calculate quadtree size
+	float3 min_point(-30); //Minimum quadtree size
+	float3 max_point(30); //Maximum quadtree size
+	CalculateQuadtreeSize(min_point, max_point);
+
+	//Create quadtree
+	quadtree = new Quadtree();
+	AABB root_node = AABB(min_point, max_point);
+	quadtree->Boundaries(root_node);
+
+	//Insert all the static GameObjects to the quadtree
+	for (int i = 0; i < statics_game_objects.size(); ++i)
+		quadtree->Insert(statics_game_objects[i]);
+}
+
+void ModuleScene::GetStaticObjects(GameObject* static_game_object)
+{
+	if (static_game_object->IsStatic())
+		statics_game_objects.push_back(static_game_object);
+
+	for (int i = 0; i < static_game_object->GetNumChilds(); ++i)
+		GetStaticObjects(static_game_object->GetChild(i));
+}
+
+void ModuleScene::CalculateQuadtreeSize(float3& min_point, float3& max_point)
+{
+	for (int i = 0; i < statics_game_objects.size(); ++i) {
+		//Min point
+		float3 min_p = statics_game_objects[i]->BBox.minPoint;
+		if (min_p.x < min_point.x)
+			min_point.x = min_p.x;
+		if (min_p.y < min_point.y)
+			min_point.y = min_p.y;
+		if (min_p.z < min_point.z)
+			min_point.z = min_p.z;
+
+		//Max point
+		float3 max_p = statics_game_objects[i]->BBox.maxPoint;
+		if (max_p.x > max_point.x)
+			max_point.x = max_p.x;
+		if (max_p.y > max_point.y)
+			max_point.y = max_p.y;
+		if (max_p.z > max_point.z)
+			max_point.z = max_p.z;
+	}
+}
+
+/*void ModuleScene::CheckIfRebuildQuadtree(GameObject * go)
+{
+	float3 min_point = go->BBox.minPoint;
+	float3 max_point = go->BBox.maxPoint;
+	bool rebuild = false;
+
+	//Min point
+	if (min_point.x < quadtree->.x || min_point.x > quadtree->min_point.x && min_point.x < 30
+		|| min_point.y < quadtree->min_point.y || min_point.y > quadtree->min_point.y && min_point.y < 30
+		|| min_point.z < quadtree->min_point.z || min_point.z > quadtree->min_point.z && min_point.y < 30)
+		rebuild = true;
+	//Max point
+	if (max_point.x > quadtree->max_point.x || max_point.x < quadtree->max_point.x && max_point.x > 30
+		|| max_point.y > quadtree->max_point.y || max_point.y < quadtree->max_point.y && max_point.y > 30
+		|| max_point.z > quadtree->max_point.z || max_point.z < quadtree->max_point.z && max_point.z > 30)
+		rebuild = true;
+
+	if (rebuild)
+		BuildQuadtree();
+}*/
+
+bool ModuleScene::EraseObjFromStatic(GameObject* go)
+{
+	for (std::vector<GameObject*>::const_iterator it = statics_game_objects.begin(); it < statics_game_objects.end(); it++)
+		if ((*it) == go) {
+			statics_game_objects.erase(it);
+			return true;
+		}
+	return false;
 }
 
 

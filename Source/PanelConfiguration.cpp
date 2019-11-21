@@ -294,7 +294,14 @@ void PanelConfiguration::Draw()
 		ImGui::TextColored(ImVec4(0, 0, 1, 1), "%d Mb", memory_usage / 1000);
 
 	}
-
+	if (ImGui::Button("Quadtree", { 120, 25 }))
+		App->scene_intro->GenQuadtree();
+	ImGui::SameLine();
+	ImGui::Text("Debug:");
+	ImGui::SameLine();
+	ImGui::Checkbox("Draw Quadtree", &App->scene_intro->draw_quadtree);
+	//ImGui::Checkbox("Draw Bounding box", &App->scene_intro->draw_quadtree);
+	
 	ImGui::End();
 }
 

@@ -72,7 +72,7 @@ update_status ModuleImGui::PreUpdate(float dt)
 update_status ModuleImGui::Update(float dt)
 {
 
-	//Draw panel or not
+	//Draw panel 
 	list<Panel*>::const_iterator panel = panels.begin();
 	while (panel != panels.end())
 	{
@@ -140,16 +140,16 @@ update_status ModuleImGui::HandleMainMenuBar()
 		}
 		if (ImGui::BeginMenu("View"))
 		{
-			if (ImGui::MenuItem("Console","", console->IsEnabled()))
+			if (ImGui::MenuItem("Console","0", console->IsEnabled()))
 				console->ToggleVisibility();
 
-			if (ImGui::MenuItem("Configuration","", config->IsEnabled()))
+			if (ImGui::MenuItem("Configuration","1", config->IsEnabled()))
 				config->ToggleVisibility();
 
-			if (ImGui::MenuItem("Scene GO", "", game_objects->IsEnabled()))
+			if (ImGui::MenuItem("Scene GO", "2", game_objects->IsEnabled()))
 				game_objects->ToggleVisibility();
 
-			if (ImGui::MenuItem("Play/Pause", "", state->IsEnabled()))
+			if (ImGui::MenuItem("Play/Pause", "3", state->IsEnabled()))
 				state->ToggleVisibility();
 
 			ImGui::EndMenu();

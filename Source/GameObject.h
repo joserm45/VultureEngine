@@ -30,11 +30,11 @@ public:
 	GameObject* GetParent();
 	GameObject* GetChild(uint i);
 	uint GetNumChilds() const;
-
+	bool IsStatic() const;
 	const char* GetName();
 	void SetName(const char* new_name);
-	void GameObject::PrintPanelGameObject(int& i, bool& clicked);
-	void GameObject::DrawInspector();
+	void PrintPanelGameObject(int& i, bool& clicked);
+	void DrawInspector();
 
 	void Draw();
 
@@ -56,11 +56,11 @@ private:
 
 	bool active = true;
 
-
 	GameObject* parent = nullptr;
 
 
 public:
+	bool game_object_static = false;
 	bool focused = false;
 	std::vector<GameObject*> childs;
 
