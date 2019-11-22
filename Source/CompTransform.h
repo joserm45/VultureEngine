@@ -13,6 +13,7 @@ public:
 	CompTransform(GameObject* parent);
 	~CompTransform();
 
+	void Update();
 	math::float3 GetPosition();
 	void SetPosition(math::float3 pos);
 
@@ -23,6 +24,7 @@ public:
 	void SetScale(math::float3 scale);
 
 	math::float4x4 GetGlobalMatrix() const;
+	math::float3 GetGlobalPos() const;
 	void Draw();
 
 
@@ -36,6 +38,5 @@ public:
 	math::float3 scale = math::float3::one;	
 
 	math::float3 rotate = math::float3::zero;
-
 };
 #endif

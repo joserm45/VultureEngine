@@ -41,9 +41,13 @@ bool ModuleScene::Start()
 	//scene_gameobject_pointer->SetName("Baker House");
 
 
+	camera = new GameObject(scene_root_gameobject);
+	camera->CreateComponent(CAMERA,0,NULL);
+	camera->SetName("camera");
+	SetMainCamera(camera->camera);
 
-	camera = CreateGameObject(GetRootGameObject());
-	camera->CreateComponent(CAMERA, 0, NULL);
+	/*camera = CreateGameObject(GetRootGameObject());
+	camera->CreateComponent(CAMERA, 0, NULL);*/
 	//camera->SetPosition(math::float3(0.0, 0.0, -20.0));
 
 	//Quadtree 
@@ -86,6 +90,7 @@ update_status ModuleScene::Update(float dt)
 
 	for (std::vector<GameObject*>::const_iterator i = GO_list.begin(); i != GO_list.end(); ++i)
 	{
+		(*i)->Update();
 		(*i)->Draw();
 	}
 	camera->camera->DrawCamera();
@@ -365,6 +370,21 @@ void ModuleScene::FocusGameObject(GameObject* focused, GameObject* root)
 		}
 	}
 }
+
+void ModuleScene::SetMainCamera(CompCamera* cam)
+{
+	if (main_camera)
+		main_camera->camer_active = false;
+
+	if (cam == nullptr)
+		main_camera = nullptr;
+	else {
+		main_camera = cam;
+		main_camera->camer_active = true;
+	}
+
+}
+
 CompCamera * ModuleScene::GetMainCamera() const
 {
 	return main_camera;
@@ -427,11 +447,17 @@ void ModuleScene::CalculateQuadtreeSize(float3& min_point, float3& max_point)
 			max_point.z = max_p.z;
 	}
 }
-
-void ModuleScene::CheckIfRebuildQuadtree(GameObject * go)
+void ModuleScene::SetActiveAllObj(GameObject* game_object)
 {
-	float3 min_point = go->BBox.minPoint;
-	float3 max_point = go->BBox.maxPoint;
+	game_object->SetActive(true);
+
+	for (int i = 0; i < game_object->GetNumChilds(); ++i)
+		SetActiveAllObj(game_object->GetChild(i));
+}
+void ModuleScene::CheckIfRebuildQuadtree(GameObject * game_object)
+{
+	float3 min_point = game_object->BBox.minPoint;
+	float3 max_point = game_object->BBox.maxPoint;
 	bool rebuild = false;
 
 	//Min point
@@ -449,10 +475,10 @@ void ModuleScene::CheckIfRebuildQuadtree(GameObject * go)
 		GenQuadtree();
 }
 
-bool ModuleScene::EraseObjFromStatic(GameObject* go)
+bool ModuleScene::EraseObjFromStatic(GameObject* game_object)
 {
 	for (std::vector<GameObject*>::const_iterator it = statics_game_objects.begin(); it < statics_game_objects.end(); it++)
-		if ((*it) == go) {
+		if ((*it) == game_object) {
 			statics_game_objects.erase(it);
 			return true;
 		}

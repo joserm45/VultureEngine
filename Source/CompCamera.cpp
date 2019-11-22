@@ -1,3 +1,4 @@
+#include "Application.h"
 #include "CompCamera.h"
 #include "Globals.h"
 #include "Imgui\imgui.h"
@@ -30,6 +31,35 @@ CompCamera::~CompCamera()
 
 }
 
+void CompCamera::Update()
+{
+	if (gameObject && gameObject->transform) 
+	{
+		CompTransform* transform = gameObject->transform;
+		math::float4x4 global_mat = transform->GetGlobalMatrix();
+
+		frustum.pos = transform->GetGlobalPos();
+		frustum.front = global_mat.WorldZ().Normalized();
+		frustum.up = global_mat.WorldY().Normalized();
+	}
+
+	if (camera_culling) 
+	{
+		if (App->scene_intro->GetRootGameObject()) 
+		{
+			
+			CameraCulling(App->scene_intro->GetRootGameObject());
+		}
+	}
+
+	if (App->GetState() == ENGINE_STATE_EDITOR) 
+	{
+		glDisable(GL_LIGHTING);
+		DrawCamera();
+		glEnable(GL_LIGHTING);
+	}
+}
+
 void CompCamera::SetFov()
 {
 	frustum.verticalFov = DEGTORAD * fov;
@@ -41,6 +71,29 @@ void CompCamera::SetVerticalFOV(float value)
 {
 	frustum.verticalFov = value;
 	frustum.horizontalFov = 2 * atanf(tanf(value * 0.5f) * (aspect_ratio));
+}
+void CompCamera::CameraCulling(GameObject* go) 
+{
+
+	if (!go->camera) 
+	{
+		for (std::vector<GameObject*>::const_iterator it = go->childs.begin(); it < go->childs.end(); it++) 
+		{
+			AABB refBox = (*it)->BBox;
+
+			if (!(*it)->IsStatic() && (*it)->mesh && refBox.IsFinite()) 
+			{
+				if (InsideAABB(refBox) == OUTSIDE) 
+				{
+
+					(*it)->SetActive(false);
+				}
+				else
+					(*it)->SetActive(true);
+			}
+			CameraCulling(*it);
+		}
+	}
 }
 void CompCamera::SetAspectRatio(float ratio)
 {
@@ -76,14 +129,21 @@ void CompCamera::Transform()
 		frustum.pos = matrix.TranslatePart();
 		frustum.front = matrix.WorldZ().Normalized();
 		frustum.up = matrix.WorldY().Normalized();
-		UpdateMatrix();
+		//UpdateMatrix();
 	}
 }
 
 void CompCamera::Draw()
 {
-	if (ImGui::CollapsingHeader("Camera")) {
-
+	if (ImGui::CollapsingHeader("Camera")) 
+	{
+		if (ImGui::Checkbox("Main Camera", &camer_active)) 
+		{
+			if (camer_active)
+				App->scene_intro->SetMainCamera(this);
+			else
+				App->scene_intro->SetMainCamera(nullptr);
+		}
 		ImGui::DragFloat("Near Distance", &frustum.nearPlaneDistance, 0.5, 0.0, frustum.farPlaneDistance);
 
 		ImGui::DragFloat("Far Distance", &frustum.farPlaneDistance, 0.5);
@@ -93,8 +153,13 @@ void CompCamera::Draw()
 			frustum.verticalFov = DEGTORAD * fov;
 			frustum.horizontalFov = atan(aspect_ratio*tan(frustum.verticalFov / 2)) * 2;
 		}
+		if (ImGui::Checkbox("Camera Culling", &camera_culling))
+		{
+			if (!camera_culling)
+				App->scene_intro->SetActiveAllObj(App->scene_intro->GetRootGameObject());
+		}
 	}
-	UpdateMatrix();
+	//UpdateMatrix();
 }
 
 void CompCamera::UpdateMatrix()
@@ -105,8 +170,6 @@ void CompCamera::UpdateMatrix()
 	projection_matrix = frustum.ProjectionMatrix();
 	projection_matrix.Transpose();
 }
-
-
 
 
 float * CompCamera::GetProjectionMatrix() const
@@ -123,4 +186,37 @@ float * CompCamera::GetViewMatrix() const
 math::Frustum  CompCamera::GetFrustum() const
 {
 	return frustum;
+}
+
+int CompCamera::InsideAABB(const AABB& bbox) const
+{
+	math::float3 vCorner[8];
+	int iTotalIn = 0;
+	bbox.GetCornerPoints(vCorner); 
+	math::Plane m_plane[6];
+	frustum.GetPlanes(m_plane); 
+
+	for (int p = 0; p < 6; ++p) 
+	{
+		int iInCount = 8;
+		int iPtIn = 1;
+		for (int i = 0; i < 8; ++i) 
+		{
+			// test this point against the planes
+			if (m_plane[p].IsOnPositiveSide(vCorner[i])) {
+				iPtIn = 0;
+				--iInCount;
+			}
+		}
+		// were all the points outside of plane p?
+		if (iInCount == 0)
+			return(OUTSIDE);
+		// check if they were all on the right side of the plane
+		iTotalIn += iPtIn;
+	}
+	// so if iTotalIn is 6, then all are inside the view
+	if (iTotalIn == 6)
+		return(INSIDE);
+	// we must be partly in then otherwise
+	return(INSIDE);
 }

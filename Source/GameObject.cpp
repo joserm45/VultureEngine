@@ -44,7 +44,7 @@ GameObject::~GameObject()
 
 	RELEASE(transform);	//CLEAN ALL COMPONENTS
 	RELEASE(mesh);
-	//RELEASE(material); //crash
+	RELEASE(material); //crash
 	RELEASE(camera);
 
 	parent = nullptr;
@@ -52,6 +52,15 @@ GameObject::~GameObject()
 
 void GameObject::Update()
 {
+	for (uint i = 0; i < childs.size(); i++) {
+		childs[i]->Update();
+	}
+
+	if (transform && this != App->scene_intro->GetRootGameObject())
+		transform->Update();
+
+	if (camera)
+		camera->Update();
 }
 
 Components* GameObject::CreateComponent(TYPECOMP type, int num_mesh, const char* path )

@@ -33,11 +33,13 @@ public:
 	GameObject* CreateGameObject(GameObject* gameobject);
 	GameObject* GetRootGameObject() const;
 	void FocusGameObject(GameObject* focused, GameObject* root);
+	void SetMainCamera(CompCamera* cam);
 	CompCamera* GetMainCamera() const;
 	//Quadtree functions
 	void GenQuadtree();
 	void GetStaticObjects(GameObject* static_candidate);
 	void CalculateQuadtreeSize(float3& min_point, float3& max_point);
+	void SetActiveAllObj(GameObject* game_object);
 	void CheckIfRebuildQuadtree(GameObject* go);
 	bool EraseObjFromStatic(GameObject* go);
 
