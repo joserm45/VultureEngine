@@ -413,4 +413,9 @@ void Application::Stop()
 		break;
 	}
 }
+u32 Application::GenerateUUID()
+{
 
+	//random between 0 and max_int
+	return lcg.Int();
+}

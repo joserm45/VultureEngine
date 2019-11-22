@@ -40,11 +40,13 @@ bool ModuleScene::Start()
 	//scene_gameobject_pointer->CreateComponent(MESH, 4, "BakerHouse.fbx");
 	//scene_gameobject_pointer->SetName("Baker House");
 
+	CreateCamera(true);
 
-	camera = new GameObject(scene_root_gameobject);
+	/*camera = new GameObject(scene_root_gameobject);
 	camera->CreateComponent(CAMERA,0,NULL);
 	camera->SetName("camera");
-	SetMainCamera(camera->camera);
+	SetMainCamera(camera->camera);*/
+	
 
 	/*camera = CreateGameObject(GetRootGameObject());
 	camera->CreateComponent(CAMERA, 0, NULL);*/
@@ -90,11 +92,11 @@ update_status ModuleScene::Update(float dt)
 
 	for (std::vector<GameObject*>::const_iterator i = GO_list.begin(); i != GO_list.end(); ++i)
 	{
-		(*i)->Update();
 		(*i)->Draw();
+		//(*i)->Update();
 	}
-	camera->camera->DrawCamera();
-
+	//camera->camera->DrawCamera();
+	scene_root_gameobject->Update();
 	return UPDATE_CONTINUE;
 }
 
@@ -108,6 +110,17 @@ update_status ModuleScene::PostUpdate(float dt)
 	return UPDATE_CONTINUE;
 }
 
+GameObject * ModuleScene::CreateCamera(bool is_main_camera)
+{
+	camera = new GameObject(scene_root_gameobject);
+	camera->CreateComponent(CAMERA,0,NULL);
+	camera->SetName("Camera");
+
+	if (is_main_camera)
+		SetMainCamera(camera->camera);
+
+	return camera;
+}
 
 void ModuleScene::DrawCubeDirectMode()
 {

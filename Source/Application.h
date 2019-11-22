@@ -62,6 +62,8 @@ private:
 	uint max_framerate = 125;
 	std::list<Module*> list_modules;
 	
+	LCG lcg;
+
 	bool go_to_save = false;
 	bool go_to_load = false;
 	bool cap_frames = false;
@@ -105,6 +107,7 @@ public:
 	void Pause();
 	void Stop();
 
+	u32 Application::GenerateUUID();
 private:
 
 	void AddModule(Module* mod);

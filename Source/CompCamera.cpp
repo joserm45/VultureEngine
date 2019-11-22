@@ -33,31 +33,22 @@ CompCamera::~CompCamera()
 
 void CompCamera::Update()
 {
-	if (gameObject && gameObject->transform) 
-	{
-		CompTransform* transform = gameObject->transform;
-		math::float4x4 global_mat = transform->GetGlobalMatrix();
-
-		frustum.pos = transform->GetGlobalPos();
-		frustum.front = global_mat.WorldZ().Normalized();
-		frustum.up = global_mat.WorldY().Normalized();
-	}
+	DrawCamera();
 
 	if (camera_culling) 
 	{
 		if (App->scene_intro->GetRootGameObject()) 
-		{
-			
+		{		
 			CameraCulling(App->scene_intro->GetRootGameObject());
 		}
 	}
 
-	if (App->GetState() == ENGINE_STATE_EDITOR) 
+	/*if (App->GetState() == ENGINE_STATE_EDITOR) 
 	{
 		glDisable(GL_LIGHTING);
 		DrawCamera();
 		glEnable(GL_LIGHTING);
-	}
+	}*/
 }
 
 void CompCamera::SetFov()
@@ -72,12 +63,12 @@ void CompCamera::SetVerticalFOV(float value)
 	frustum.verticalFov = value;
 	frustum.horizontalFov = 2 * atanf(tanf(value * 0.5f) * (aspect_ratio));
 }
-void CompCamera::CameraCulling(GameObject* go) 
+void CompCamera::CameraCulling(GameObject* game_object) 
 {
 
-	if (!go->camera) 
+	if (!game_object->camera)
 	{
-		for (std::vector<GameObject*>::const_iterator it = go->childs.begin(); it < go->childs.end(); it++) 
+		for (std::vector<GameObject*>::const_iterator it = game_object->childs.begin(); it < game_object->childs.end(); it++)
 		{
 			AABB refBox = (*it)->BBox;
 
@@ -129,7 +120,7 @@ void CompCamera::Transform()
 		frustum.pos = matrix.TranslatePart();
 		frustum.front = matrix.WorldZ().Normalized();
 		frustum.up = matrix.WorldY().Normalized();
-		//UpdateMatrix();
+		UpdateMatrix();
 	}
 }
 
@@ -159,7 +150,7 @@ void CompCamera::Draw()
 				App->scene_intro->SetActiveAllObj(App->scene_intro->GetRootGameObject());
 		}
 	}
-	//UpdateMatrix();
+	UpdateMatrix();
 }
 
 void CompCamera::UpdateMatrix()
@@ -190,32 +181,31 @@ math::Frustum  CompCamera::GetFrustum() const
 
 int CompCamera::InsideAABB(const AABB& bbox) const
 {
-	math::float3 vCorner[8];
-	int iTotalIn = 0;
-	bbox.GetCornerPoints(vCorner); 
+	math::float3 corner[8];
+	int total = 0;
+	bbox.GetCornerPoints(corner);
 	math::Plane m_plane[6];
 	frustum.GetPlanes(m_plane); 
 
 	for (int p = 0; p < 6; ++p) 
 	{
-		int iInCount = 8;
-		int iPtIn = 1;
+		int cont = 8;
+		int pt = 1;
 		for (int i = 0; i < 8; ++i) 
 		{
-			// test this point against the planes
-			if (m_plane[p].IsOnPositiveSide(vCorner[i])) {
-				iPtIn = 0;
-				--iInCount;
+			if (m_plane[p].IsOnPositiveSide(corner[i])) {
+				pt = 0;
+				--cont;
 			}
 		}
 		// were all the points outside of plane p?
-		if (iInCount == 0)
+		if (cont == 0)
 			return(OUTSIDE);
 		// check if they were all on the right side of the plane
-		iTotalIn += iPtIn;
+		total += pt;
 	}
 	// so if iTotalIn is 6, then all are inside the view
-	if (iTotalIn == 6)
+	if (total == 6)
 		return(INSIDE);
 	// we must be partly in then otherwise
 	return(INSIDE);

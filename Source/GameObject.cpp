@@ -52,7 +52,8 @@ GameObject::~GameObject()
 
 void GameObject::Update()
 {
-	for (uint i = 0; i < childs.size(); i++) {
+	for (uint i = 0; i < childs.size(); i++) 
+	{
 		childs[i]->Update();
 	}
 
@@ -172,6 +173,13 @@ void GameObject::PrintPanelGameObject(int& i, bool& clicked) {
 			App->scene_intro->FocusGameObject(this, App->scene_intro->GetRootGameObject()); //Focus
 		}
 
+		/*if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None))
+		{
+			GameObject* go = this;
+			ImGui::SetDragDropPayload("Scene Game Object", &go, sizeof(GameObject));
+
+			ImGui::EndDragDropSource();
+		}*/
 		//Print each child of the gameobject
 
 		for (int j = 0; j < GetNumChilds(); j++) 

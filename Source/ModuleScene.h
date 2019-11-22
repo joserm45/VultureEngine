@@ -28,6 +28,7 @@ public:
 	void Draw();
 	void DebugDraw();
 
+	GameObject* CreateCamera(bool is_main_camera);
 	GameObject* CreateCubePrimitive();
 	GameObject* CreateSpherePrimitive(int subdivisions);
 	GameObject* CreateGameObject(GameObject* gameobject);
