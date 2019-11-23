@@ -18,6 +18,7 @@ public:
 	bool CleanUp();
 
 	void OnResize(int width, int height);
+	void ModuleRenderer3D::UpdateGameObjectMatrix(GameObject* go);
 	void RecalculateProjMat();
 public:
 

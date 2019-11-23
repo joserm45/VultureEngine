@@ -25,6 +25,7 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
+	void Draw();
 	update_status HandleMainMenuBar();
 	void ResizePanels();
 	void AddLogToConsole(const char* log);

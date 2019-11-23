@@ -7,6 +7,7 @@
 #include "Components.h"
 #include <vector>
 #include "MathGeoLib/include/MathGeoLib.h"
+#include "MathGeoLib/include/Geometry/OBB.h"
 
 class CompTransform;
 class CompMaterial;
@@ -47,9 +48,11 @@ public:
 
 	void CreateBBox();
 	void DrawBBox();
+	void UpdateBoundingBox();
 	void ShowGizmos();
 
 	math::AABB BBox;
+	math::OBB obb;
 private:
 
 	const char* name;

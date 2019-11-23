@@ -322,6 +322,31 @@ void GameObject::DrawBBox()
 	}
 }
 
+void GameObject::UpdateBoundingBox() {
+
+	BBox.SetNegativeInfinity();
+
+	if (mesh) 
+	{
+		BBox.Enclose((math::float3*)mesh->mesh_info.vertex, mesh->mesh_info.num_vertex);
+	}
+
+	if (transform) 
+	{
+		obb.SetFrom(BBox);
+		obb.Transform(transform->GetGlobalMatrix());
+		if (obb.IsFinite()) {
+			BBox = obb.MinimalEnclosingAABB();
+		}
+	}
+
+	for (uint i = 0; i < childs.size(); ++i) {
+
+		childs[i]->UpdateBoundingBox();
+	}
+
+}
+
 void GameObject::Draw()
 {
 	if (camera == NULL)

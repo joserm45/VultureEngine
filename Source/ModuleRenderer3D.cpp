@@ -173,13 +173,17 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	//ImGui_ImplOpenGL3_NewFrame();
 	//ImGui_ImplSDL2_NewFrame(App->window->window);
 	//ImGui::NewFrame();
-
+	App->scene_intro->Draw();
 	return UPDATE_CONTINUE;
 }
 
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
+	
+
+	App->imgui->Draw();
+
 	SDL_GL_SwapWindow(App->window->window);
 	
 	return UPDATE_CONTINUE;

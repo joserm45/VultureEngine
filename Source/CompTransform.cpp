@@ -26,6 +26,40 @@ void CompTransform::Update()
 	}
 }
 
+void CompTransform::UpdateMatrix() 
+{
+	local_matrix = math::float4x4::FromTRS(position, rotation, scale);
+
+	last_global_matrix = global_matrix;
+
+	GameObject* parent_aux = gameObject->GetParent();
+	if (parent_aux != nullptr && parent_aux->GetParent() != nullptr) 
+	{
+		CompTransform* p_transform = parent_aux->transform;
+
+		if (p_transform != nullptr) 
+		{
+
+			math::float4x4 p_global_matrix = p_transform->GetGlobalMatrix();
+
+			global_matrix = p_global_matrix * local_matrix;
+
+		}
+		else {
+			global_matrix = local_matrix;
+		}
+
+	}
+	else {
+		global_matrix = local_matrix;
+	}
+
+	if (!last_global_matrix.Equals(global_matrix)) 
+	{
+		gameObject->UpdateBoundingBox();		
+	}
+}
+
 math::float3 CompTransform::GetPosition() 
 {
 

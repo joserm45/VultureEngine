@@ -125,6 +125,17 @@ bool ModuleImGui::CleanUp()
 	return true;
 }
 
+void ModuleImGui::Draw()
+{
+	list<Panel*>::const_iterator panel = App->imgui->panels.begin();
+	while (panel != App->imgui->panels.end())
+	{
+		if ((*panel)->IsActive())
+			(*panel)->Draw();
+		panel++;
+	}
+}
+
 update_status ModuleImGui::HandleMainMenuBar()
 {
 	static bool quit = false;

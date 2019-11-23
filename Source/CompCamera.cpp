@@ -64,18 +64,19 @@ void CompCamera::CameraCulling(GameObject* game_object)
 	{
 		for (std::vector<GameObject*>::const_iterator it = game_object->childs.begin(); it < game_object->childs.end(); it++)
 		{
+			//(*it)->UpdateBoundingBox();
 			AABB refBox = (*it)->BBox;
 			//refBox.get
 			if (!(*it)->IsStatic() && (*it)->mesh && refBox.IsFinite()) 
 			{
 				if (InsideAABB(refBox) == OUTSIDE) 
 				{
-
 					(*it)->SetVisibility(false);
 				}
 				else
 					(*it)->SetVisibility(true);
 			}
+			
 			CameraCulling(*it);
 		}
 	}
@@ -114,7 +115,7 @@ void CompCamera::Transform()
 		frustum.pos = matrix.TranslatePart();
 		frustum.front = matrix.WorldZ().Normalized();
 		frustum.up = matrix.WorldY().Normalized();
-		UpdateMatrix();
+		//UpdateMatrix();
 	}
 }
 
@@ -144,7 +145,7 @@ void CompCamera::Draw()
 				App->scene_intro->SetActiveAllObj(App->scene_intro->GetRootGameObject());
 		}
 	}
-	UpdateMatrix();
+	//UpdateMatrix();
 }
 
 void CompCamera::UpdateMatrix()
@@ -154,6 +155,7 @@ void CompCamera::UpdateMatrix()
 
 	projection_matrix = frustum.ProjectionMatrix();
 	projection_matrix.Transpose();
+
 }
 
 

@@ -88,20 +88,20 @@ update_status ModuleScene::Update(float dt)
 	//DrawCubeVertexArrays();
 
 	//DrawCubeDrawElements();
-	Draw();
+	//Draw();
 
-	for (std::vector<GameObject*>::const_iterator i = GO_list.begin(); i != GO_list.end(); ++i)
+	/*for (std::vector<GameObject*>::const_iterator i = GO_list.begin(); i != GO_list.end(); ++i)
 	{
 		if ((*i)->IsVisible() == true)
 		{
-			/*glPushMatrix();
+			glPushMatrix();
 			float4x4 matrix = (*i)->GetGlobalMatrix();
-			glMultMatrixf((GLfloat*)matrix.Transposed().ptr());*/
+			glMultMatrixf((GLfloat*)matrix.Transposed().ptr());
 			(*i)->Draw();
 		}
 			
 		//(*i)->Update();
-	}
+	}*/
 	//camera->camera->DrawCamera();
 	scene_root_gameobject->Update();
 	return UPDATE_CONTINUE;
@@ -337,13 +337,20 @@ void ModuleScene::DrawCubeDrawElements()
 void ModuleScene::Draw()
 {
 	//App->panel->Draw();
-	list<Panel*>::const_iterator panel = App->imgui->panels.begin();
-	while (panel != App->imgui->panels.end())
+
+
+	for (std::vector<GameObject*>::const_iterator i = GO_list.begin(); i != GO_list.end(); ++i)
 	{
-		if ((*panel)->IsActive())
-			(*panel)->Draw();
-		panel++;
+		if ((*i)->IsVisible() == true)
+		{
+			glPushMatrix();
+			float4x4 matrix = (*i)->GetGlobalMatrix();
+			glMultMatrixf((GLfloat*)matrix.Transposed().ptr());
+			(*i)->Draw();
+		}
+		//(*i)->Update();
 	}
+
 	if (App->GetState() == ENGINE_STATE_EDITOR)
 		DebugDraw();
 }
