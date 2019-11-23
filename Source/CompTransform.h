@@ -15,6 +15,7 @@ public:
 
 	void Update();
 	void CompTransform::UpdateMatrix();
+
 	math::float3 GetPosition();
 	void SetPosition(math::float3 pos);
 

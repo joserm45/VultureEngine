@@ -377,7 +377,7 @@ void GameObject::Draw()
 			glDrawElements(GL_TRIANGLES, mesh->mesh_info.num_index, GL_UNSIGNED_SHORT, NULL);
 		}
 		//glDisable(GL_LIGHTING);
-		DrawBBox();
+		//DrawBBox();
 		//glEnable(GL_LIGHTING);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

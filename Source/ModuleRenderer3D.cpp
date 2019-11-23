@@ -4,6 +4,8 @@
 #include "ModuleImGui.h"
 #include "Quadtree.h"
 #include "CompCamera.h"
+#include "CompTransform.h"
+
 #include "glew\include\GL\glew.h"
 #include "SDL\include\SDL_opengl.h"
 
@@ -149,6 +151,8 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(App->camera->GetViewMatrix());
 
+	UpdateGameObjectMatrix(App->scene_intro->GetRootGameObject());
+
 	// light 0 on cam pos
 	lights[0].SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
 
@@ -173,6 +177,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	//ImGui_ImplOpenGL3_NewFrame();
 	//ImGui_ImplSDL2_NewFrame(App->window->window);
 	//ImGui::NewFrame();
+
 	App->scene_intro->Draw();
 	return UPDATE_CONTINUE;
 }
@@ -180,7 +185,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
-	
+
 
 	App->imgui->Draw();
 
@@ -211,6 +216,24 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+}
+
+void ModuleRenderer3D::UpdateGameObjectMatrix(GameObject* game_object)
+{
+	if (game_object)
+	{
+		game_object->transform->UpdateMatrix();
+		game_object->DrawBBox();
+
+	}
+
+
+	if (game_object) {
+		for (int i = 0; i < game_object->GetNumChilds(); i++) {
+			if (game_object->GetChild(i) != nullptr)
+				UpdateGameObjectMatrix(game_object->GetChild(i));
+		}
+	}
 }
 
 void ModuleRenderer3D::RecalculateProjMat()
