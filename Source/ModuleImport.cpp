@@ -194,10 +194,10 @@ void ModuleImport::LoadMesh(char* path, bool is_parshape, uint i)
 			last_GO->SetName("Sphere");
 
 		App->scene_intro->GO_list.push_back(last_GO);
-
+		
 		par_shapes_free_mesh(shape);
 	}
-
+	
 }
 
 void ModuleImport::LoadChilds(const aiScene* scene, aiNode* node, GameObject* game_object, const char* path)

@@ -33,6 +33,7 @@ void CompTransform::UpdateMatrix()
 	last_global_matrix = global_matrix;
 
 	GameObject* parent_aux = gameObject->GetParent();
+
 	if (parent_aux != nullptr && parent_aux->GetParent() != nullptr) 
 	{
 		CompTransform* p_transform = parent_aux->transform;
@@ -80,13 +81,11 @@ math::Quat CompTransform::GetRotation()
 
 void CompTransform::SetRotation(math::Quat rot) 
 {
-
 	rotation = rot;
 }
 
 math::float3 CompTransform::GetScale() 
 {
-
 	return scale;
 }
 
@@ -97,7 +96,6 @@ void CompTransform::SetScale(math::float3 scale) {
 
 math::float4x4 CompTransform::GetGlobalMatrix() const 
 {
-
 	return global_matrix;
 }
 

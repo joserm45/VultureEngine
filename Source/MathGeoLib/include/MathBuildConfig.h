@@ -4,7 +4,7 @@
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
+	   http://www.apache.org/licenses/LICENSE-2.0
 
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
@@ -12,30 +12,30 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-/** @file MathBuildConfig.h
-	@author Jukka Jylänki
-	@brief Specifies all build flags for the library. */
+   /** @file MathBuildConfig.h
+	   @author Jukka Jylänki
+	   @brief Specifies all build flags for the library. */
 #pragma once
 
-/*#if !defined(WIN32)
+#if !defined(WIN32)
 #define WIN32
-#endif*/
+#endif
 
-// Ric
-// Warning disabled ---
-//#pragma warning( disable : 4577 ) // Warning that exceptions are disabled
-//#pragma warning( disable : 4530 ) // Warning that exceptions are disabled
+	   // Ric
+	   // Warning disabled ---
+#pragma warning( disable : 4577 ) // Warning that exceptions are disabled
+#pragma warning( disable : 4530 ) // Warning that exceptions are disabled
 #define MATH_SILENT_ASSUME
-//#define MATH_BULLET_INTEROP
+//#define MATH_BULLET_INTEROP  //Commented this after deleting Bullet to avoid errors
 // ---
-/*
+
 // Disable STL exceptions
 #if !defined(_HAS_EXCEPTIONS) 
 #define _HAS_EXCEPTIONS 0
 #endif
 
 #define _STATIC_CPPLIB
-*/
+
 // If MATH_ENABLE_NAMESPACE is defined, all math symbols are put inside a namespace.
 #define MATH_ENABLE_NAMESPACE
 
@@ -95,7 +95,7 @@
 // If MATH_ENABLE_STL_SUPPORT is defined, MathGeoLib utilizes STL data structures. Otherwise,
 // features requiring STL are disabled (but the library can still be built).
 #ifndef MATH_ENABLE_STL_SUPPORT
-	#define MATH_ENABLE_STL_SUPPORT
+#define MATH_ENABLE_STL_SUPPORT
 #endif
 
 // If MATH_TINYXML_INTEROP is defined, MathGeoLib integrates with TinyXML to provide
@@ -123,7 +123,7 @@
 #endif
 
 // Uncomment to specify the SIMD instruction set level in use.
-#define MATH_AVX
+//#define MATH_AVX
 //#define MATH_SSE41
 //#define MATH_SSE3
 //#define MATH_SSE2
