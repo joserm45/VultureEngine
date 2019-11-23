@@ -110,12 +110,12 @@ Components* GameObject::CreateComponent(TYPECOMP type, int num_mesh, const char*
 	return new_component;
 }
 
-bool GameObject::IsActive() const
+bool GameObject::IsVisible() const
 {
 	return active;
 }
 
-void GameObject::SetActive(bool active)
+void GameObject::SetVisibility(bool active)
 {
 	this->active = active;
 }

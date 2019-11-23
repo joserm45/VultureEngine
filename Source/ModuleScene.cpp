@@ -92,7 +92,14 @@ update_status ModuleScene::Update(float dt)
 
 	for (std::vector<GameObject*>::const_iterator i = GO_list.begin(); i != GO_list.end(); ++i)
 	{
-		(*i)->Draw();
+		if ((*i)->IsVisible() == true)
+		{
+			/*glPushMatrix();
+			float4x4 matrix = (*i)->GetGlobalMatrix();
+			glMultMatrixf((GLfloat*)matrix.Transposed().ptr());*/
+			(*i)->Draw();
+		}
+			
 		//(*i)->Update();
 	}
 	//camera->camera->DrawCamera();
@@ -462,7 +469,7 @@ void ModuleScene::CalculateQuadtreeSize(float3& min_point, float3& max_point)
 }
 void ModuleScene::SetActiveAllObj(GameObject* game_object)
 {
-	game_object->SetActive(true);
+	game_object->SetVisibility(true);
 
 	for (int i = 0; i < game_object->GetNumChilds(); ++i)
 		SetActiveAllObj(game_object->GetChild(i));

@@ -43,12 +43,6 @@ void CompCamera::Update()
 		}
 	}
 
-	/*if (App->GetState() == ENGINE_STATE_EDITOR) 
-	{
-		glDisable(GL_LIGHTING);
-		DrawCamera();
-		glEnable(GL_LIGHTING);
-	}*/
 }
 
 void CompCamera::SetFov()
@@ -66,21 +60,21 @@ void CompCamera::SetVerticalFOV(float value)
 void CompCamera::CameraCulling(GameObject* game_object) 
 {
 
-	if (!game_object->camera)
+	if (game_object->camera == NULL)
 	{
 		for (std::vector<GameObject*>::const_iterator it = game_object->childs.begin(); it < game_object->childs.end(); it++)
 		{
 			AABB refBox = (*it)->BBox;
-
+			//refBox.get
 			if (!(*it)->IsStatic() && (*it)->mesh && refBox.IsFinite()) 
 			{
 				if (InsideAABB(refBox) == OUTSIDE) 
 				{
 
-					(*it)->SetActive(false);
+					(*it)->SetVisibility(false);
 				}
 				else
-					(*it)->SetActive(true);
+					(*it)->SetVisibility(true);
 			}
 			CameraCulling(*it);
 		}

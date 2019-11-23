@@ -24,8 +24,8 @@ public:
 	void Update();
 	Components* CreateComponent(TYPECOMP type, int num_mesh , const char* path = "");
 
-	bool IsActive() const;
-	void SetActive(bool active);
+	bool IsVisible() const;
+	void SetVisibility(bool active);
 
 	GameObject* GetParent();
 	GameObject* GetChild(uint i);
