@@ -12,6 +12,7 @@
 
 CompCamera::CompCamera(GameObject* parent) : Components(parent)
 {
+	if(gameObject)
 	gameObject->SetName("Camera");
 	frustum.type = math::PerspectiveFrustum;
 
@@ -86,6 +87,28 @@ void CompCamera::SetAspectRatio(float ratio)
 	frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * ratio);
 	projection_changed = true;
 	aspect_ratio = ratio;
+}
+
+void CompCamera::SetNearPlane(float near_plane) 
+{
+
+	if (near_plane >= frustum.farPlaneDistance)
+		near_plane = frustum.farPlaneDistance - 1.0f;
+
+	if (near_plane < 0.0f)
+		near_plane = 0.1f;
+
+	frustum.nearPlaneDistance = near_plane;
+}
+
+
+void CompCamera::SetFarPlane(float far_plane) 
+{
+
+	if (far_plane <= frustum.nearPlaneDistance)
+		far_plane = frustum.nearPlaneDistance + 1.0f;
+
+	frustum.farPlaneDistance = far_plane;
 }
 
 void CompCamera::DrawCamera() 

@@ -9,6 +9,11 @@
 
 ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
+	editor_camera = new CompCamera(nullptr);
+	editor_camera->SetNearPlane(0.6f);
+	editor_camera->SetFarPlane(512.0f);
+	curr_camera = editor_camera;
+
 	name = "Camera";
 
 	CalculateViewMatrix();
@@ -241,16 +246,17 @@ void ModuleCamera3D::CheckForMousePicking()
 	int mouse_pos_x = App->input->GetMouseX();
 	int mouse_pos_y = App->input->GetMouseY();
 	int scr_width, scr_height;
+
 	App->window->GetWinSize(scr_width, scr_height);
 
 	//Normalize 
 	float norm_x = -(1.0f - 2.0f * ((float)mouse_pos_x) / ((float)scr_width));
 	float norm_y = 1.0f - (2.0f * ((float)mouse_pos_y) / ((float)scr_height));
 
-	LineSegment picking = curr_camera->frustum.UnProjectLineSegment(norm_x, norm_y);
+	LineSegment picking = editor_camera->frustum.UnProjectLineSegment(norm_x, norm_y);
 
 	//Quadtree picking static intersected objects only looking in the TreeNode 
-	//App->scene_intro->quadtree->Intersect(intersected_objs, picking);
+	App->scene_intro->quadtree->Intersect(intersected_objs, picking);
 
 	//Get the AABB intersection of the dynamic objects
 	GameObject* root_obj = App->scene_intro->GetRootGameObject();

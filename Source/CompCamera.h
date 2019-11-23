@@ -18,6 +18,8 @@ public:
 	void Update();
 	void SetAspectRatio(float ratio);
 	void Draw();
+	void SetNearPlane(float near_plane);
+	void SetFarPlane(float far_plane);
 	void DrawCamera();
 	void Transform();
 
