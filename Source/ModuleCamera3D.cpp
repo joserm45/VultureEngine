@@ -1,6 +1,9 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleCamera3D.h"
+#include "CompCamera.h"
+#include "CompMesh.h"
+#include "Quadtree.h"
 
 #include "MathGeoLib\include\Math\MathAll.h"
 
@@ -69,6 +72,11 @@ update_status ModuleCamera3D::Update(float dt)
 
 		Position += newPos;
 		Reference += newPos;
+
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN) {
+			if (!App->imgui->IsMouseHoveringWindow()) //If any ImGui window is being pressed, don't check picking
+				CheckForMousePicking();
+		}
 
 		// Mouse motion ----------------
 
@@ -225,6 +233,64 @@ void ModuleCamera3D::Move(const vec3 &Movement)
 
 	CalculateViewMatrix();
 }
+void ModuleCamera3D::CheckForMousePicking()
+{
+	vector<GameObject*> intersected_objs;
+
+	//Get the screen coords and normalize it
+	int mouse_pos_x = App->input->GetMouseX();
+	int mouse_pos_y = App->input->GetMouseY();
+	int scr_width, scr_height;
+	App->window->GetWinSize(scr_width, scr_height);
+
+	//Normalize 
+	float norm_x = -(1.0f - 2.0f * ((float)mouse_pos_x) / ((float)scr_width));
+	float norm_y = 1.0f - (2.0f * ((float)mouse_pos_y) / ((float)scr_height));
+
+	LineSegment picking = curr_camera->frustum.UnProjectLineSegment(norm_x, norm_y);
+
+	//Quadtree picking static intersected objects only looking in the TreeNode 
+	//App->scene_intro->quadtree->Intersect(intersected_objs, picking);
+
+	//Get the AABB intersection of the dynamic objects
+	GameObject* root_obj = App->scene_intro->GetRootGameObject();
+	for (int i = 0; i < root_obj->GetNumChilds(); ++i)
+		AABBIntersect(picking, root_obj->childs[i], intersected_objs);
+
+	//We have the whole vector of intersections. Test which
+	GameObject* nearest_GO = nullptr;
+	GetAABBClosestObject(picking, intersected_objs, nearest_GO);
+
+	if (nearest_GO) { //If there's something to pick
+		if (nearest_GO->mesh->IsPrimitive()) //If the nearest GO AABB is a primitive automaticaly focus
+			App->scene_intro->FocusGameObject(nearest_GO, App->scene_intro->GetRootGameObject());
+		else
+		{
+			//Test the triangles of every mesh that isn't a primitive
+			if (InsidePicking(picking, intersected_objs, nearest_GO))
+				App->scene_intro->FocusGameObject(nearest_GO, App->scene_intro->GetRootGameObject());
+			else
+				int i = 0;
+				//App->scene_intro->UnfocusGameObjects();
+		}
+	}
+	else{}
+		//App->scene_intro->UnfocusGameObjects();
+
+}
+
+void ModuleCamera3D::GetAABBClosestObject(LineSegment ray, std::vector<GameObject*> intersected_objs, GameObject*& nearest)
+{
+	float min_dist = FLOAT_INF;
+
+	for (int i = 0; i < intersected_objs.size(); ++i) {
+		float hit_dist = intersected_objs[i]->BBox.Distance(ray.a);
+		if (hit_dist < min_dist) {
+			nearest = intersected_objs[i];
+			min_dist = hit_dist;
+		}
+	}
+}
 
 // -----------------------------------------------------------------
 float* ModuleCamera3D::GetViewMatrix()
@@ -232,11 +298,76 @@ float* ModuleCamera3D::GetViewMatrix()
 	return &ViewMatrix;
 }
 
+void ModuleCamera3D::AABBIntersect(LineSegment picking, GameObject* inters_GO, std::vector<GameObject*>& intersected_objs)
+{
+	//Look for AABB intersections. Look for all the intersected object and the closest object to the ray
+	if (inters_GO->BBox.IsFinite() && !inters_GO->IsStatic()) {
+		if (picking.Intersects(inters_GO->BBox))
+			intersected_objs.push_back(inters_GO);
+	}
+
+	for (int i = 0; i < inters_GO->GetNumChilds(); ++i)
+		AABBIntersect(picking, inters_GO->childs[i], intersected_objs);
+}
+
 // -----------------------------------------------------------------
 void ModuleCamera3D::CalculateViewMatrix()
 {
 	ViewMatrix = mat4x4(X.x, Y.x, Z.x, 0.0f, X.y, Y.y, Z.y, 0.0f, X.z, Y.z, Z.z, 0.0f, -dot(X, Position), -dot(Y, Position), -dot(Z, Position), 1.0f);
 	ViewMatrixInverse = inverse(ViewMatrix);
+}
+
+bool ModuleCamera3D::InsidePicking(LineSegment ray, vector<GameObject*> intersected_objs, GameObject*& nearest)
+{
+	bool ret = false;
+	//set far plane as first distance check
+	float nearest_distance = 10000.0f;
+	float min_hit_dist = FLOAT_INF;
+
+	for (int i = 0; i < intersected_objs.size(); ++i)
+	{
+
+		if (intersected_objs[i]->mesh->IsPrimitive()) //If we got a primitive don't check the triangles
+			continue;
+
+		//Pass ray to local coordinates
+		LineSegment local_ray = ray;
+		local_ray.Transform(intersected_objs[i]->GetGlobalMatrix().Inverted());
+		//static
+		//App->scene_intro->quadtree.CollectIntersections(collided, my_ray);
+
+		//check every mesh triangle
+		for (int i = 0; i < intersected_objs.size(); i++)
+		{
+			math::LineSegment local_ray = ray;
+			local_ray.Transform(intersected_objs[i]->GetGlobalMatrix().Inverted());
+
+			CompMesh* mesh = (CompMesh*)intersected_objs[i]->mesh;
+
+			for (int j = 0; j < mesh->mesh_info.num_index; j++)
+			{
+				math::Triangle triangle;
+
+				triangle.a = math::float3(mesh->mesh_info.vertex[j * 3], mesh->mesh_info.vertex[j * 3 + 1], mesh->mesh_info.vertex[j * 3 + 2]);
+				j++;
+				triangle.b = math::float3(mesh->mesh_info.vertex[j * 3], mesh->mesh_info.vertex[j * 3 + 1], mesh->mesh_info.vertex[j * 3 + 2]);
+				j++;
+				triangle.c = math::float3(mesh->mesh_info.vertex[j * 3], mesh->mesh_info.vertex[j * 3 + 1], mesh->mesh_info.vertex[j * 3 + 2]);
+
+				float distance = 10000.0f;
+				math::float3 hit_point;
+
+				if (local_ray.Intersects(triangle, &distance, &hit_point)) {
+					ret = true;
+					if (distance < min_hit_dist) {
+						nearest = intersected_objs[i];
+						min_hit_dist = distance;
+					}
+				}
+			}
+		}
+	}
+	return ret;
 }
 
 //FollowCamera

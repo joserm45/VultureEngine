@@ -24,7 +24,10 @@ void CompMesh::AssignMesh(char * path)
 
 bool CompMesh::IsPrimitive() const
 {
-	return false;
+	if (is_primitive == Primitive_None)
+		return false;
+
+	return true;
 }
 
 void CompMesh::Draw()

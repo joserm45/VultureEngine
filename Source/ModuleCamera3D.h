@@ -1,6 +1,7 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
+#include "Components.h"
 #include "glmath.h"
 
 #include "MathGeoLib\include\Math\float3.h"
@@ -23,7 +24,11 @@ public:
 	void LookAround(const math::float3& reference, float pitch, float yaw) const;
 	
 	void Move(const vec3 &Movement);
+	void CheckForMousePicking();
 	float* GetViewMatrix();
+
+	void AABBIntersect(LineSegment picking, GameObject* inters_GO, std::vector<GameObject*>& intersected_objs);
+	void GetAABBClosestObject(LineSegment ray, std::vector<GameObject*> intersected_objs, GameObject*& nearest);
 
 	//Follow a body
 	void SelectFollowItem(PhysBody3D* body, float min, float max, float height);
@@ -32,6 +37,7 @@ public:
 private:
 
 	void CalculateViewMatrix();
+	bool InsidePicking(LineSegment ray, std::vector<GameObject*> intersected_objs, GameObject*& nearest);
 
 public:
 	

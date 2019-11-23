@@ -64,12 +64,11 @@ void QuadtreeNode::Insert(GameObject * gameObject)
 
 void QuadtreeNode::Remove(GameObject * to_remove)
 {
-	std::list<GameObject*>::iterator it = std::find(objects.begin(), objects.end(), to_remove);
-
-	if (it != objects.end())
-	{
-		objects.erase(it);
-	}
+	for(std::vector<GameObject*>::const_iterator it = objects.begin(); it != objects.end(); ++it)
+		if (it != objects.end())
+		{
+			objects.erase(it);
+		}
 	if (!IsLeaf())
 	{
 		for (uint i = 0; i < 4; i++)
@@ -118,7 +117,7 @@ void QuadtreeNode::DistributeObjects()
 	GameObject* object = nullptr;
 
 	std::list<GameObject*>::iterator it;
-	for (it = objects.begin(); it != objects.end();)
+	for (std::vector<GameObject*>::const_iterator it = objects.begin(); it != objects.end(); ++it)
 	{
 		object = *it;
 		bool intersecting[4];

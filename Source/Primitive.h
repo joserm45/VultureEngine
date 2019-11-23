@@ -5,6 +5,7 @@
 
 enum PrimitiveTypes
 {
+	Primitive_None,
 	Primitive_Point,
 	Primitive_Line,
 	Primitive_Plane,

@@ -34,7 +34,6 @@ public:
 
 private:
 
-	math::Frustum frustum;
 	bool projection_changed = false;
 	float fov = 60.0f;
 	float aspect_ratio = 0.0f;
@@ -44,6 +43,7 @@ private:
 public:
 	bool camera_culling = false;
 	bool camer_active = false;
+	math::Frustum frustum;
 };
 
 #endif

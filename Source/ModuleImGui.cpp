@@ -136,6 +136,11 @@ void ModuleImGui::Draw()
 	}
 }
 
+bool ModuleImGui::IsMouseHoveringWindow()
+{
+	return ImGui::GetIO().WantCaptureMouse;
+}
+
 update_status ModuleImGui::HandleMainMenuBar()
 {
 	static bool quit = false;

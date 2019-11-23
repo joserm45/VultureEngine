@@ -33,8 +33,11 @@ public:
 	GameObject* CreateSpherePrimitive(int subdivisions);
 	GameObject* CreateGameObject(GameObject* gameobject);
 	GameObject* GetRootGameObject() const;
+
 	void FocusGameObject(GameObject* focused, GameObject* root);
+	void UnfocusGameObjects();
 	void SetMainCamera(CompCamera* cam);
+
 	CompCamera* GetMainCamera() const;
 	//Quadtree functions
 	void GenQuadtree();
@@ -53,6 +56,7 @@ public:
 	GameObject* scene_gameobject_pointer = nullptr;
 
 	std::vector<GameObject*> GO_list;
+	GameObject* focused_object = nullptr;
 
 public:
 

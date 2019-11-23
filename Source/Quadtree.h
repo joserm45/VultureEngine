@@ -38,6 +38,9 @@ public:
 
 	void DrawQuadtree();
 
+	template<typename TYPE>
+	inline void Intersect(std::vector<GameObject*>& objects, const TYPE& primitive);
+
 	template<typename Type>
 	inline void CollectIntersections(std::vector<GameObject*>& objects, Type & primitive);
 
@@ -46,7 +49,7 @@ public:
 	math::AABB bbox;
 	QuadtreeNode* parent = nullptr;
 	QuadtreeNode* childs[4]; 
-	std::list<GameObject*> objects;
+	std::vector<GameObject*> objects;
 
 	uint subdivisions = 0;
 };
@@ -65,6 +68,8 @@ public:
 	void Insert(GameObject* gameObject);
 	void DebugDraw();
 
+	template<typename TYPE>
+	inline void Intersect(std::vector<GameObject*>& objects, const TYPE& primitive);
 	template<typename Type>
 	inline void CollectIntersections(std::vector<GameObject*>& objects, Type & primitive);
 
@@ -74,12 +79,36 @@ public:
 	QuadtreeNode* root = nullptr;
 };
 
+template<typename TYPE>
+inline void Quadtree::Intersect(std::vector<GameObject*>& objects, const TYPE& primitive)
+{
+	if (root)
+		root->Intersect(objects, primitive);
+}
+
+template<typename TYPE>
+inline void QuadtreeNode::Intersect(std::vector<GameObject*>& objects, const TYPE& primitive)
+{
+	if (primitive.Intersects(bbox))
+	{
+		for (std::vector<GameObject*>::const_iterator it = this->objects.begin(); it != this->objects.end(); ++it)
+		{
+			if (std::find(objects.begin(), objects.end(), (*it)) == objects.end()) //Check that the element is not in the list
+				if (primitive.Intersects((*it)->BBox))
+					objects.push_back(*it);
+
+		}
+		for (int i = 0; i < 4; ++i)
+			if (childs[i] != nullptr) childs[i]->Intersect(objects, primitive);
+
+	}
+}
 template<typename Type>
 inline void QuadtreeNode::CollectIntersections(std::vector<GameObject*>& gameObjects, Type& primitive)
 {
 	if (primitive.Intersects(bbox))
 	{
-		for (std::list<GameObject*>::const_iterator it = objects.begin(); it != objects.end(); ++it)
+		for (std::vector<GameObject*>::const_iterator it = objects.begin(); it != objects.end(); ++it)
 		{
 			if (primitive.Intersects(*(*it)->bbox))
 				gameObjects.push_back(*it);

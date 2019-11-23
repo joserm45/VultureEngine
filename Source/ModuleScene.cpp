@@ -398,6 +398,13 @@ void ModuleScene::FocusGameObject(GameObject* focused, GameObject* root)
 	}
 }
 
+void ModuleScene::UnfocusGameObjects()
+{
+	if (focused_object)
+		focused_object->focused = false;
+	focused_object = nullptr;
+}
+
 void ModuleScene::SetMainCamera(CompCamera* cam)
 {
 	if (main_camera)

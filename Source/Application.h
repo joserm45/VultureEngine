@@ -35,6 +35,7 @@ public:
 	ModuleImGui* imgui = nullptr;
 	ModuleImport* importer = nullptr;
 	ModuleTimeEditor* time = nullptr;
+	GameObject* mesh = nullptr;
 
 	pcg32_random_t random_num;
 	//fps
