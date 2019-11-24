@@ -25,7 +25,7 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 
 	Position = vec3(0.0f, 0.0f, 5.0f);
 	Reference = vec3(0.0f, 0.0f, 0.0f);
-	Move({ 5.0f, 5.0f, 5.0f });
+	Move({ 45.0f, 45.0f, 5.0f });
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -56,35 +56,59 @@ update_status ModuleCamera3D::Update(float dt)
 	// Now we can make this movememnt frame rate independant!
 	if (following == nullptr)
 	{
-		vec3 newPos(0, 0, 0);
+		float3 newPos(0, 0, 0);
+
 		float speed = 8.0f * dt;
 		if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 			speed *= 2.0f;
 		
-		if (App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT) newPos.y += speed;
+		if (App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT)newPos.y += speed;
 
 		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT)
 		{
 			FocusInObject();
 		}
 
-		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed;
-		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += Z * speed;
+		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos += curr_camera->frustum.front * speed;
+		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos -= curr_camera->frustum.front *speed;
 
 
-		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed;
-		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
+		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= curr_camera->frustum.WorldRight() * speed;
+		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)newPos += curr_camera->frustum.WorldRight() * speed;
 
-		if (App->input->GetMouseZ()) newPos -= Z * App->input->GetMouseZ() * speed;
+		if (App->input->GetMouseZ()) newPos += curr_camera->frustum.front * speed * App->input->GetMouseZ();
 
-		Position += newPos;
-		Reference += newPos;
+		Move(newPos);
 
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN) {
 			if (!App->imgui->IsMouseHoveringWindow()) //If any ImGui window is being pressed, don't check picking
 				CheckForMousePicking();
 		}
+		// Quadtree
+		/*int dx = -App->input->GetMouseXMotion();
+		int dy = -App->input->GetMouseYMotion();
 
+		float Sensitivity = 0.25f;
+
+		if (dx != 0)
+		{
+			//Rotate arround the Y axis to rotate in the X coord axis
+			Quat quat = Quat::RotateY(dx*dt*Sensitivity);
+			curr_camera->frustum.up = quat.Mul(curr_camera->frustum.up).Normalized();
+			curr_camera->frustum.front = quat.Mul(curr_camera->frustum.front).Normalized();
+		}
+
+		if (dy != 0)
+		{
+			//Rotate arround the X local axis to rotate in the Y coord axis
+			Quat quat = Quat::RotateAxisAngle(curr_camera->frustum.WorldRight(), dy*dt*Sensitivity);
+			float3 up = quat.Mul(curr_camera->frustum.up).Normalized();
+			//Cap that you can be upside down in engine
+			if (up.y > 0.0f) {
+				curr_camera->frustum.up = up;
+				curr_camera->frustum.front = quat.Mul(curr_camera->frustum.front).Normalized();
+			}
+		}*/
 		// Mouse motion ----------------
 
 		if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
@@ -94,36 +118,28 @@ update_status ModuleCamera3D::Update(float dt)
 
 			float Sensitivity = 0.25f;
 
-			Position -= Reference;
-
 			if (dx != 0)
 			{
-				float DeltaX = (float)dx * Sensitivity;
-
-				X = rotate(X, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-				Y = rotate(Y, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-				Z = rotate(Z, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+				//Rotate arround the Y axis to rotate in the X coord axis
+				Quat quat = Quat::RotateY(dx*dt*Sensitivity);
+				curr_camera->frustum.up = quat.Mul(curr_camera->frustum.up).Normalized();
+				curr_camera->frustum.front = quat.Mul(curr_camera->frustum.front).Normalized();
 			}
 
 			if (dy != 0)
 			{
-				float DeltaY = (float)dy * Sensitivity;
-
-				Y = rotate(Y, DeltaY, X);
-				Z = rotate(Z, DeltaY, X);
-
-				if (Y.y < 0.0f)
+				//Rotate arround the X local axis to rotate in the Y coord axis
+				Quat quat = Quat::RotateAxisAngle(curr_camera->frustum.WorldRight(), dy*dt*Sensitivity);
+				float3 up = quat.Mul(curr_camera->frustum.up).Normalized();
+				//Cap that you can be upside down in engine
+				if (up.y > 0.0f) 
 				{
-					Z = vec3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
-					Y = cross(Z, X);
+					curr_camera->frustum.up = up;
+					curr_camera->frustum.front = quat.Mul(curr_camera->frustum.front).Normalized();
 				}
 			}
-
-			Position = Reference + Z * length(Position);
 		}
 	}
-	else
-		Follow();
 
 	if ((App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RALT) == KEY_REPEAT) &&
 		App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
@@ -190,7 +206,7 @@ void ModuleCamera3D::Look(const vec3 &Position, const vec3 &Reference, bool Rota
 void ModuleCamera3D::Look(const float3 &Position, const float3 &Reference)
 {
 
-	frustum.pos = Position;
+	curr_camera->frustum.pos = Position;
 	LookAt(Reference);
 
 }
@@ -209,11 +225,11 @@ void ModuleCamera3D::LookAt( const vec3 &Spot)
 
 void ModuleCamera3D::LookAt(const float3 &Spot)
 {
-	float3 dir = Spot - frustum.pos;
+	float3 dir = Spot - curr_camera->frustum.pos;
 	dir.Normalize();
-	float3x3 mat = float3x3::LookAt(frustum.front, dir, frustum.up, float3::unitY);
-	frustum.front = mat.MulDir(frustum.front).Normalized();
-	frustum.up = mat.MulDir(frustum.up).Normalized();
+	float3x3 mat = float3x3::LookAt(curr_camera->frustum.front, dir, curr_camera->frustum.up, float3::unitY);
+	curr_camera->frustum.front = mat.MulDir(curr_camera->frustum.front).Normalized();
+	curr_camera->frustum.up = mat.MulDir(curr_camera->frustum.up).Normalized();
 }
 
 void ModuleCamera3D::LookAt(const math::float3& reference, float radius) const
@@ -222,12 +238,12 @@ void ModuleCamera3D::LookAt(const math::float3& reference, float radius) const
 	math::float3 X = math::Cross(math::float3(0.0f, 1.0f, 0.0f), Z).Normalized(); // X is perpendicular to vectors Y and Z
 	math::float3 Y = math::Cross(Z, X); // Y is perpendicular to vectors Z and X
 
-	(float3)frustum.front = Z;
-	(float3)frustum.up = Y;
+	(float3)curr_camera->frustum.front = Z;
+	(float3)curr_camera->frustum.up = Y;
 
 	if (radius != 0.0f)
 	{
-		float distance = (frustum.pos - reference).Length();
+		float distance = (curr_camera->frustum.pos - reference).Length();
 		distance -= radius;
 
 		//frustum.Translate(frustum.front * distance);
@@ -268,6 +284,7 @@ void ModuleCamera3D::Move(const float3 &Movement)
 {
 	curr_camera->frustum.Translate(Movement);
 }
+
 void ModuleCamera3D::CheckForMousePicking()
 {
 	vector<GameObject*> intersected_objs;
