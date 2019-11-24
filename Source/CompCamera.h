@@ -3,6 +3,7 @@
 #include "Globals.h"
 #include "Components.h"
 #include "MathGeoLib/include/MathGeoLib.h"
+#include "MathGeoLib/include/Math/float4x4.h"
 
 enum Intersection {
 	INSIDE = 0,
@@ -29,7 +30,7 @@ public:
 
 	void UpdateMatrix();
 	//camera view 
-	float* GetViewMatrix()const;
+	float* GetViewMatrix();
 	float* GetProjectionMatrix()const;
 	math::Frustum GetFrustum() const;
 	int CompCamera::InsideAABB(const AABB& bbox) const;
@@ -39,8 +40,8 @@ private:
 	bool projection_changed = false;
 	float fov = 60.0f;
 	float aspect_ratio = 0.0f;
-	math::float4x4 view_matrix = math::float4x4::zero;
-	math::float4x4 projection_matrix = math::float4x4::zero;
+	math::float4x4 view_matrix;
+	math::float4x4 projection_matrix;
 
 public:
 	bool camera_culling = false;

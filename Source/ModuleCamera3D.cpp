@@ -14,6 +14,7 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 	editor_camera->SetFarPlane(512.0f);
 	curr_camera = editor_camera;
 
+
 	name = "Camera";
 
 	CalculateViewMatrix();
@@ -24,6 +25,7 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 
 	Position = vec3(0.0f, 0.0f, 5.0f);
 	Reference = vec3(0.0f, 0.0f, 0.0f);
+	Move({ 5.0f, 5.0f, 5.0f });
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -63,7 +65,7 @@ update_status ModuleCamera3D::Update(float dt)
 
 		if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT)
 		{
-			LookAt(X);
+			FocusInObject();
 		}
 
 		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed;
@@ -185,6 +187,14 @@ void ModuleCamera3D::Look(const vec3 &Position, const vec3 &Reference, bool Rota
 	CalculateViewMatrix();
 }
 
+void ModuleCamera3D::Look(const float3 &Position, const float3 &Reference)
+{
+
+	frustum.pos = Position;
+	LookAt(Reference);
+
+}
+
 // -----------------------------------------------------------------
 void ModuleCamera3D::LookAt( const vec3 &Spot)
 {
@@ -195,6 +205,15 @@ void ModuleCamera3D::LookAt( const vec3 &Spot)
 	Y = cross(Z, X);
 
 	CalculateViewMatrix();
+}
+
+void ModuleCamera3D::LookAt(const float3 &Spot)
+{
+	float3 dir = Spot - frustum.pos;
+	dir.Normalize();
+	float3x3 mat = float3x3::LookAt(frustum.front, dir, frustum.up, float3::unitY);
+	frustum.front = mat.MulDir(frustum.front).Normalized();
+	frustum.up = mat.MulDir(frustum.up).Normalized();
 }
 
 void ModuleCamera3D::LookAt(const math::float3& reference, float radius) const
@@ -229,14 +248,25 @@ void ModuleCamera3D::LookAround(const math::float3 & reference, float pitch, flo
 	//frustum.pos = reference + (-frustum.front * distance);
 }
 
+void ModuleCamera3D::FocusInObject()
+{
+	GameObject* focus = App->scene_intro->GetFocusedGameObject();
+	if (focus != nullptr && focus->mesh != nullptr)
+		focus->CenterGameObject();
+}
 
 // -----------------------------------------------------------------
-void ModuleCamera3D::Move(const vec3 &Movement)
+/*void ModuleCamera3D::Move(const vec3 &Movement)
 {
 	Position += Movement;
 	Reference += Movement;
 
 	CalculateViewMatrix();
+}*/
+
+void ModuleCamera3D::Move(const float3 &Movement)
+{
+	curr_camera->frustum.Translate(Movement);
 }
 void ModuleCamera3D::CheckForMousePicking()
 {

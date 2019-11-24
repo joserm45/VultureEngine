@@ -4,7 +4,7 @@
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
+	   http://www.apache.org/licenses/LICENSE-2.0
 
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
@@ -12,9 +12,9 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-/** @file Frustum.h
-	@author Jukka Jylänki
-	@brief The Frustum geometry object. */
+   /** @file Frustum.h
+	   @author Jukka Jylänki
+	   @brief The Frustum geometry object. */
 #pragma once
 
 #include "../MathGeoLibFwd.h"
@@ -345,7 +345,7 @@ public:
 	/// Returns the tightest AABB that contains this Frustum.
 	/** This function computes the optimal minimum volume AABB that encloses this Frustum.
 		@note Since an AABB cannot generally represent a Frustum, this conversion is not exact, but the returned AABB
-			specifies a larger volume.			
+			specifies a larger volume.
 		@see MinimalEnclosingOBB(), ToPolyhedron(). */
 	AABB MinimalEnclosingAABB() const;
 

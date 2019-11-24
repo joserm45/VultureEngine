@@ -19,11 +19,15 @@ public:
 	bool CleanUp();
 
 	void Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference = false);
+	void Look(const float3 &Position, const float3 &Reference);
 	void LookAt(const vec3 &Spot);
 	void LookAt(const math::float3& reference, float radius) const;
+	void LookAt(const float3 &Spot);
 	void LookAround(const math::float3& reference, float pitch, float yaw) const;
 	
-	void Move(const vec3 &Movement);
+	void FocusInObject();
+	//void Move(const vec3 &Movement);
+	void Move(const float3 &Movement);
 	void CheckForMousePicking();
 	float* GetViewMatrix();
 

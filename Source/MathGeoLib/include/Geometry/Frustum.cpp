@@ -4,7 +4,7 @@
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
+	   http://www.apache.org/licenses/LICENSE-2.0
 
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
@@ -12,9 +12,9 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-/** @file Frustum.cpp
-	@author Jukka Jylänki
-	@brief Implementation for the Frustum geometry object. */
+   /** @file Frustum.cpp
+	   @author Jukka Jylänki
+	   @brief Implementation for the Frustum geometry object. */
 #include "Frustum.h"
 #include "AABB.h"
 #include "Circle.h"
@@ -177,8 +177,8 @@ float3 Frustum::NearPlanePos(float x, float y) const
 	{
 		float3 right = WorldRight();
 		return pos + front * nearPlaneDistance
-				   + x * orthographicWidth * 0.5f * right
-				   + y * orthographicHeight * 0.5f * up;
+			+ x * orthographicWidth * 0.5f * right
+			+ y * orthographicHeight * 0.5f * up;
 	}
 }
 
@@ -204,8 +204,8 @@ float3 Frustum::FarPlanePos(float x, float y) const
 	{
 		float3 right = WorldRight();
 		return pos + front * farPlaneDistance
-				   + x * orthographicWidth * 0.5f * right
-				   + y * orthographicHeight * 0.5f * up;
+			+ x * orthographicWidth * 0.5f * right
+			+ y * orthographicHeight * 0.5f * up;
 	}
 }
 
@@ -216,7 +216,7 @@ float3 Frustum::FarPlanePos(const float2 &point) const
 
 float2 Frustum::ViewportToScreenSpace(float x, float y, int screenWidth, int screenHeight)
 {
-	return float2((x + 1.f) * 0.5f * (screenWidth-1.f), (1.f - y) * 0.5f * (screenHeight-1.f));
+	return float2((x + 1.f) * 0.5f * (screenWidth - 1.f), (1.f - y) * 0.5f * (screenHeight - 1.f));
 }
 
 float2 Frustum::ViewportToScreenSpace(const float2 &point, int screenWidth, int screenHeight)
@@ -226,7 +226,7 @@ float2 Frustum::ViewportToScreenSpace(const float2 &point, int screenWidth, int 
 
 float2 Frustum::ScreenToViewportSpace(float x, float y, int screenWidth, int screenHeight)
 {
-	return float2(x * 2.f / (screenWidth-1.f) - 1.f, 1.f - y * 2.f / (screenHeight - 1.f));
+	return float2(x * 2.f / (screenWidth - 1.f) - 1.f, 1.f - y * 2.f / (screenHeight - 1.f));
 }
 
 float2 Frustum::ScreenToViewportSpace(const float2 &point, int screenWidth, int screenHeight)
@@ -301,7 +301,7 @@ bool Frustum::Contains(const Triangle &triangle) const
 
 bool Frustum::Contains(const Polygon &polygon) const
 {
-	for(int i = 0; i < polygon.NumVertices(); ++i)
+	for (int i = 0; i < polygon.NumVertices(); ++i)
 		if (!Contains(polygon.Vertex(i)))
 			return false;
 	return true;
@@ -309,7 +309,7 @@ bool Frustum::Contains(const Polygon &polygon) const
 
 bool Frustum::Contains(const AABB &aabb) const
 {
-	for(int i = 0; i < 8; ++i)
+	for (int i = 0; i < 8; ++i)
 		if (!Contains(aabb.CornerPoint(i)))
 			return false;
 
@@ -318,7 +318,7 @@ bool Frustum::Contains(const AABB &aabb) const
 
 bool Frustum::Contains(const OBB &obb) const
 {
-	for(int i = 0; i < 8; ++i)
+	for (int i = 0; i < 8; ++i)
 		if (!Contains(obb.CornerPoint(i)))
 			return false;
 
@@ -327,7 +327,7 @@ bool Frustum::Contains(const OBB &obb) const
 
 bool Frustum::Contains(const Frustum &frustum) const
 {
-	for(int i = 0; i < 8; ++i)
+	for (int i = 0; i < 8; ++i)
 		if (!Contains(frustum.CornerPoint(i)))
 			return false;
 
@@ -337,7 +337,7 @@ bool Frustum::Contains(const Frustum &frustum) const
 bool Frustum::Contains(const Polyhedron &polyhedron) const
 {
 	assume(polyhedron.IsClosed());
-	for(int i = 0; i < polyhedron.NumVertices(); ++i)
+	for (int i = 0; i < polyhedron.NumVertices(); ++i)
 		if (!Contains(polyhedron.Vertex(i)))
 			return false;
 
@@ -364,15 +364,15 @@ bool Frustum::IsFinite() const
 Plane Frustum::GetPlane(int faceIndex) const
 {
 	assume(0 <= faceIndex && faceIndex <= 5);
-	switch(faceIndex)
+	switch (faceIndex)
 	{
-		default: // For release builds where assume() is disabled, always return the first option if out-of-bounds.
-		case 0: return NearPlane();
-		case 1: return FarPlane();
-		case 2: return LeftPlane();
-		case 3: return RightPlane();
-		case 4: return TopPlane();
-		case 5: return BottomPlane();
+	default: // For release builds where assume() is disabled, always return the first option if out-of-bounds.
+	case 0: return NearPlane();
+	case 1: return FarPlane();
+	case 2: return LeftPlane();
+	case 3: return RightPlane();
+	case 4: return TopPlane();
+	case 5: return BottomPlane();
 	}
 }
 
@@ -393,7 +393,7 @@ float3 Frustum::UniformRandomPointInside(LCG &rng) const
 	else
 	{
 		OBB o = MinimalEnclosingOBB();
-		for(int numTries = 0; numTries < 1000; ++numTries)
+		for (int numTries = 0; numTries < 1000; ++numTries)
 		{
 			float3 pt = o.RandomPointInside(rng);
 			if (Contains(pt))
@@ -443,7 +443,7 @@ void Frustum::Transform(const float3x4 &transform)
 
 void Frustum::Transform(const float4x4 &transform)
 {
-	assume(transform.Row(3).Equals(0,0,0,1));
+	assume(transform.Row(3).Equals(0, 0, 0, 1));
 	Transform(transform.Float3x4Part());
 }
 
@@ -459,7 +459,7 @@ void Frustum::GetPlanes(Plane *outArray) const
 	if (!outArray)
 		return;
 #endif
-	for(int i = 0; i < 6; ++i)
+	for (int i = 0; i < 6; ++i)
 		outArray[i] = GetPlane(i);
 }
 
@@ -475,45 +475,45 @@ void Frustum::GetCornerPoints(float3 *outPointArray) const
 	if (!outPointArray)
 		return;
 #endif
-	for(int i = 0; i < 8; ++i)
+	for (int i = 0; i < 8; ++i)
 		outPointArray[i] = CornerPoint(i);
 }
 
 LineSegment Frustum::Edge(int edgeIndex) const
 {
 	assume(0 <= edgeIndex && edgeIndex <= 11);
-	switch(edgeIndex)
+	switch (edgeIndex)
 	{
-		default: // For release builds where assume() is disabled, return always the first option if out-of-bounds.
-		case 0: return LineSegment(CornerPoint(0), CornerPoint(1));
-		case 1: return LineSegment(CornerPoint(0), CornerPoint(2));
-		case 2: return LineSegment(CornerPoint(0), CornerPoint(4));
-		case 3: return LineSegment(CornerPoint(1), CornerPoint(3));
-		case 4: return LineSegment(CornerPoint(1), CornerPoint(5));
-		case 5: return LineSegment(CornerPoint(2), CornerPoint(3));
-		case 6: return LineSegment(CornerPoint(2), CornerPoint(6));
-		case 7: return LineSegment(CornerPoint(3), CornerPoint(7));
-		case 8: return LineSegment(CornerPoint(4), CornerPoint(5));
-		case 9: return LineSegment(CornerPoint(4), CornerPoint(6));
-		case 10: return LineSegment(CornerPoint(5), CornerPoint(7));
-		case 11: return LineSegment(CornerPoint(6), CornerPoint(7));
+	default: // For release builds where assume() is disabled, return always the first option if out-of-bounds.
+	case 0: return LineSegment(CornerPoint(0), CornerPoint(1));
+	case 1: return LineSegment(CornerPoint(0), CornerPoint(2));
+	case 2: return LineSegment(CornerPoint(0), CornerPoint(4));
+	case 3: return LineSegment(CornerPoint(1), CornerPoint(3));
+	case 4: return LineSegment(CornerPoint(1), CornerPoint(5));
+	case 5: return LineSegment(CornerPoint(2), CornerPoint(3));
+	case 6: return LineSegment(CornerPoint(2), CornerPoint(6));
+	case 7: return LineSegment(CornerPoint(3), CornerPoint(7));
+	case 8: return LineSegment(CornerPoint(4), CornerPoint(5));
+	case 9: return LineSegment(CornerPoint(4), CornerPoint(6));
+	case 10: return LineSegment(CornerPoint(5), CornerPoint(7));
+	case 11: return LineSegment(CornerPoint(6), CornerPoint(7));
 	}
 }
 
 float3 Frustum::CornerPoint(int cornerIndex) const
 {
 	assume(0 <= cornerIndex && cornerIndex <= 7);
-	switch(cornerIndex)
+	switch (cornerIndex)
 	{
-		default: // For release builds where assume() is disabled, return always the first option if out-of-bounds.
-		case 0: return NearPlanePos(-1, -1);
-		case 1: return FarPlanePos(-1, -1);
-		case 2: return NearPlanePos(-1, 1);
-		case 3: return FarPlanePos(-1, 1);
-		case 4: return NearPlanePos(1, -1);
-		case 5: return FarPlanePos(1, -1);
-		case 6: return NearPlanePos(1, 1);
-		case 7: return FarPlanePos(1, 1);
+	default: // For release builds where assume() is disabled, return always the first option if out-of-bounds.
+	case 0: return NearPlanePos(-1, -1);
+	case 1: return FarPlanePos(-1, -1);
+	case 2: return NearPlanePos(-1, 1);
+	case 3: return FarPlanePos(-1, 1);
+	case 4: return NearPlanePos(1, -1);
+	case 5: return FarPlanePos(1, -1);
+	case 6: return NearPlanePos(1, 1);
+	case 7: return FarPlanePos(1, 1);
 	}
 }
 
@@ -521,7 +521,7 @@ float3 Frustum::ExtremePoint(const float3 &direction) const
 {
 	float3 mostExtreme = float3::nan;
 	float mostExtremeDist = -FLT_MAX;
-	for(int i = 0; i < 8; ++i)
+	for (int i = 0; i < 8; ++i)
 	{
 		float3 pt = CornerPoint(i);
 		float d = Dot(direction, pt);
@@ -547,7 +547,7 @@ AABB Frustum::MinimalEnclosingAABB() const
 {
 	AABB aabb;
 	aabb.SetNegativeInfinity();
-	for(int i = 0; i < 8; ++i)
+	for (int i = 0; i < 8; ++i)
 		aabb.Enclose(CornerPoint(i));
 	return aabb;
 }
@@ -564,7 +564,7 @@ OBB Frustum::MinimalEnclosingOBB() const
 	obb.axis[2] = -front;
 	obb.axis[0] = Cross(obb.axis[1], obb.axis[2]);
 	obb.r = float3::zero;
-	for(int i = 0; i < 8; ++i)
+	for (int i = 0; i < 8; ++i)
 		obb.Enclose(CornerPoint(i));
 	return obb;
 }
@@ -576,7 +576,7 @@ Polyhedron Frustum::ToPolyhedron() const
 	Polyhedron p;
 	// Populate the corners of this Frustum.
 	// The will be in the order 0: ---, 1: --+, 2: -+-, 3: -++, 4: +--, 5: +-+, 6: ++-, 7: +++.
-	for(int i = 0; i < 8; ++i)
+	for (int i = 0; i < 8; ++i)
 		p.v.push_back(CornerPoint(i));
 
 	// Generate the 6 faces of this Frustum.
@@ -590,10 +590,10 @@ Polyhedron Frustum::ToPolyhedron() const
 		{ 1, 3, 7, 5 }, // Z+
 	};
 
-	for(int f = 0; f < 6; ++f)
+	for (int f = 0; f < 6; ++f)
 	{
 		Polyhedron::Face face;
-		for(int v = 0; v < 4; ++v)
+		for (int v = 0; v < 4; ++v)
 			face.v.push_back(faces[f][v]);
 		p.f.push_back(face);
 	}
@@ -622,7 +622,27 @@ bool Frustum::Intersects(const LineSegment &lineSegment) const
 bool Frustum::Intersects(const AABB &aabb) const
 {
 	///@todo This is a naive test. Implement a faster version.
-	return this->ToPolyhedron().Intersects(aabb);
+	//return this->ToPolyhedron().Intersects(aabb);
+
+	math::float3 vCorner[8];
+	aabb.GetCornerPoints(vCorner);
+
+	math::Plane m_plane[6];
+	GetPlanes(m_plane);
+
+	for (int p = 0; p < 6; ++p) {
+		int iInCount = 8;
+		for (int i = 0; i < 8; ++i) {
+
+			if (m_plane[p].IsOnPositiveSide(vCorner[i])) {
+				--iInCount;
+			}
+		}
+		if (iInCount == 0)
+			return false;
+	}
+
+	return true;
 }
 
 bool Frustum::Intersects(const OBB &obb) const
@@ -747,3 +767,4 @@ Frustum operator *(const Quat &transform, const Frustum &frustum)
 }
 
 MATH_END_NAMESPACE
+

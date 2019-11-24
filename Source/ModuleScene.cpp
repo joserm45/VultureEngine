@@ -358,7 +358,12 @@ void ModuleScene::Draw()
 void ModuleScene::DebugDraw()
 {
 	glDisable(GL_LIGHTING);
+	//Draw bounding BBox
+	for (uint i = 0; i < scene_root_gameobject->GetNumChilds(); i++) {
+		DrawAABBRecursive(scene_root_gameobject->GetChild(i));
+	}
 
+	//Draw quadtree
 	if (draw_quadtree)
 		quadtree->DebugDraw();
 
@@ -377,6 +382,15 @@ GameObject* ModuleScene::GetRootGameObject() const
 	return scene_root_gameobject;
 }
 
+void ModuleScene::DrawAABBRecursive(GameObject * go)
+{
+	if (go == focused_object || draw_GO_AABBs)
+		go->DrawBBox();
+
+	for (uint i = 0; i < go->GetNumChilds(); i++)
+		DrawAABBRecursive(go->GetChild(i));
+}
+
 void ModuleScene::FocusGameObject(GameObject* focused, GameObject* root) 
 {
 
@@ -386,6 +400,7 @@ void ModuleScene::FocusGameObject(GameObject* focused, GameObject* root)
 
 			if ((*it) == focused) {
 				(*it)->focused = true;
+				focused_object = (*it);
 				LOG("%c focused", (*it)->GetName());
 			}
 			else {
@@ -396,6 +411,11 @@ void ModuleScene::FocusGameObject(GameObject* focused, GameObject* root)
 			focused_GO = focused;
 		}
 	}
+}
+
+GameObject* ModuleScene::GetFocusedGameObject() const {
+
+	return focused_object;
 }
 
 void ModuleScene::UnfocusGameObjects()

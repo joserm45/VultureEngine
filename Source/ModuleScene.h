@@ -34,7 +34,9 @@ public:
 	GameObject* CreateGameObject(GameObject* gameobject);
 	GameObject* GetRootGameObject() const;
 
+	void DrawAABBRecursive(GameObject * go);
 	void FocusGameObject(GameObject* focused, GameObject* root);
+	GameObject* GetFocusedGameObject() const;
 	void UnfocusGameObjects();
 	void SetMainCamera(CompCamera* cam);
 
@@ -69,7 +71,7 @@ public:
 	CompCamera* main_camera = nullptr;
 	CompCamera* active_camera = nullptr;
 
-
+	bool draw_GO_AABBs = false;
 
 	std::vector<GameObject*> statics_game_objects;
 

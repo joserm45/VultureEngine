@@ -41,11 +41,12 @@ public:
 
 	//transform
 	math::float4x4& GetLocalMatrix();
+
 	math::float4x4 GetGlobalMatrix();
 	void SetPosition(float3 position);
 	void SetRotation(float3 rotation);
 	void SetScale(float3 scale);
-
+	void CenterGameObject() const;
 	void CreateBBox();
 	void DrawBBox();
 	void UpdateBoundingBox();

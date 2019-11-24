@@ -4,7 +4,7 @@
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
+	   http://www.apache.org/licenses/LICENSE-2.0
 
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
@@ -12,9 +12,9 @@
    See the License for the specific language governing permissions and
    limitations under the License. */
 
-/** @file float4x4.h
-	@author Jukka Jylänki
-	@brief A 4-by-4 matrix for affine and perspective projection operations in 3D space. */
+   /** @file float4x4.h
+	   @author Jukka Jylänki
+	   @brief A 4-by-4 matrix for affine and perspective projection operations in 3D space. */
 #pragma once
 
 #include "../MathBuildConfig.h"
@@ -66,7 +66,7 @@ MATH_BEGIN_NAMESPACE
 	There the elements for a single column of the matrix hold successive memory addresses.
 	This is exactly opposite from the standard C++ multidimensional arrays, since if you have e.g.
 	int v[10][10], then v[0][9] comes in memory right before v[1][0]. ( [0][0], [0][1], [0][2], ... [1][0], [1][1], ...) */
-class ALIGN_MAT float4x4
+	class ALIGN_MAT float4x4
 {
 public:
 	/// Specifies the height of this matrix.
@@ -122,9 +122,9 @@ public:
 	/// The elements are specified in row-major format, i.e. the first row first followed by the second and third row.
 	/// E.g. The element _10 denotes the scalar at second (index 1) row, first (index 0) column.
 	float4x4(float _00, float _01, float _02, float _03,
-			 float _10, float _11, float _12, float _13,
-			 float _20, float _21, float _22, float _23,
-			 float _30, float _31, float _32, float _33);
+		float _10, float _11, float _12, float _13,
+		float _20, float _21, float _22, float _23,
+		float _30, float _31, float _32, float _33);
 
 	/// Constructs this float4x4 to represent the same transformation as the given float3x3.
 	/** This function expands the last row and column of this matrix with the elements from the identity matrix. */
@@ -201,15 +201,15 @@ public:
 	/** This function rotates the sourceDirection vector to coincide with the targetDirection vector, and then
 			rotates sourceDirection2 (which was transformed by 1.) to targetDirection2, but keeping the constraint that
 			sourceDirection must look at targetDirection. */
-	/** @param sourceDirection The first 'from' direction. This vector must be normalized.
-		@param targetDirection The first 'to' direction. This vector must be normalized.
-		@param sourceDirection2 The second 'from' direction. This vector must be normalized.
-		@param targetDirection2 The second 'to' direction. This vector must be normalized.
-		@param centerPoint If specified, rotation is performed using this point as the coordinate space origin.
-		@return The returned matrix maps sourceDirection to targetDirection. Additionally, the returned matrix
-			rotates sourceDirection2 to point towards targetDirection2 as closely as possible, under the previous constraint.
-			The returned matrix is a rotation matrix, i.e. it is orthonormal with a determinant of +1, and optionally
-			has a translation component if the rotation is not performed w.r.t. the coordinate system origin. */
+			/** @param sourceDirection The first 'from' direction. This vector must be normalized.
+				@param targetDirection The first 'to' direction. This vector must be normalized.
+				@param sourceDirection2 The second 'from' direction. This vector must be normalized.
+				@param targetDirection2 The second 'to' direction. This vector must be normalized.
+				@param centerPoint If specified, rotation is performed using this point as the coordinate space origin.
+				@return The returned matrix maps sourceDirection to targetDirection. Additionally, the returned matrix
+					rotates sourceDirection2 to point towards targetDirection2 as closely as possible, under the previous constraint.
+					The returned matrix is a rotation matrix, i.e. it is orthonormal with a determinant of +1, and optionally
+					has a translation component if the rotation is not performed w.r.t. the coordinate system origin. */
 	static float4x4 RotateFromTo(const float3 &sourceDirection, const float3 &targetDirection,
 		const float3 &sourceDirection2, const float3 &targetDirection2, const float3 &centerPoint);
 	static float4x4 RotateFromTo(const float3 &sourceDirection, const float3 &targetDirection,
@@ -260,7 +260,7 @@ public:
 	/// Creates a new float4x4 that scales points along the given axis.
 	/** @param axis A normalized direction vector that specifies the direction of scaling.
 		@param scalingFactor The amount of scaling to apply along the specified axis. */
-	/** @param scaleCenter If specified, this point will be used as the origin for the scale operation. */
+		/** @param scaleCenter If specified, this point will be used as the origin for the scale operation. */
 	static float4x4 ScaleAlongAxis(const float3 &axis, float scalingFactor, const float3 &scaleCenter);
 	static float4x4 ScaleAlongAxis(const float3 &axis, float scalingFactor);
 
@@ -450,9 +450,9 @@ public:
 
 	/// Sets all values of this matrix.
 	void Set(float _00, float _01, float _02, float _03,
-			 float _10, float _11, float _12, float _13,
-			 float _20, float _21, float _22, float _23,
-			 float _30, float _31, float _32, float _33);
+		float _10, float _11, float _12, float _13,
+		float _20, float _21, float _22, float _23,
+		float _30, float _31, float _32, float _33);
 
 	/// Sets this to be a copy of the matrix rhs.
 	void Set(const float4x4 &rhs);
@@ -578,7 +578,7 @@ public:
 			for any 3D object (camera or not). The view space is the local space of the camera, so this function returns the mapping
 			view->world. In GLM, the LookAt function is tied to cameras only, and it returns the inverse mapping world->view. */
 	static float4x4 LookAt(const float3 &eyePos, const float3 &targetPos, const float3 &localForward,
-	                       const float3 &localUp, const float3 &worldUp);
+		const float3 &localUp, const float3 &worldUp);
 
 	/// Sets this float4x4 to represent the same transformation as the given float3x3.
 	/// @note The remaining entries of this matrix are set to identity.
@@ -905,7 +905,7 @@ public:
 #endif
 
 #ifdef MATH_QT_INTEROP
-	float4x4(const QMatrix4x4 &m) { Set(m(0,0), m(0,1), m(0,2), m(0,3), m(1,0), m(1,1), m(1,2), m(1,3), m(2,0), m(2,1), m(2,2), m(2,3), m(3,0), m(3,1), m(3,2), m(3,3)); }
+	float4x4(const QMatrix4x4 &m) { Set(m(0, 0), m(0, 1), m(0, 2), m(0, 3), m(1, 0), m(1, 1), m(1, 2), m(1, 3), m(2, 0), m(2, 1), m(2, 2), m(2, 3), m(3, 0), m(3, 1), m(3, 2), m(3, 3)); }
 	operator QMatrix4x4() const { return QMatrix4x4(v[0][0], v[0][1], v[0][2], v[0][3], v[1][0], v[1][1], v[1][2], v[1][3], v[2][0], v[2][1], v[2][2], v[2][3], v[3][0], v[3][1], v[3][2], v[3][3]); }
 	operator QString() const { return toString(); }
 	QString toString() const { return ToString2().c_str(); }

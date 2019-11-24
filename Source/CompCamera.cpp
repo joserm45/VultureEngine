@@ -182,13 +182,16 @@ void CompCamera::UpdateMatrix()
 }
 
 
-float * CompCamera::GetProjectionMatrix() const
+float* CompCamera::GetProjectionMatrix() const
 {
 	return (float*)projection_matrix.v;
 }
 
-float * CompCamera::GetViewMatrix() const
+float* CompCamera::GetViewMatrix() 
 {
+	view_matrix = frustum.ViewMatrix();
+	view_matrix.Transpose();
+
 	return (float*)view_matrix.v;
 }
 

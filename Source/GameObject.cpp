@@ -281,9 +281,24 @@ void GameObject::SetRotation(float3 rotation)
 void GameObject::SetScale(float3 scale)
 {
 	transform->scale = scale;
-	for (uint i = 0; i < childs.size(); ++i) {
+	for (uint i = 0; i < childs.size(); ++i) 
+	{
 		childs[i]->transform->scale = scale;
 	}
+}
+
+void GameObject::CenterGameObject() const 
+{
+
+	float3 dir_vector = -transform->GetGlobalPos() + App->camera->editor_camera->frustum.pos;
+	dir_vector.Normalize();
+
+	float rad = BBox.MinimalEnclosingSphere().r;
+	float dist = math::Abs(App->camera->editor_camera->frustum.orthographicWidth / App->camera->editor_camera->frustum.orthographicHeight * rad / math::Sin(App->camera->editor_camera->frustum.verticalFov / 2));
+
+
+	App->camera->Look(BBox.Centroid() + dir_vector * dist, BBox.Centroid());
+
 }
 
 
