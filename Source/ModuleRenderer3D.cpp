@@ -154,7 +154,8 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	UpdateGameObjectMatrix(App->scene_intro->GetRootGameObject());
 
 	// light 0 on cam pos
-	lights[0].SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
+	float3 cam_pos = App->camera->curr_camera->frustum.pos;
+	lights[0].SetPos(cam_pos.x, cam_pos.y, cam_pos.z);
 
 	for(uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();

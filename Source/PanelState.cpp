@@ -40,13 +40,16 @@ void PanelState::Draw()
 	ImGui::SetCursorPos({ (float)(w / 2 - 35), (float)(h / 3) });
 
 	//Play/Stop
-	if (ImGui::Button(play, { 65, 40 })) {
-		if (engine_state != ENGINE_STATE_EDITOR) {
+	if (ImGui::Button(play, { 65, 40 })) 
+	{
+		if (engine_state != ENGINE_STATE_EDITOR) 
+		{
 			App->Stop();
 			play = "Play";
 			pause = "Pause";
 		}
-		else {
+		else 
+		{
 			if (App->Play())
 				play = "Stop";
 		}
@@ -56,7 +59,7 @@ void PanelState::Draw()
 	ImGui::SetCursorPos({ (float)(w / 2 + 35), (float)(h / 3) });
 	if (ImGui::Button(pause, { 65, 40 })) {
 		if (engine_state == ENGINE_STATE_PLAY)
-			pause = "Unpaused";
+			pause = "Resume";
 		else if (engine_state == ENGINE_STATE_PAUSE)
 			pause = "Pause";
 

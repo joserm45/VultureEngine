@@ -15,7 +15,7 @@ Application::Application()
 	camera = new ModuleCamera3D(this);
 	imgui = new ModuleImGui(this);
 	importer = new ModuleImport(this);
-
+	time = new ModuleTimeEditor(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -25,7 +25,7 @@ Application::Application()
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
-	
+	AddModule(time);
 
 	
 	// Scenes
@@ -111,6 +111,16 @@ void Application::PrepareUpdate()
 	dt = frame_time.ReadSec();
 
 	frame_time.Start();
+
+	switch (state) 
+	{
+	case ENGINE_STATE_EDITOR:
+		current_dt = dt;
+		break;
+	case ENGINE_STATE_PLAY:
+	case ENGINE_STATE_PAUSE:
+		current_dt = time->GetGamedt();
+	}
 }
 
 
@@ -140,7 +150,7 @@ update_status Application::Update()
 	
 	while(item != list_modules.end() && ret == UPDATE_CONTINUE)
 	{
-		ret = (*item)->PreUpdate(dt);
+		ret = (*item)->PreUpdate(current_dt);
 		item++;
 	}
 
@@ -148,7 +158,7 @@ update_status Application::Update()
 
 	while(item != list_modules.end() && ret == UPDATE_CONTINUE)
 	{
-		ret = (*item)->Update(dt);
+		ret = (*item)->Update(current_dt);
 		item++;
 	}
 
@@ -156,7 +166,7 @@ update_status Application::Update()
 
 	while(item != list_modules.end() && ret == UPDATE_CONTINUE)
 	{
-		ret = (*item)->PostUpdate(dt);
+		ret = (*item)->PostUpdate(current_dt);
 		item++;
 	}
 
@@ -349,7 +359,7 @@ float Application::GetDt() const
 
 void Application::SetState(EngineState state)
 {
-	state = state;
+	this->state = state;
 }
 
 EngineState Application::GetState() const
@@ -359,9 +369,11 @@ EngineState Application::GetState() const
 
 bool Application::Play()
 {
-	switch (state) {
+	switch (state) 
+	{
 	case ENGINE_STATE_EDITOR:
-		if (scene_intro->GetMainCamera() != nullptr) {
+		if (scene_intro->GetMainCamera() != nullptr) 
+		{
 			//Change camera view
 			camera->curr_camera = scene_intro->GetMainCamera();
 			renderer3D->RecalculateProjMat();
@@ -384,10 +396,10 @@ bool Application::Play()
 void Application::Pause()
 {
 	switch (state) {
-	case ENGINE_STATE_PAUSE:
+	case ENGINE_STATE_PLAY:
 		SetState(ENGINE_STATE_PAUSE);
 		break;
-	case  ENGINE_STATE_PLAY:
+	case  ENGINE_STATE_PAUSE:
 		SetState(ENGINE_STATE_PLAY);
 		break;
 	}

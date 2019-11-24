@@ -50,6 +50,7 @@ public:
 	uint				frames = 0;
 	uint				framerete_cap = 60;
 	float				framerete_ms = 0;
+	float				current_dt;
 	float				dt = 0;
 	int					argc = 0;
 	char**				args;

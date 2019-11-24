@@ -121,7 +121,7 @@ GameObject * ModuleScene::CreateCamera(bool is_main_camera)
 {
 	camera = new GameObject(scene_root_gameobject);
 	camera->CreateComponent(CAMERA,0,NULL);
-	camera->SetName("Camera");
+	camera->SetName("CameraLUL");
 
 	if (is_main_camera)
 		SetMainCamera(camera->camera);
