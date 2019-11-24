@@ -376,7 +376,7 @@ bool Application::Play()
 		{
 			//Change camera view
 			camera->curr_camera = scene_intro->GetMainCamera();
-			renderer3D->RecalculateProjMat();
+			//renderer3D->RecalculateProjMat();
 
 			scene_intro->rebuild_quadtree = true;
 
@@ -414,7 +414,7 @@ void Application::Stop()
 
 		//Change camera view
 		camera->curr_camera = App->camera->editor_camera;
-		renderer3D->RecalculateProjMat();
+		//renderer3D->RecalculateProjMat();
 
 		SetState(ENGINE_STATE_EDITOR);
 
