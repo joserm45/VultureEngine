@@ -22,6 +22,27 @@ Download the .zip in the last release in https://github.com/joserm45/VultureEngi
 * Alt+Left Click: Rotate around Gameobject
 * Drag&Drop: Drag any model or texture to apply to scene
 
+## Optimization
+
+Quadtree: With Static Game Object check box
+Camera Culling: hide Game Objects that are not in Main Camera
+
+## Mouse Pickying
+
+With mouse we can select and did focus to Game Object on the scene
+
+## Engine State
+
+We can Start/Pause/Stop Engine and be the main camera
+
+## Bounding Box
+
+We use AABB to encapsulate meshes and discarded using frustum culling in editor mode
+
+## Resizable
+
+All panels can resizable if rendering window changes
+
 ## Github Repository
 
 https://github.com/joserm45/VultureEngine
