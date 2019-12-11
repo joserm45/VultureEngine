@@ -2,6 +2,7 @@
 #include "Globals.h"
 #include "ModuleImport.h"
 #include "CompMesh.h"
+#include "CompTransform.h"
 
 #include "glew\include\GL\glew.h"
 #include "SDL\include\SDL_opengl.h"
@@ -56,7 +57,15 @@ bool ModuleImport::Start()
 
 	//LoadMesh("Assets/WoodenTower/woodenwatchtower2.FBX");
 	//LoadMesh("Assets/Rifle/KSR-29 sniper rifle new_fbx_7.4_binary.FBX");
-	LoadMesh("Assets/BakerHouse.FBX");
+	//LoadMesh("Assets/BakerHouse.FBX");
+	LoadMesh("Assets/scene.DAE");
+	//LoadMesh("Assets/Street environment_V01.FBX");
+	GameObject *street = App->scene_intro->scene_root_gameobject->childs[1];
+	street->SetName("Street Scene");
+	//street->SetRotation(float3(-45, 0, 0));
+	//street->childs[0]->SetPosition(float3(0, 0, 45));
+	//street->childs[0]->CreateComponent(MATERIAL, 0, "Assets/textures/Building_V01_C.PNG");
+
 	//LoadMesh(NULL, true, 1);
 
 
@@ -295,7 +304,7 @@ void ModuleImport::LoadChilds(const aiScene* scene, aiNode* node, GameObject* ga
 		
 		//game_object->CreateComponent(MATERIAL, 0, path);
 
-		std::string path_name = path;
+		std::string path_name = node->mName.C_Str();
 		std::string namedotfbx = path_name.substr(path_name.find_last_of("/\\") + 1);
 		std::string::size_type const p(namedotfbx.find_last_of('.'));
 		std::string name_fbx = namedotfbx.substr(0, p);;
@@ -316,10 +325,27 @@ void ModuleImport::LoadChilds(const aiScene* scene, aiNode* node, GameObject* ga
 			material->GetTexture(aiTextureType_DIFFUSE, 0, &path_material);
 		}
 
-	
+		//Transformations
+		aiVector3D position, scale;
+		aiQuaternion rotation;
+		node->mTransformation.Decompose(scale, rotation, position);
+		float3 pos(position.x, position.y, position.z);
+		float3 scale_f(scale.x, scale.y, scale.z);
+		Quat rotation_q(rotation.x, rotation.y, rotation.z, rotation.w);
+		//float3 rot(rotation.x, rotation.y, rotation.z);
+		float3 rot = rotation_q.ToEulerXYZ(); 
+		rot *= RADTODEG;
+
+
 		if (scene->mNumMeshes != 0)
 		{
 			last_GO = App->scene_intro->CreateGameObject(game_object);
+			if(path == "Assets/scene.DAE")
+			{
+				last_GO->SetPosition(pos);
+				last_GO->SetRotation(rot);
+				last_GO->SetScale(scale_f);
+			}
 			last_GO->CreateComponent(MESH, 0, path);
 			last_GO->CreateComponent(MATERIAL, 0, path_material.data);
 			last_GO->mesh->SetTexture(texture);
