@@ -8,6 +8,7 @@
 #include <vector>
 #include "MathGeoLib/include/MathGeoLib.h"
 #include "MathGeoLib/include/Geometry/OBB.h"
+#include "ShaderProgramManager.h"
 
 class CompTransform;
 class CompMaterial;
@@ -73,6 +74,11 @@ public:
 	CompMaterial* material = nullptr;
 	CompMesh* mesh = nullptr;
 	CompCamera* camera = nullptr;
+
+	ShaderProgram* shader_active = nullptr;
+	//ShaderProgramManager* shaders_manager = nullptr;
+	float shader_dt = 0;
+	uint DefaultTexture;
 };
 
 #endif

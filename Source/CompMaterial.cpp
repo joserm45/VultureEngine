@@ -53,6 +53,7 @@ void CompMaterial::Draw()
 		{
 			chess_texture = false;
 			water_shader = false;
+			own_shader = false;
 			App->importer->LoadTexture(path_copy);
 		}
 
@@ -60,6 +61,7 @@ void CompMaterial::Draw()
 		{
 			texture_active = false;
 			water_shader = false;
+			own_shader = false;
 			parent->LoadTextureSelected(1);
 		}
 
@@ -67,7 +69,19 @@ void CompMaterial::Draw()
 		{
 			texture_active = false;
 			chess_texture = false;
+			own_shader = false;
 			parent->LoadTextureSelected(2);
+		}
+		if (ImGui::Checkbox("Own Shader", &own_shader))
+		{
+			texture_active = false;
+			chess_texture = false;
+			water_shader = false;
+			if (ImGui::Button("Edit", ImVec2(100, 0)))
+			{
+
+			}
+			
 		}
 
 	}

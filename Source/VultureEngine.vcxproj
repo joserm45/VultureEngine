@@ -193,6 +193,7 @@
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="Quadtree.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="ShaderProgramManager.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
@@ -268,6 +269,7 @@
     <ClCompile Include="PCG\entropy.c" />
     <ClCompile Include="Primitive.cpp" />
     <ClCompile Include="Quadtree.cpp" />
+    <ClCompile Include="ShaderProgramManager.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>

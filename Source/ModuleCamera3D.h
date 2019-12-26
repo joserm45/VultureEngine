@@ -38,6 +38,9 @@ public:
 	void SelectFollowItem(PhysBody3D* body, float min, float max, float height);
 	void Follow();
 
+	math::float4x4 GetOpenGLViewMatrix();
+	math::float4x4 GetOpenGLProjectionMatrix();
+
 private:
 
 	void CalculateViewMatrix();

@@ -24,6 +24,7 @@
 #pragma comment (lib, "DevIL\\libx86\\ILU.lib")
 #pragma comment (lib, "DevIL\\libx86\\ILUT.lib")
 
+#include "ShaderProgramManager.h"
 
 
 
@@ -43,6 +44,7 @@ bool ModuleImport::Init()
 	struct aiLogStream stream;
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
+
 
 	return ret;
 }
@@ -347,7 +349,8 @@ void ModuleImport::LoadChilds(const aiScene* scene, aiNode* node, GameObject* ga
 				last_GO->SetScale(scale_f);
 			}
 			last_GO->CreateComponent(MESH, 0, path);
-			last_GO->CreateComponent(MATERIAL, 0, path_material.data);
+			if(material != nullptr)
+				last_GO->CreateComponent(MATERIAL, 0, path_material.data);
 			last_GO->mesh->SetTexture(texture);
 			last_GO->SetName(go_name);
 		}
@@ -398,7 +401,9 @@ void ModuleImport::LoadTexture(const char* path)
 		//FIND SELECTED GAMEOBJECT AND APPLY "->mesh->SetTexture(texture);" TO IT!!!!!!!
 		//SEE BELOW
 		//if(last_GO->focused)
-		last_GO->mesh->SetTexture(texture);
+
+		
+		//last_GO->mesh->SetTexture(texture);
 
 	}
 	else

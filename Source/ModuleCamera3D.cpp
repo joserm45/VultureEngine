@@ -452,3 +452,22 @@ void ModuleCamera3D::Follow()
 	Position -= correctionFactor * cam_to_target;
 }
 
+math::float4x4 ModuleCamera3D::GetOpenGLViewMatrix()
+{
+	static math::float4x4 m;
+
+	m = frustum.ViewMatrix();
+	m.Transpose();
+
+	return m;
+}
+
+math::float4x4 ModuleCamera3D::GetOpenGLProjectionMatrix()
+{
+	static math::float4x4 m;
+
+	m = frustum.ProjectionMatrix();
+	m.Transpose();
+
+	return m;
+}

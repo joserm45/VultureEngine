@@ -27,5 +27,7 @@ public:
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
 
+	ShaderProgramManager* shaders_manager = nullptr;
+
 	bool grid = true;
 };

@@ -20,12 +20,15 @@ public:
 	int tex_width = 0, tex_height = 0;
 	//void SetTexture(text_data tex);
 
-	//text_data text_info;
+	//text_data text_info;	
+	bool water_shader = false;
+	bool own_shader = false;
+
 private:
 
 	bool texture_active = true;
 	bool chess_texture = false;
-	bool water_shader = false;
+
 	const char* path_name;
 	
 	GameObject* parent = nullptr;
