@@ -33,7 +33,7 @@ bool ShaderProgramManager::LoadShaderObject(ShaderObject* object)
 
 	glShaderSource(object->id, 1, &object->data, NULL);
 	glCompileShader(object->id);
-	int success;
+	GLint success;
 	glGetShaderiv(object->id, GL_COMPILE_STATUS, &success);
 	if (success == GL_FALSE)
 	{
@@ -63,7 +63,7 @@ ShaderProgram* ShaderProgramManager::CreateShaderProgram()
 	}
 
 	glLinkProgram(programid);
-	int success;
+	GLint success;
 	glGetProgramiv(programid, GL_LINK_STATUS, &success);
 
 	for (int i = 0; i < objects.size(); i++)

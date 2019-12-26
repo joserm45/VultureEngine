@@ -59,7 +59,7 @@ public:
 	bool LoadShaderObject(ShaderObject* object);
 	bool UnloadShaderObject(ShaderObject* object);
 
-	ShaderProgram* CreateShaderProgram();
+	ShaderProgram * CreateShaderProgram();
 	ShaderProgram * CreateDefaultShaderProgram();
 	ShaderProgram * CreateWaterShaderProgram();
 

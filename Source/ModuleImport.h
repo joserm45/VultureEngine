@@ -61,6 +61,14 @@ struct text_data
 	uint height = 0;
 };
 
+enum wrap_mode
+{
+	REPEAT,
+	MIRRORED_REPEAT,
+	CLAMP_TO_EDGE,
+	CLAMP_TO_BORDER
+};
+
 class ModuleImport : public Module
 {
 public:
@@ -78,8 +86,9 @@ public:
 	void LoadTexture(const char* path);
 	void DrawMesh(bool is_parshape, mesh_data fbx);
 	void ClearMeshData();
+
 	void LoadChessTexture(GameObject* selected);
-	text_data LoadTextureData(ILuint id, uint w, uint h);
+	uint LoadTextureData(const char* name);
 	//void LoadParShape(uint i);
 	//void DrawParShape();
 
@@ -95,6 +104,11 @@ public:
 
 	//testing transformation
 	GameObject* last_GO = nullptr;
+
+	wrap_mode wrap = wrap_mode::REPEAT;
+	int wrap_mode = 0;
+	uint last_tex_width = 0;
+	uint last_tex_height = 0;
 };
 
 

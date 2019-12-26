@@ -415,6 +415,9 @@
     <ClInclude Include="ShaderProgramManager.h">
       <Filter>Sources</Filter>
     </ClInclude>
+    <ClInclude Include="Uniforms.h">
+      <Filter>Sources\Modules\Comp&amp;GO</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">

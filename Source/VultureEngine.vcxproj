@@ -195,6 +195,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="ShaderProgramManager.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="Uniforms.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />

@@ -52,7 +52,8 @@ bool ModuleImport::Init()
 
 bool ModuleImport::Start()
 {
-	App->imgui->AddLogToConsole("Loading Baker House");
+	//App->imgui->AddLogToConsole("Loading Baker House");
+	App->imgui->AddLogToConsole("Loading Street Scene");
 	bool ret = true;
 
 
@@ -528,6 +529,104 @@ void ModuleImport::LoadChessTexture(GameObject* selected)
 
 
 	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+uint ModuleImport::LoadTextureData(const char* name)
+{
+	std::string path = "Library/Shaders/";
+	path += name;
+	path += ".dds";
+
+
+	ILuint imageID;				// Create an image ID as a ULuint
+
+	GLuint textureID;			// Create a texture ID as a GLuint
+
+	ILboolean success;			
+
+	ILenum error;				
+
+	ilGenImages(1, &imageID); 		// Generate the image ID
+
+	ilBindImage(imageID); 			// Bind image
+
+	success = ilLoadImage(path.c_str()); 	// Load the image file
+
+									
+	if (success)
+	{
+
+		ILinfo ImageInfo;
+		iluGetImageInfo(&ImageInfo);
+
+		last_tex_width = ImageInfo.Width;
+		last_tex_height = ImageInfo.Height;
+
+		if (ImageInfo.Origin == IL_ORIGIN_UPPER_LEFT)
+		{
+			iluFlipImage();
+		}
+
+		// NOTE: If your image contains alpha channel you can replace IL_RGB with IL_RGBA
+		success = ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
+
+		if (!success)
+		{
+			error = ilGetError();
+			LOG("Image conversion failed - IL reports error: %s ", iluErrorString(error));
+			exit(-1);
+		}
+
+		// Generate a new texture
+		glGenTextures(1, &textureID);
+
+		// Bind the texture to a name
+		glBindTexture(GL_TEXTURE_2D, textureID);
+
+		// Set texture clamping method
+		switch (wrap)
+		{
+		case REPEAT:
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			break;
+		case MIRRORED_REPEAT:
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+			break;
+		case CLAMP_TO_EDGE:
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			break;
+		case CLAMP_TO_BORDER:
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+			break;
+		default:
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+			break;
+		}
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+		// Specify the texture specification
+		glTexImage2D(GL_TEXTURE_2D,	0, ilGetInteger(IL_IMAGE_FORMAT), ilGetInteger(IL_IMAGE_WIDTH),	ilGetInteger(IL_IMAGE_HEIGHT), 0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE, ilGetData());			
+
+	}
+	else // If we failed to open the image
+	{
+		error = ilGetError();
+		LOG("Image load failed - IL reports error: %s", iluErrorString(error));
+		return 0;
+	}
+
+	ilDeleteImages(1, &imageID); // Because we have already copied image data into texture data we can release memory used by image.
+
+	LOG("Texture creation successful.");
+
+	return textureID; // Return the GLuint to the texture so you can use it!
 }
 
 /*
