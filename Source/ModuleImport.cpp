@@ -486,7 +486,7 @@ void ModuleImport::ClearMeshData()
 	mesh_list.clear();
 }
 
-void ModuleImport::LoadChessTexture()
+void ModuleImport::LoadChessTexture(GameObject* selected)
 {
 	GLubyte chessImage[50][50][4];
 
@@ -519,7 +519,7 @@ void ModuleImport::LoadChessTexture()
 	//FIND SELECTED GAMEOBJECT AND APPLY "->mesh->SetTexture(texture);" TO IT!!!!!!!
 	//SEE BELOW
 	//if(last_GO->focused)
-	last_GO->mesh->SetTexture(texture);
+	selected->mesh->SetTexture(texture);
 
 
 	glBindTexture(GL_TEXTURE_2D, 0);

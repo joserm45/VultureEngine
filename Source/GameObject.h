@@ -51,6 +51,7 @@ public:
 	void DrawBBox();
 	void UpdateBoundingBox();
 	void ShowGizmos();
+	void LoadTextureSelected(int x);
 
 	math::AABB BBox;
 	math::OBB obb;

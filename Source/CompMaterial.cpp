@@ -7,6 +7,7 @@ CompMaterial::CompMaterial(GameObject * parent, const char* path)
 {
 	type = MATERIAL;
 	path_name = path;
+	this->parent = parent;
 
 	char* path_start = "Assets/";
 
@@ -51,13 +52,22 @@ void CompMaterial::Draw()
 		if (ImGui::Checkbox("Draw Texture", &texture_active))
 		{
 			chess_texture = false;
+			water_shader = false;
 			App->importer->LoadTexture(path_copy);
 		}
 
 		if (ImGui::Checkbox("Chess Texture", &chess_texture))
 		{
 			texture_active = false;
-			App->importer->LoadChessTexture();
+			water_shader = false;
+			parent->LoadTextureSelected(1);
+		}
+
+		if (ImGui::Checkbox("Water Shader", &water_shader))
+		{
+			texture_active = false;
+			chess_texture = false;
+			parent->LoadTextureSelected(2);
 		}
 
 	}

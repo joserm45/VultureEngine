@@ -78,7 +78,7 @@ public:
 	void LoadTexture(const char* path);
 	void DrawMesh(bool is_parshape, mesh_data fbx);
 	void ClearMeshData();
-	void LoadChessTexture();
+	void LoadChessTexture(GameObject* selected);
 	text_data LoadTextureData(ILuint id, uint w, uint h);
 	//void LoadParShape(uint i);
 	//void DrawParShape();

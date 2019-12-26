@@ -25,9 +25,10 @@ private:
 
 	bool texture_active = true;
 	bool chess_texture = false;
+	bool water_shader = false;
 	const char* path_name;
 	
-	
+	GameObject* parent = nullptr;
 
 };
 

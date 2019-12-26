@@ -403,6 +403,32 @@ void GameObject::Draw()
 		glBindTexture(GL_TEXTURE_2D, NULL);
 
 		glPopMatrix();
+
+		
+	}
+}
+
+void GameObject::LoadTextureSelected(int x)
+{
+	if (x == 1)
+	{
+		if (App->scene_intro->GetFocusedGameObject() == this)
+		{
+			if (material != NULL)
+			{
+				App->importer->LoadChessTexture(this);
+			}
+		}
+	}
+	if (x == 2)
+	{
+		if (App->scene_intro->GetFocusedGameObject() == this)
+		{
+			if (material != NULL)
+			{
+
+			}
+		}
 	}
 }
 
