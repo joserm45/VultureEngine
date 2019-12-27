@@ -15,6 +15,7 @@ public:
 	bool Init();
 	update_status PreUpdate(float dt);
 	update_status PostUpdate(float dt);
+	void UpdateShader(CompMesh*  );
 	bool CleanUp();
 
 	void OnResize(int width, int height);
@@ -33,4 +34,5 @@ public:
 
 	ShaderProgramManager* shaders_manager = nullptr;
 	uint defTexture;
+	float shaderDt = 0;
 };

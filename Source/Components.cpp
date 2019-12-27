@@ -28,3 +28,12 @@ GameObject* Components::GetGameObject() const
 {
 	return gameObject;
 }
+
+void Components::SetGameObject(GameObject* go)
+{
+	gameObject = go;
+}
+TYPECOMP Components::GetType() const
+{
+	return type;
+}

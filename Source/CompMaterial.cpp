@@ -1,5 +1,6 @@
-#include "CompMaterial.h"
+
 #include "CompMesh.h"
+#include "CompMaterial.h"
 #include "Imgui\imgui.h"
 #include "Application.h"
 
@@ -91,6 +92,13 @@ uint CompMaterial::GetTexId() const
 {
 	return tex_id;
 }
+
+ShaderProgram * CompMaterial::GetShader() const
+{
+	return shader;
+}
+
+
 
 
 //void CompMaterial::SetTexture(text_data tex)

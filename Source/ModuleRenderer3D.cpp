@@ -5,6 +5,9 @@
 #include "Quadtree.h"
 #include "CompCamera.h"
 #include "CompTransform.h"
+#include "Components.h"
+#include "CompMesh.h"
+#include "CompMaterial.h"
 
 #include "glew\include\GL\glew.h"
 #include "SDL\include\SDL_opengl.h"
@@ -218,8 +221,51 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	App->imgui->Draw();
 
 	SDL_GL_SwapWindow(App->window->window);
-	
+
 	return UPDATE_CONTINUE;
+}
+
+void ModuleRenderer3D::UpdateShader(CompMesh * object)
+{
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	ShaderProgram* shader_active = &shaders_manager->default_shader;
+	shader_active->UseProgram();
+	
+	if (object != nullptr)
+	{
+		CompMaterial* texture = (CompMaterial*)object->GetGameObject()->FindComponent(MATERIAL);
+		if (object->mesh_info.num_textcoord != 0 /*&& texture->IsAlphaTest()*/)
+			glEnable(GL_ALPHA_TEST);
+		//glAlphaFunc(GL_GREATER, texture->GetAlphaValue());
+		glBindTexture(GL_TEXTURE_2D, texture->tex_id);
+
+		if (texture->sample_shader)
+		{
+			shader_active = &shaders_manager->water_shader;
+			if (shader_active != nullptr)
+				shader_active->UseProgram();
+		}
+		else if (texture->own_shader)
+		{
+			shader_active = texture->GetShader();
+			if (shader_active != nullptr)
+				shader_active->UseProgram();
+		}
+
+		if (shader_active != nullptr)
+		{
+			glUniform1i(glGetUniformLocation(shader_active->id_shader_prog, "ourTexture"), 0);
+			glUniform1f(glGetUniformLocation(shader_active->id_shader_prog, "ftime"), shaderDt);
+		}
+
+	}
+	else
+	{
+		glBindTexture(GL_TEXTURE_2D, defTexture);
+		glUniform1i(glGetUniformLocation(shaders_manager->default_shader.id_shader_prog, "ourTexture"), 0);
+	}
 }
 
 // Called before quitting

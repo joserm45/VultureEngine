@@ -27,6 +27,8 @@ public:
 	void SetActive(bool active);
 
 	GameObject* GetGameObject() const;
+	void SetGameObject(GameObject* go);
+	TYPECOMP GetType() const;
 
 protected:
 

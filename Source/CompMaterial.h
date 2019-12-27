@@ -21,8 +21,11 @@ public:
 	//void SetTexture(text_data tex);
 
 	//text_data text_info;	
+	bool sample_shader = false;
 	bool water_shader = false;
 	bool own_shader = false;
+
+	ShaderProgram* GetShader() const;
 
 private:
 
@@ -33,6 +36,10 @@ private:
 	
 	GameObject* parent = nullptr;
 
+	//shaders
+	ShaderProgram* shader = nullptr;
+	bool combo_type = false;
+	int shaders_type = 2;
 };
 
 #endif

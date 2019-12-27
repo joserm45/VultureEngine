@@ -79,7 +79,9 @@ Components* GameObject::CreateComponent(TYPECOMP type, int num_mesh, const char*
 			if (transform == nullptr) 
 			{
 				transform = new CompTransform(this);
-				new_component = transform; 
+				new_component = transform;
+				//new_component.push_back(transform); 
+				//component->SetGameObject(this);
 			}
 			break;
 		
@@ -88,6 +90,8 @@ Components* GameObject::CreateComponent(TYPECOMP type, int num_mesh, const char*
 			{
 				material = new CompMaterial(this, path);
 				new_component = material;
+				//new_component.push_back(material);
+				//component->SetGameObject(this);
 			}
 			break;
 
@@ -96,6 +100,8 @@ Components* GameObject::CreateComponent(TYPECOMP type, int num_mesh, const char*
 			{
 				mesh = new CompMesh(this, path, num_mesh);
 				new_component = mesh;
+				//new_component.push_back(mesh);
+				//component->SetGameObject(this);
 				CreateBBox();
 			}
 			break;
@@ -103,8 +109,10 @@ Components* GameObject::CreateComponent(TYPECOMP type, int num_mesh, const char*
 		case CAMERA:
 			if (camera == nullptr) 
 			{
-				camera = new CompCamera(this);
 				new_component = camera;
+				camera = new CompCamera(this);
+				//new_component.push_back(camera);
+				//component->SetGameObject(this);
 			}
 			break;
 
@@ -540,6 +548,18 @@ void GameObject::LoadTextureSelected(int x)
 	}
 }
 
+Components *GameObject::FindComponent(TYPECOMP type) const
+{
+	for (int i = 0; i < new_component.size(); i++)
+	{
+		if (new_component[i]->GetType() == type)
+		{
+			return new_component[i];
+		}
+	}
+
+	return nullptr;;
+}
 void GameObject::ShowGizmos()
 {
 	ImGuizmo::Enable(true);

@@ -53,6 +53,7 @@ public:
 	void UpdateBoundingBox();
 	void ShowGizmos();
 	void LoadTextureSelected(int x);
+	Components* FindComponent(TYPECOMP type) const;
 
 	math::AABB BBox;
 	math::OBB obb;
@@ -69,6 +70,7 @@ public:
 	bool game_object_static = false;
 	bool focused = false;
 	std::vector<GameObject*> childs;
+	std::vector<Components*> new_component;
 
 	CompTransform* transform = nullptr;
 	CompMaterial* material = nullptr;
