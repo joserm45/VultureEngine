@@ -336,8 +336,8 @@ void ModuleImport::LoadChilds(const aiScene* scene, aiNode* node, GameObject* ga
 		float3 pos(position.x, position.y, position.z);
 		//float3 pos(position.x / 2, position.y / 2, position.z / 2);
 		float3 scale_f(scale.x, scale.y, scale.z);
+		//Quat rotation_q(rotation.x/2, rotation.y/2, rotation.z/2, rotation.w/2);
 		Quat rotation_q(rotation.x, rotation.y, rotation.z, rotation.w);
-		//float3 rot(rotation.x, rotation.y, rotation.z);
 		float3 rot = rotation_q.ToEulerXYZ(); 
 		rot *= RADTODEG;
 
@@ -349,7 +349,7 @@ void ModuleImport::LoadChilds(const aiScene* scene, aiNode* node, GameObject* ga
 			{
 				//last_GO->SetPosition(pos);
 				last_GO->SetPosition(pos/2);
-				last_GO->SetRotation(rot);
+				//last_GO->SetRotation(rot);
 				last_GO->SetScale(scale_f);
 			}
 			last_GO->CreateComponent(MESH, 0, path);
