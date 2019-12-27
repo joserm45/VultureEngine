@@ -262,8 +262,17 @@ math::float4x4& GameObject::GetLocalMatrix()
 }
 math::float4x4 GameObject::GetGlobalMatrix()
 {
+	//float4x4 local_matrix = GetLocalMatrix();
+	//local_matrix = transform->GetGlobalMatrix() * local_matrix;
+	//return local_matrix;
+	
 	float4x4 local_matrix = GetLocalMatrix();
-	//transform->GetGlobalMatrix() * local_matrix;
+	if (GetParent()->GetParent() != nullptr)
+	{
+		float4x4 global_matrix = float4x4::identity;
+		global_matrix = GetParent()->GetParent()->transform->GetGlobalMatrix();
+		return global_matrix * local_matrix;
+	}
 	return local_matrix;
 }
 void GameObject::SetPosition(float3 position)
@@ -410,7 +419,7 @@ void GameObject::Draw()
 		glPopMatrix();
 		
 
-
+		/*
 		if (App->scene_intro->GetFocusedGameObject() == this)
 		{
 			if (material != NULL)
@@ -503,6 +512,7 @@ void GameObject::Draw()
 				glUniform1i(glGetUniformLocation(App->renderer3D->shaders_manager->default_shader.id_shader_prog, "ourTexture"), 0);
 			}
 		}
+		*/
 
 
 

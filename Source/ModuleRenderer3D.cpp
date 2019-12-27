@@ -164,7 +164,7 @@ bool ModuleRenderer3D::Init()
 	//default shader
 	shaders_manager->default_shader = * shaders_manager->CreateDefaultShaderProgram();
 	shaders_manager->water_shader = * shaders_manager->CreateWaterShaderProgram();
-	defTexture = App->importer->LoadTextureData("white");
+	//defTexture = App->importer->LoadTextureData("white");
 	return ret;
 }
 

@@ -28,7 +28,7 @@ void CompTransform::Update()
 
 void CompTransform::UpdateMatrix() 
 {
-	local_matrix = math::float4x4::FromTRS(position, rotation, scale);
+	local_matrix = math::float4x4::FromTRS(position*2, rotation, scale);
 
 	last_global_matrix = global_matrix;
 
@@ -96,6 +96,7 @@ void CompTransform::SetScale(math::float3 scale) {
 
 math::float4x4 CompTransform::GetGlobalMatrix() const 
 {
+
 	return global_matrix;
 }
 
@@ -113,6 +114,7 @@ void CompTransform::Draw()
 		if(ImGui::DragFloat3("p", &position[0], 0.1f))
 		{
 			gameObject->SetPosition(position);
+			UpdateMatrix();
 		}
 
 		rotate = rotation.ToEulerXYZ() * RADTODEG;
@@ -120,6 +122,7 @@ void CompTransform::Draw()
 		ImGui::SameLine();
 		if (ImGui::DragFloat3("r", &rotate[0], 0.1f)) {
 			gameObject->SetRotation(rotate);
+			UpdateMatrix();
 		}
 
 		ImGui::Text("Scale   ");
@@ -127,6 +130,7 @@ void CompTransform::Draw()
 		if (ImGui::DragFloat3("s", &scale[0], 0.1f))
 		{
 			gameObject->SetScale(scale);
+			UpdateMatrix();
 		}
 	}
 }
