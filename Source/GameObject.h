@@ -50,6 +50,7 @@ public:
 	void CenterGameObject() const;
 	void CreateBBox();
 	void DrawBBox();
+	void DrawShaders();
 	void UpdateBoundingBox();
 	void ShowGizmos();
 	void LoadTextureSelected(int x);

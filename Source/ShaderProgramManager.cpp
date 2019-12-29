@@ -33,8 +33,10 @@ bool ShaderProgramManager::LoadShaderObject(ShaderObject* object)
 
 	glShaderSource(object->id, 1, &object->data, NULL);
 	glCompileShader(object->id);
+
 	GLint success;
 	glGetShaderiv(object->id, GL_COMPILE_STATUS, &success);
+
 	if (success == GL_FALSE)
 	{
 		char infoLog[512];
@@ -53,6 +55,33 @@ bool ShaderProgramManager::UnloadShaderObject(ShaderObject* object)
 	return true;
 }
 
+bool ShaderProgramManager::DeleteShaderProgram(GLuint & shaderProgram)
+{
+	bool ret = false;
+
+	if (glIsProgram(shaderProgram))
+	{
+		glDeleteProgram(shaderProgram);
+		shaderProgram = 0;
+		ret = true;
+	}
+
+	return ret;
+}
+bool ShaderProgramManager::DeleteShaderObject(GLuint& shaderObject)
+{
+	bool ret = false;
+
+	if (glIsShader(shaderObject))
+	{
+		glDeleteShader(shaderObject);
+		shaderObject = 0;
+		ret = true;
+	}
+
+	return ret;
+}
+
 ShaderProgram* ShaderProgramManager::CreateShaderProgram()
 {
 	GLuint programid = glCreateProgram();
@@ -63,13 +92,17 @@ ShaderProgram* ShaderProgramManager::CreateShaderProgram()
 	}
 
 	glLinkProgram(programid);
+	glValidateProgram(programid);
+
 	GLint success;
+
 	glGetProgramiv(programid, GL_LINK_STATUS, &success);
 
 	for (int i = 0; i < objects.size(); i++)
 	{
-		delete objects[i];
-		objects[i] = nullptr;
+		glDeleteShader(objects[i]->id);
+		//objects[i];
+		//objects[i] = nullptr;
 	}
 	objects.clear();
 

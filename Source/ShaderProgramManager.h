@@ -58,10 +58,14 @@ public:
 
 	bool LoadShaderObject(ShaderObject* object);
 	bool UnloadShaderObject(ShaderObject* object);
+	static bool DeleteShaderProgram(GLuint& shaderProgram);
+	static bool DeleteShaderObject(GLuint & shaderObject);
 
 	ShaderProgram * CreateShaderProgram();
 	ShaderProgram * CreateDefaultShaderProgram();
 	ShaderProgram * CreateWaterShaderProgram();
+
+	bool CreateShaderObject(std::string & file, shader_type shaderType) const;
 
 public:
 
@@ -172,6 +176,8 @@ public:
 		"}\n";
 
 
+
+	
 
 };
 

@@ -19,6 +19,7 @@ CompMaterial::CompMaterial(GameObject * parent, const char* path)
 
 	strcpy(App->importer->texture.name, path_copy);
 
+	shader = App->renderer3D->shaders_manager->CreateDefaultShaderProgram();
 	//text_info = App->importer->texture;
 }
 

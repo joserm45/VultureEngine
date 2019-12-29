@@ -45,11 +45,11 @@ void PanelGameObjects::DrawPanelGameObjects(GameObject* game_object, int& node_i
 		game_object->PrintPanelGameObject(node_id, click);
 		node_id++;
 	}
-	else {
-
+	else 
+	{
 		for (uint i = 0; i < game_object->GetNumChilds(); ++i)
 		{
-			DrawPanelGameObjects(game_object->GetChild(i), node_id);
+			DrawPanelGameObjects(game_object->GetChild(i), node_id);			
 		}
 			
 	}

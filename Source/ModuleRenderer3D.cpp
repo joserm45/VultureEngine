@@ -62,6 +62,10 @@ bool ModuleRenderer3D::Init()
 			LOG("Error initializing glew! %s\n", glewGetErrorString(error_glew));
 			ret = false;
 		}
+		else
+		{
+			LOG("Status: Using GLEW! %s \n", glewGetString(GLEW_VERSION));
+		}
 
 		// Initialize Projection Matrix
 		glMatrixMode(GL_PROJECTION);
@@ -167,7 +171,7 @@ bool ModuleRenderer3D::Init()
 	//default shader
 	shaders_manager->default_shader = * shaders_manager->CreateDefaultShaderProgram();
 	shaders_manager->water_shader = * shaders_manager->CreateWaterShaderProgram();
-	//defTexture = App->importer->LoadTextureData("white");
+	//defTexture = App->importer->LoadTextureData("background");
 	return ret;
 }
 
@@ -218,9 +222,29 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 
+	GameObject* go = nullptr;
 	App->imgui->Draw();
 
 	SDL_GL_SwapWindow(App->window->window);
+
+	// Shader Draw
+	//go = App->scene_intro->GetRootGameObject();
+	/*uint l = 0;
+	for (std::vector<GameObject*>::const_iterator i = App->scene_intro->GO_list.begin(); i != App->scene_intro->GO_list.end(); ++i)
+	{
+		
+		UpdateShader(i[l]->mesh);
+		l++;
+	}
+
+	/*if (go->GetNumChilds() > 0) 
+	{
+		for (int i = 0; i < go->GetNumChilds(); i++) {
+			if (go->GetChild(i)->material != nullptr)
+				UpdateShader(go->GetChild(i)->mesh);
+		}
+	}*/
+
 
 	return UPDATE_CONTINUE;
 }
@@ -236,10 +260,10 @@ void ModuleRenderer3D::UpdateShader(CompMesh * object)
 	if (object != nullptr)
 	{
 		CompMaterial* texture = (CompMaterial*)object->GetGameObject()->FindComponent(MATERIAL);
-		if (object->mesh_info.num_textcoord != 0 /*&& texture->IsAlphaTest()*/)
+		/*if (object->mesh_info.num_textcoord != 0 /*&& texture->IsAlphaTest())
 			glEnable(GL_ALPHA_TEST);
 		//glAlphaFunc(GL_GREATER, texture->GetAlphaValue());
-		glBindTexture(GL_TEXTURE_2D, texture->tex_id);
+		glBindTexture(GL_TEXTURE_2D, texture->tex_id);*/
 
 		if (texture->sample_shader)
 		{

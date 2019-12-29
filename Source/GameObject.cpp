@@ -359,6 +359,105 @@ void GameObject::DrawBBox()
 	}
 }
 
+void GameObject::DrawShaders()
+{
+	for (std::vector<GameObject*>::const_iterator i = App->scene_intro->GO_list.begin(); i != App->scene_intro->GO_list.end(); ++i)
+	{
+		if ((*i)->IsVisible() == true && (*i)->material->own_shader == true)
+		{
+			if (material != NULL)
+			{
+				math::float4x4 matrixfloat = transform->GetGlobalMatrix();
+				GLfloat matrix[16] =
+				{
+					matrixfloat[0][0],matrixfloat[1][0],matrixfloat[2][0],matrixfloat[3][0],
+					matrixfloat[0][1],matrixfloat[1][1],matrixfloat[2][1],matrixfloat[3][1],
+					matrixfloat[0][2],matrixfloat[1][2],matrixfloat[2][2],matrixfloat[3][2],
+					matrixfloat[0][3],matrixfloat[1][3],matrixfloat[2][3],matrixfloat[3][3]
+				};
+
+				uint offset = sizeof(float)* (3 + 3 + 4 + 2);
+				if (mesh->mesh_info.textcoord == nullptr)
+					offset -= sizeof(float) * 2;
+				if (mesh->mesh_info.normal == nullptr)
+					offset -= sizeof(float) * 3;
+
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+				ShaderProgram* shader_active = &App->renderer3D->shaders_manager->default_shader;
+				shader_active->UseProgram();
+
+
+				shader_active = &App->renderer3D->shaders_manager->water_shader;
+				if (shader_active != nullptr)
+					shader_active->UseProgram();
+
+				if (shader_active != nullptr)
+				{
+					glUniform1i(glGetUniformLocation(shader_active->id_shader_prog, "ourTexture"), 0);
+					glUniform1f(glGetUniformLocation(shader_active->id_shader_prog, "ftime"), shader_dt);
+				}
+
+				glBindBuffer(GL_ARRAY_BUFFER, mesh->mesh_info.id_vertex);
+				glEnableVertexAttribArray(0);
+				glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, offset, 0); //VBO
+
+				if (mesh->mesh_info.normal != nullptr)
+				{
+					glEnableVertexAttribArray(1);
+					glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, offset, BUFFER_OFFSET(sizeof(float) * 3)); //normals, 12 bytes from start
+				}
+
+				glEnableVertexAttribArray(2);
+				glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, offset, BUFFER_OFFSET(sizeof(float) *(3 + 3))); //color, 24 bytes from start
+
+				if (mesh->mesh_info.textcoord != nullptr)
+				{
+					glEnableVertexAttribArray(3);
+					glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, offset, BUFFER_OFFSET(sizeof(float) * (3 + 3 + 4))); //texcoords, 40 bytes from start
+				}
+
+				if (mesh->mesh_info.id_index != NULL && shader_active != nullptr)
+				{
+					GLint view2Loc = glGetUniformLocation(shader_active->id_shader_prog, "view_matrix");
+					math::float4x4 temp = App->camera->GetOpenGLViewMatrix();
+					glUniformMatrix4fv(view2Loc, 1, GL_FALSE, temp.ptr());
+
+					GLint modelLoc = glGetUniformLocation(shader_active->id_shader_prog, "model_matrix");
+					temp = transform->GetGlobalMatrix();
+					glUniformMatrix4fv(modelLoc, 1, GL_TRUE, temp.ptr());
+
+					GLint viewLoc = glGetUniformLocation(shader_active->id_shader_prog, "proj_matrix");
+					temp = App->camera->GetOpenGLProjectionMatrix();
+					glUniformMatrix4fv(viewLoc, 1, GL_FALSE, temp.ptr());
+
+
+					if (mesh->mesh_info.id_index != NULL)
+						glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->mesh_info.id_index);
+
+					glDrawElements(GL_TRIANGLES, mesh->mesh_info.num_index, GL_UNSIGNED_INT, NULL);
+				}
+
+
+
+				glBindTexture(GL_TEXTURE_2D, 0);
+				glDisable(GL_TEXTURE_2D);
+				glDisable(GL_ALPHA_TEST);
+				glDisable(GL_BLEND);
+
+				glUseProgram(NULL);
+
+			}
+			else
+			{
+				glBindTexture(GL_TEXTURE_2D, DefaultTexture);
+				glUniform1i(glGetUniformLocation(App->renderer3D->shaders_manager->default_shader.id_shader_prog, "ourTexture"), 0);
+			}
+		}
+	}
+}
+
 void GameObject::UpdateBoundingBox() {
 
 	BBox.SetNegativeInfinity();
@@ -426,106 +525,7 @@ void GameObject::Draw()
 
 		glPopMatrix();
 		
-
-		/*
-		if (App->scene_intro->GetFocusedGameObject() == this)
-		{
-			if (material != NULL)
-			{
-				math::float4x4 matrixfloat = transform->GetGlobalMatrix();
-				GLfloat matrix[16] =
-				{
-					matrixfloat[0][0],matrixfloat[1][0],matrixfloat[2][0],matrixfloat[3][0],
-					matrixfloat[0][1],matrixfloat[1][1],matrixfloat[2][1],matrixfloat[3][1],
-					matrixfloat[0][2],matrixfloat[1][2],matrixfloat[2][2],matrixfloat[3][2],
-					matrixfloat[0][3],matrixfloat[1][3],matrixfloat[2][3],matrixfloat[3][3]
-				};
-
-				uint offset = sizeof(float)* (3 + 3 + 4 + 2);
-				if (mesh->mesh_info.textcoord == nullptr)
-					offset -= sizeof(float) * 2;
-				if (mesh->mesh_info.normal == nullptr)
-					offset -= sizeof(float) * 3;
-
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-				ShaderProgram* shader_active = &App->renderer3D->shaders_manager->default_shader;
-				shader_active->UseProgram();
-
-				
-				shader_active = &App->renderer3D->shaders_manager->water_shader;
-				if (shader_active != nullptr)
-					shader_active->UseProgram();
-				
-				if (shader_active != nullptr)
-				{
-					glUniform1i(glGetUniformLocation(shader_active->id_shader_prog, "ourTexture"), 0);
-					glUniform1f(glGetUniformLocation(shader_active->id_shader_prog, "ftime"), shader_dt);
-				}
-
-				glBindBuffer(GL_ARRAY_BUFFER, mesh->mesh_info.id_vertex);
-				glEnableVertexAttribArray(0);
-				glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, offset, 0); //VBO
-
-				if (mesh->mesh_info.normal != nullptr) 
-				{
-					glEnableVertexAttribArray(1);
-					glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, offset, BUFFER_OFFSET(sizeof(float) * 3)); //normals, 12 bytes from start
-				}
-
-				glEnableVertexAttribArray(2);
-				glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, offset, BUFFER_OFFSET(sizeof(float) *(3 + 3))); //color, 24 bytes from start
-
-				if (mesh->mesh_info.textcoord != nullptr) 
-				{
-					glEnableVertexAttribArray(3);
-					glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, offset, BUFFER_OFFSET(sizeof(float) * (3 + 3 + 4))); //texcoords, 40 bytes from start
-				}
-
-				if (mesh->mesh_info.id_index != NULL && shader_active != nullptr)
-				{
-					GLint view2Loc = glGetUniformLocation(shader_active->id_shader_prog, "view_matrix");
-					math::float4x4 temp = App->camera->GetOpenGLViewMatrix();
-					glUniformMatrix4fv(view2Loc, 1, GL_FALSE, temp.ptr());
-
-					GLint modelLoc = glGetUniformLocation(shader_active->id_shader_prog, "model_matrix");
-					temp = transform->GetGlobalMatrix();
-					glUniformMatrix4fv(modelLoc, 1, GL_TRUE, temp.ptr());
-
-					GLint viewLoc = glGetUniformLocation(shader_active->id_shader_prog, "proj_matrix");
-					temp = App->camera->GetOpenGLProjectionMatrix();
-					glUniformMatrix4fv(viewLoc, 1, GL_FALSE, temp.ptr());
-
-
-					if (mesh->mesh_info.id_index != NULL)
-						glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->mesh_info.id_index);
-
-					glDrawElements(GL_TRIANGLES, mesh->mesh_info.num_index, GL_UNSIGNED_INT, NULL);
-				}
-
-
-
-				glBindTexture(GL_TEXTURE_2D, 0);
-				glDisable(GL_TEXTURE_2D);
-				glDisable(GL_ALPHA_TEST);
-				glDisable(GL_BLEND);
-
-				glUseProgram(NULL);
-
-			}
-			else
-			{
-				glBindTexture(GL_TEXTURE_2D, DefaultTexture);
-				glUniform1i(glGetUniformLocation(App->renderer3D->shaders_manager->default_shader.id_shader_prog, "ourTexture"), 0);
-			}
-		}
-		*/
-
-
-
-
-
+		DrawShaders();
 
 	}
 }
@@ -544,7 +544,13 @@ void GameObject::LoadTextureSelected(int x)
 	}
 	if (x == 2)
 	{
-		
+		if (App->scene_intro->GetFocusedGameObject() == this)
+		{
+			if (material != NULL)
+			{
+				App->shader_manager->CreateWaterShaderProgram();
+			}
+		}
 	}
 }
 

@@ -13,6 +13,7 @@
 #include "ModuleImport.h"
 #include "Components.h"
 #include "ModuleTimeEditor.h"
+//#include "ShaderProgramManager.h"
 
 #include "PCG\pcg_variants.h"
 
@@ -36,6 +37,7 @@ public:
 	ModuleImport* importer = nullptr;
 	ModuleTimeEditor* time = nullptr;
 	GameObject* mesh = nullptr;
+	ShaderProgramManager* shader_manager = nullptr;
 
 	pcg32_random_t random_num;
 	//fps
