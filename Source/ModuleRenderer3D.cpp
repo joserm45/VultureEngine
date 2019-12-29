@@ -265,7 +265,7 @@ void ModuleRenderer3D::UpdateShader(CompMesh * object)
 		//glAlphaFunc(GL_GREATER, texture->GetAlphaValue());
 		glBindTexture(GL_TEXTURE_2D, texture->tex_id);*/
 
-		if (texture->sample_shader)
+		if (texture->default_shader)
 		{
 			shader_active = &shaders_manager->water_shader;
 			if (shader_active != nullptr)

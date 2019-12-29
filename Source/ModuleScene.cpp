@@ -30,7 +30,7 @@ bool ModuleScene::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
-	App->camera->LookAt(vec3(0.0f, 0.0f, 0.0f));
+	//App->camera->LookAt(vec3(0.0f, 0.0f, 38.0f));
 
 	scene_root_gameobject = CreateGameObject(nullptr);
 	scene_root_gameobject->SetName("Scene Game Objects");
@@ -54,7 +54,10 @@ bool ModuleScene::Start()
 
 	//Quadtree 
 	GenQuadtree();
+	
+	
 
+	//App->camera->curr_camera.ge;
 	return ret;
 }
 
@@ -71,6 +74,7 @@ bool ModuleScene::CleanUp()
 // Update
 update_status ModuleScene::Update(float dt)
 {
+	//App->scene_intro->scene_root_gameobject->childs[1]->CenterGameObject();
 	if (App->input->keyboard[SDL_SCANCODE_M] == KEY_DOWN)
 	{
 		App->SaveProject();

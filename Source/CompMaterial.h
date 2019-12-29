@@ -21,15 +21,16 @@ public:
 	//void SetTexture(text_data tex);
 
 	//text_data text_info;	
-	bool sample_shader = false;
+	bool texture_active = true;
 	bool water_shader = false;
 	bool own_shader = false;
+	bool default_shader = false;
 
 	ShaderProgram* GetShader() const;
 
 private:
 
-	bool texture_active = true;
+	
 	bool chess_texture = false;
 
 	const char* path_name;

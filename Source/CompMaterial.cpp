@@ -19,7 +19,7 @@ CompMaterial::CompMaterial(GameObject * parent, const char* path)
 
 	strcpy(App->importer->texture.name, path_copy);
 
-	shader = App->renderer3D->shaders_manager->CreateDefaultShaderProgram();
+	//shader = App->renderer3D->shaders_manager->CreateDefaultShaderProgram();
 	//text_info = App->importer->texture;
 }
 
@@ -53,37 +53,63 @@ void CompMaterial::Draw()
 
 		if (ImGui::Checkbox("Draw Texture", &texture_active))
 		{
+			texture_active != texture_active;
 			chess_texture = false;
 			water_shader = false;
 			own_shader = false;
-			App->importer->LoadTexture(path_copy);
+			default_shader = false;
+			
+			if(texture_active)
+				App->importer->LoadTexture(path_copy);
 		}
 
-		if (ImGui::Checkbox("Chess Texture", &chess_texture))
+		else if (ImGui::Checkbox("Default Shader", &default_shader))
 		{
+			default_shader != default_shader;
 			texture_active = false;
+			chess_texture = false;
 			water_shader = false;
 			own_shader = false;
-			parent->LoadTextureSelected(1);
+
+			if(default_shader)
+				parent->LoadTextureSelected(3);
 		}
 
-		if (ImGui::Checkbox("Water Shader", &water_shader))
+		else if (ImGui::Checkbox("Chess Texture", &chess_texture))
 		{
+			chess_texture != chess_texture;
+			texture_active = false;
+			water_shader = false;
+			own_shader = false;
+			default_shader = false;
+			
+			if(chess_texture)
+				parent->LoadTextureSelected(1);
+		}
+
+		else if (ImGui::Checkbox("Water Shader", &water_shader))
+		{
+			water_shader != water_shader;
 			texture_active = false;
 			chess_texture = false;
 			own_shader = false;
-			parent->LoadTextureSelected(2);
+			default_shader = false;
+			
+			if(water_shader)
+				parent->LoadTextureSelected(2);
 		}
-		if (ImGui::Checkbox("Own Shader", &own_shader))
+		else if (ImGui::Checkbox("Own Shader", &own_shader))
 		{
 			texture_active = false;
 			chess_texture = false;
 			water_shader = false;
+			default_shader = false;
+			
 			if (ImGui::Button("Edit", ImVec2(100, 0)))
 			{
 
 			}
-			
+				
 		}
 
 	}

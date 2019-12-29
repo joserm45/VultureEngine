@@ -19,7 +19,9 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(ap
 
 	CalculateViewMatrix();
 
-	Move({ 0.0f, 2.0f, -8.0f });
+	
+	Move({ 0.0f, 0.0f, -122.0f });
+	
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -30,6 +32,8 @@ bool ModuleCamera3D::Start()
 {
 	LOG("Setting up the camera");
 	bool ret = true;
+
+	
 
 	return ret;
 }

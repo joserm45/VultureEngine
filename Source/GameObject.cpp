@@ -361,9 +361,9 @@ void GameObject::DrawBBox()
 
 void GameObject::DrawShaders()
 {
-	for (std::vector<GameObject*>::const_iterator i = App->scene_intro->GO_list.begin(); i != App->scene_intro->GO_list.end(); ++i)
+	for (std::vector<GameObject*>::iterator i = App->scene_intro->GO_list.begin(); i != App->scene_intro->GO_list.end(); ++i)
 	{
-		if ((*i)->IsVisible() == true && (*i)->material->own_shader == true)
+		if ((*i)->IsVisible() == true && (*i)->material->default_shader == true)
 		{
 			if (material != NULL)
 			{
@@ -440,7 +440,6 @@ void GameObject::DrawShaders()
 				}
 
 
-
 				glBindTexture(GL_TEXTURE_2D, 0);
 				glDisable(GL_TEXTURE_2D);
 				glDisable(GL_ALPHA_TEST);
@@ -454,6 +453,10 @@ void GameObject::DrawShaders()
 				glBindTexture(GL_TEXTURE_2D, DefaultTexture);
 				glUniform1i(glGetUniformLocation(App->renderer3D->shaders_manager->default_shader.id_shader_prog, "ourTexture"), 0);
 			}
+		}
+		else if ((*i)->material->texture_active == true)
+		{
+			//App->importer->LoadTexture((*i)->material->path_copy);
 		}
 	}
 }
@@ -542,13 +545,24 @@ void GameObject::LoadTextureSelected(int x)
 			}
 		}
 	}
-	if (x == 2)
+	else if (x == 2)
 	{
 		if (App->scene_intro->GetFocusedGameObject() == this)
 		{
 			if (material != NULL)
 			{
-				App->shader_manager->CreateWaterShaderProgram();
+				//App->shader_manager->water_shader = *App->shader_manager->CreateWaterShaderProgram();				
+			}
+		}
+	}
+	else if (x == 3)
+	{
+		if (App->scene_intro->GetFocusedGameObject() == this)
+		{
+			if (material != NULL)
+			{
+				//App->shader_manager->default_shader = *App->shader_manager->CreateDefaultShaderProgram();
+				DrawShaders();
 			}
 		}
 	}

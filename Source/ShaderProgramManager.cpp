@@ -43,7 +43,8 @@ bool ShaderProgramManager::LoadShaderObject(ShaderObject* object)
 		glGetShaderInfoLog(object->id, 512, NULL, infoLog);
 		App->imgui->AddLogToConsole(("Shader compilation error : %s", infoLog));
 	}
-
+	else
+		App->imgui->AddLogToConsole(("Successfully linked Shader Program!"));
 	objects.push_back(object);
 
 	return success;
@@ -101,8 +102,8 @@ ShaderProgram* ShaderProgramManager::CreateShaderProgram()
 	for (int i = 0; i < objects.size(); i++)
 	{
 		glDeleteShader(objects[i]->id);
-		//objects[i];
-		//objects[i] = nullptr;
+		objects[i];
+		objects[i] = nullptr;
 	}
 	objects.clear();
 
